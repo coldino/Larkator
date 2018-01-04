@@ -1,0 +1,13 @@
+﻿<Application x:Class="LarkatorGUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:LarkatorGUI"
+             StartupUri="Welcome.xaml">
+    <Application.Resources>
+
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FF2D6BA8"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:OptionalIntConverter x:Key="OptionalIntConverter"/>
+
+    </Application.Resources>
+</Application>

@@ -1,0 +1,393 @@
+﻿<Window x:Class="LarkatorGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LarkatorGUI"
+        xmlns:common="clr-namespace:Larkator.Common;assembly=Larkator.Common"
+        xmlns:lvl="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:sysCol="clr-namespace:System.Collections;assembly=mscorlib"
+        mc:Ignorable="d"
+        x:Name="root"
+        SourceInitialized="Window_SourceInitialized" MaxHeight="800" MinHeight="240"
+        Title="{Binding WindowTitle}" SizeToContent="WidthAndHeight" Background="{DynamicResource WindowBackgroundBrush}"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:SearchResultToTooltipConverter x:Key="SearchResultToTooltipConverter"/>
+        <local:DinoToTooltipConverter x:Key="DinoToTooltipConverter"/>
+        <local:PositionToStringConverter x:Key="PositionToStringConverter"/>
+        <local:StatsToStringConverter x:Key="StatsToStringConverter"/>
+        <local:PositionToXConverter x:Key="PositionToXConverter"/>
+        <local:PositionToYConverter x:Key="PositionToYConverter"/>
+        <local:GenderToImageConverter x:Key="GenderToImageConverter"/>
+        <local:GenderToLetterConverter x:Key="GenderToLetterConverter"/>
+        <SolidColorBrush x:Key="MaleSymbolBrush" Color="#FF050C93"/>
+        <sysCol:ArrayList x:Key="DummyData">
+            <common:Dino Name="Dummy" BaseLevel="100" Female="False" Id="213412341234" Type="Allosaurus">
+                <common:Dino.Location>
+                    <common:Position Lat="10" Lon="20"/>
+                </common:Dino.Location>
+                <common:Dino.WildLevels>
+                    <common:StatPoints Health="1" Melee="2"/>
+                </common:Dino.WildLevels>
+            </common:Dino>
+        </sysCol:ArrayList>
+        <DataTemplate x:Key="SearchCriteriaTemplate" DataType="{x:Type common:SearchCriteria}">
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Species}"/>
+                <Image Grid.Column="1" Source="{Binding Female, Converter={StaticResource GenderToImageConverter}}" Width="24"/>
+                <TextBlock Grid.Column="2" Text="{Binding MinLevel}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="3" Text="{Binding MaxLevel}" TextAlignment="Center"/>
+                <fa:FontAwesome Grid.Column="4" Icon="trash" Width="16" Height="16"/>
+                <TextBlock Grid.Column="4" Text="-" TextAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="SearchResultTemplate" DataType="{x:Type common:SearchResult}">
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Female}" Value="True">
+                    <Setter TargetName="grid" Property="TextBlock.Foreground" Value="Pink"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+            <Grid Name="grid" TextBlock.Foreground="Blue" Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding Female, Converter={StaticResource GenderToImageConverter}}" Width="24"/>
+                <TextBlock Grid.Column="1" Text="{Binding Level}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding Location, Converter={StaticResource PositionToStringConverter}}" TextAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DinoTemplate" DataType="{x:Type local:DinoViewModel}">
+            <Grid Name="grid" Margin="0,2" ToolTip="{Binding Path=Dino,Converter={StaticResource DinoToTooltipConverter}}" MouseEnter="Result_MouseEnter" MouseLeave="Result_MouseLeave">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding Path=Dino.Female, Converter={StaticResource GenderToImageConverter}}" Width="24"/>
+                <TextBlock Grid.Column="1" Text="{Binding Path=Dino.BaseLevel}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding Path=Dino.Location, Converter={StaticResource PositionToStringConverter}}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="3" Text="{Binding Path=Dino.WildLevels.Health}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="4" Text="{Binding Path=Dino.WildLevels.Stamina}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="5" Text="{Binding Path=Dino.WildLevels.Weight}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="6" Text="{Binding Path=Dino.WildLevels.Melee}" TextAlignment="Center"/>
+                <TextBlock Grid.Column="7" Text="{Binding Path=Dino.WildLevels.Speed}" TextAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="MapPinTemplate" DataType="{x:Type local:DinoViewModel}">
+            <DataTemplate.Resources>
+                <Storyboard x:Key="PinHighlightAnimation" Storyboard.TargetName="scale" Duration="0:0:0.2">
+                    <DoubleAnimation Storyboard.TargetProperty="ScaleX" To="3" AutoReverse="True">
+                        <DoubleAnimation.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="ScaleY" To="3" AutoReverse="True">
+                        <DoubleAnimation.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <ColorAnimation Storyboard.TargetName="stroke" Storyboard.TargetProperty="Color" To="LightGoldenrodYellow"/>
+                </Storyboard>
+            </DataTemplate.Resources>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Highlight}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard x:Name="highlightStoryboard" Storyboard="{StaticResource PinHighlightAnimation}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <StopStoryboard BeginStoryboardName="highlightStoryboard"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+            <Rectangle x:Name="rect" Width="30" Height="30" RadiusX="15" RadiusY="15" StrokeThickness="5" Margin="-15,-15"
+                       Fill="#7FB8B8B8" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"
+                       ToolTip="{Binding Path=Dino, Converter={StaticResource DinoToTooltipConverter}}">
+                <Rectangle.Stroke>
+                    <SolidColorBrush x:Name="stroke" Color="{Binding Path=Color}"/>
+                </Rectangle.Stroke>
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="scale" CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1" />
+                        <TranslateTransform X="{Binding Path=Dino.Location, Converter={StaticResource PositionToXConverter}}"
+                                            Y="{Binding Path=Dino.Location, Converter={StaticResource PositionToYConverter}}"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="SearchListPanelTemplate">
+            <StackPanel IsItemsHost="True" Background="Transparent" />
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="SearchItemTemplate">
+            <Grid/>
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel>
+        <Grid x:Name="statusPanel" DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" MinWidth="128"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding StatusText}"/>
+            <TextBlock Grid.Column="1" Text="{Binding StatusDetailText}"/>
+        </Grid>
+        <Grid TextBlock.Foreground="AntiqueWhite">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="leftPanel" Grid.Column="0" Width="240" MinHeight="200" Padding="8" Background="{DynamicResource WindowBackgroundBrush}">
+                <DockPanel LastChildFill="True">
+                    <Grid DockPanel.Dock="Bottom">
+                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTames_Click">
+                            <Underline>Show Tames</Underline>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTheHunt_Click">
+                            <Underline>Show The Hunt</Underline>
+                        </TextBlock>
+                    </Grid>
+                    <StackPanel>
+                        <TextBlock Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center"><Run Text="The Hunt"/></TextBlock>
+                        <TextBlock Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center"><Run Text="Tames"/></TextBlock>
+
+                        <Grid TextBlock.Foreground="#44ffffff" Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text=""/>
+                            <TextBlock Grid.Column="1" Text="Sex" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Min" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Max" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text=""/>
+                        </Grid>
+
+                        <ListView x:Name="searchesList" ItemsSource="{Binding ListSearches}"
+                              TextBlock.FontSize="16" TextBlock.Foreground="AntiqueWhite"
+                              Background="Transparent" BorderThickness="0"
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                              SelectionChanged="Searches_SelectionChanged" SelectionMode="Single"
+                              lvl:ListViewLayoutManager.Enabled="True" Padding="-1" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding ElementName=root}">
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="11" VerticalAlignment="Bottom" Margin="0,4,0,0" />
+                                                            <ItemsPresenter/>
+                                                        </StackPanel>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Style.Resources>
+                                        <SolidColorBrush x:Key="ListItemHoverFill" Color="#44F1FBFF"/>
+                                        <SolidColorBrush x:Key="ListItemSelectedFill" Color="#22F1FBFF"/>
+                                        <SolidColorBrush x:Key="ListItemSelectedInactiveFill" Color="#44F1FBFF"/>
+                                        <SolidColorBrush x:Key="ListItemSelectedHoverFill" Color="#44F1FBFF"/>
+                                    </Style.Resources>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Border CornerRadius="2" SnapsToDevicePixels="True" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                                                    <Border Name="InnerBorder" CornerRadius="1" BorderThickness="0">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition MaxHeight="11" />
+                                                                <RowDefinition />
+                                                            </Grid.RowDefinitions>
+                                                            <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF" />
+                                                            <GridViewRowPresenter Grid.RowSpan="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                        </Grid>
+                                                    </Border>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource ListItemHoverFill}" />
+                                                        <Setter Property="BorderBrush" Value="#FFCCF0FF" />
+                                                        <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource ListItemSelectedFill}" />
+                                                        <Setter Property="BorderBrush" Value="#FF98DDFB" />
+                                                        <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#80FFFFFF" />
+                                                        <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible" />
+                                                        <Setter TargetName="UpperHighlight" Property="Fill" Value="#40FFFFFF" />
+                                                    </Trigger>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsSelected" Value="True" />
+                                                            <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter Property="Background" Value="{StaticResource ListItemSelectedInactiveFill}" />
+                                                        <Setter Property="BorderBrush" Value="#FFCFCFCF" />
+                                                    </MultiTrigger>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsSelected" Value="True" />
+                                                            <Condition Property="IsMouseOver" Value="True" />
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter Property="Background" Value="{StaticResource ListItemSelectedHoverFill}" />
+                                                        <Setter Property="BorderBrush" Value="#FF98DDFB" />
+                                                    </MultiTrigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.Resources>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn lvl:ProportionalColumn.Width="6">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <local:ListViewHackyCell Padding="0">
+                                                    <TextBlock Text="{Binding Species}" TextAlignment="Left" Padding="0" Margin="0"/>
+                                                </local:ListViewHackyCell>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn lvl:ProportionalColumn.Width="2">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <local:ListViewHackyCell Padding="0">
+                                                    <Image Source="{Binding Female, Converter={StaticResource GenderToImageConverter}}" Width="24" Margin="0" HorizontalAlignment="Center" MouseWheel="AdjustableGender_MouseWheel"/>
+                                                </local:ListViewHackyCell>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn lvl:ProportionalColumn.Width="2">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <local:ListViewHackyCell Padding="0">
+                                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                                </local:ListViewHackyCell>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn lvl:ProportionalColumn.Width="2">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <local:ListViewHackyCell Padding="0">
+                                                    <TextBlock Text="{Binding MaxLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                                </local:ListViewHackyCell>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn lvl:ProportionalColumn.Width="1">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <local:ListViewHackyCell Padding="0">
+                                                    <Button BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="RemoveSearch_Click" Padding="0" Margin="0">
+                                                        <fa:ImageAwesome Icon="Remove" Width="8" Margin="0" Foreground="AntiqueWhite" ToolTip="Remove this search"/>
+                                                    </Button>
+                                                </local:ListViewHackyCell>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click" Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
+                            <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
+                                <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True"/>
+                                <ComboBox x:Name="speciesCombo" Text="{Binding Species}"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                                    <TextBlock Text="Min"/>
+                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                                    <TextBlock Text="Max"/>
+                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                </StackPanel>
+                                <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <Viewbox Grid.Column="1" MinWidth="240" MaxWidth="800" MaxHeight="800">
+                <Grid>
+                    <Image Source="imgs/hires_map.png" />
+                    <Canvas>
+                        <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+                    </Canvas>
+                    <fa:ImageAwesome Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Icon="cog" Spin="True" SpinDuration="3" Width="360" Height="360" Foreground="#44ffffff"/>
+                </Grid>
+            </Viewbox>
+            <Grid x:Name="rightPanel" Grid.Column="2" Width="360" MinHeight="200">
+                <Border MinHeight="200" Padding="8" Background="{DynamicResource WindowBackgroundBrush}">
+                    <StackPanel>
+                        <TextBlock FontSize="24" TextAlignment="Center" Text="The Chase"/>
+
+                        <Grid TextBlock.Foreground="#44ffffff" Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Sex" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Lvl" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Pos" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Hp" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="St" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="We" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="Me" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="7" Text="Sp" TextAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl x:Name="resultsList" TextBlock.FontSize="16" ItemTemplate="{DynamicResource DinoTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
