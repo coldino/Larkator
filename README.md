@@ -16,6 +16,12 @@ On first run Larkator will ask you to locate it.
 You can get it from the [Steam forum post](https://survivetheark.com/index.php?/forums/topic/80750-ark-tools-v064-tools-for-reading-and-manipulating-ark-savegame-files/),
 or directly from [Qowyn/ark-tools](https://github.com/Qowyn/ark-tools/releases).
 
+Before using Larkator, ark-tools must have downloaded its database (update-data). For anyone struggling with the command-prompt side of things open a Command Prompt and type the following, replacing `<path-to-ark-tools-directory>` with the correct path for your system:
+```
+cd <path-to-ark-tools-directory>
+ark-tools.exe update-data
+```
+
 ### Features
 
  - Find both wild and tamed creatures
