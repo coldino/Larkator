@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -127,6 +126,8 @@ namespace LarkatorGUI
 
         public MainWindow()
         {
+            ValidateWindowPositionAndSize();
+
             arkReaderWild = new ArkReader(true);
             arkReaderTamed = new ArkReader(false);
 
@@ -153,6 +154,23 @@ namespace LarkatorGUI
             // Add grouping to the searches list
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(searchesList.ItemsSource);
             view.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+        }
+
+        private void ValidateWindowPositionAndSize()
+        {
+            var settings = Properties.Settings.Default;
+
+            if (settings.MainWindowLeft <= -10000 || settings.MainWindowTop <= -10000)
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
+            if (settings.MainWindowWidth < 0 || settings.MainWindowHeight < 0)
+            {
+                settings.MainWindowWidth = (double)settings.Properties["MainWindowWidth"].DefaultValue;
+                settings.MainWindowHeight = (double)settings.Properties["MainWindowHeight"].DefaultValue;
+                settings.Save();
+            }
         }
 
         private void EnsureOutputDirectory()
@@ -424,7 +442,7 @@ namespace LarkatorGUI
                 StatusText = "Processing saved ARK : Tamed";
                 await arkReaderTamed.PerformConversion(force);
                 StatusText = "ARK processing completed";
-                StatusDetailText = $"{arkReaderWild.NumberOfSpecies} species";
+                StatusDetailText = $"{arkReaderWild.NumberOfSpecies} wild and {arkReaderTamed.NumberOfSpecies} species located";
             }
             catch (Exception ex)
             {
@@ -535,6 +553,14 @@ namespace LarkatorGUI
         private void ShowWildSearches()
         {
             LoadSavedSearches();
+        }
+
+        private void Settings_Click(object sender, MouseButtonEventArgs e)
+        {
+            var settings = new SettingsWindow();
+            settings.ShowDialog();
+
+            EnsureOutputDirectory();
         }
     }
 }

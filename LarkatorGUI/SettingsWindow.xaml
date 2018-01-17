@@ -1,0 +1,77 @@
+﻿<Window x:Class="LarkatorGUI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LarkatorGUI"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" MinWidth="360" MaxWidth="500"
+        Title="Settings" Background="{DynamicResource WindowBackgroundBrush}">
+    <Window.Resources>
+        <local:SettingsWindowModel x:Key="Model"/>
+    </Window.Resources>
+    <StackPanel>
+        <TabControl>
+            <TabItem Selector.IsSelected="True" Header="Paths &amp; Files">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">ARK Tools (.exe)</TextBlock>
+                    <local:FileEntryBox Grid.Column="1" Grid.Row="0" Value="{Binding Source={StaticResource Model}, Path=Settings.ArkTools, Mode=TwoWay}"
+                                        Filter="ARK Tools Executable|ark-tools.exe" DefaultExt="ark-tools.exe" Title="Locate ark-tools.exe"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Save File (.ark)</TextBlock>
+                    <local:FileEntryBox Grid.Column="1" Grid.Row="1" Value="{Binding Source={StaticResource Model}, Path=Settings.SaveFile, Mode=TwoWay}"
+                                        Filter="ARK Save File|*.ark" DefaultExt=".ark" Title="Locate saved ARK"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Output Directory</TextBlock>
+                    <DockPanel Grid.Column="1" Grid.Row="2">
+                        <Button DockPanel.Dock="Right" Content="Reset" Click="ResetTmp_Click"/>
+                        <local:DirectoryEntryBox Value="{Binding Source={StaticResource Model}, Path=Settings.OutputDir, Mode=TwoWay}"
+                                                 Title="Choose a directory for temporary output files"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Misc">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Max Level</TextBlock>
+                    <local:NumericEntryControl Grid.Row="0" Grid.Column="1" ToolTip="The maximum level of normal spawns in the map (only affects filtering)"
+                                               Value="{Binding Source={StaticResource Model}, Path=Settings.MaxLevel, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
+                                               MaxValue="1000" MinValue="1" Increment="1" LargeIncrement="5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Level Step</TextBlock>
+                    <local:NumericEntryControl Grid.Row="1" Grid.Column="1" ToolTip="The step between levels, typically 4 for 120 or 5 for 150 (only affects filter adjustments)"
+                                               Value="{Binding Source={StaticResource Model}, Path=Settings.LevelStep, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
+                                               MaxValue="100" MinValue="1" Increment="1" LargeIncrement="1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <DockPanel Margin="2,6,2,2" LastChildFill="True">
+            <TextBlock Text="Restore all defaults" DockPanel.Dock="Left" VerticalAlignment="Bottom" TextDecorations="Underline" MouseDown="Restore_MouseDown" FontSize="10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Padding="8,2" IsDefault="True" Click="Apply_Click" Content="Apply" Margin="0,0,4,0"/>
+                <Button Padding="4,0" IsCancel="True" Content="Cancel"/>
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</Window>

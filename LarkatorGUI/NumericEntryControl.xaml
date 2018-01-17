@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="LarkatorGUI.NumericEntryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:LarkatorGUI" Width="200" Height="26"
+             >
+    <DockPanel d:LayoutOverrides="Width">
+        <Button x:Name="buttonDecrement"
+                DockPanel.Dock="Left"
+                Content="-"
+                Width="{Binding ActualHeight, ElementName=buttonDecrement, Mode=Default}"
+                Height="{Binding ActualHeight, ElementName=_textbox, Mode=Default}"/>
+        <Button x:Name="buttonIncrement"
+                DockPanel.Dock="Right"
+                Content="+"
+                Width="{Binding ActualHeight, ElementName=buttonDecrement, Mode=Default}"
+                Height="{Binding ActualHeight, ElementName=_textbox, Mode=Default}"/>
+        <TextBox
+            x:Name="_textbox"
+            Margin="2,0"
+            Text="{Binding Value, Mode=TwoWay,
+                RelativeSource={RelativeSource FindAncestor,
+                    AncestorLevel=1,
+                    AncestorType={x:Type local:NumericEntryControl}},
+                UpdateSourceTrigger=PropertyChanged}"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center" />
+    </DockPanel>
+</UserControl>

@@ -36,15 +36,19 @@ namespace LarkatorGUI
         }
 
         public async Task PerformConversion(bool force = false)
-        {;
+        {
             outputDir = Path.Combine(Properties.Settings.Default.OutputDir, Tamed ? "tamed" : "wild");
             EnsureDirectory(outputDir);
 
             if (force || IsConversionRequired())
+            {
                 await RunArkTools();
-
-            if (ClassMapping.Count == 0)
+                ClassMapping.Clear();
+            }
+            else if (ClassMapping.Count == 0)
+            {
                 await LoadClassesJson();
+            }
         }
 
         private bool IsConversionRequired()
@@ -84,7 +88,7 @@ namespace LarkatorGUI
         {
             var exe = Properties.Resources.ArkToolsExe;
             var exeDir = Path.GetDirectoryName(Properties.Settings.Default.ArkTools);
-            var commandLine = $"/S /C \"cd \"{exeDir}\" && {exe} -p {op} \"{saveFile}\" \"{outDir}\" \"";
+            var commandLine = $"/S /C {exe} -p {op} \"{saveFile}\" \"{outDir}\"";
 
             var completionTask = new TaskCompletionSource<int>();
             var psi = new ProcessStartInfo("cmd.exe", commandLine)
@@ -94,6 +98,7 @@ namespace LarkatorGUI
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 ErrorDialog = true,
+                WorkingDirectory = exeDir,
             };
             process = new Process
             {

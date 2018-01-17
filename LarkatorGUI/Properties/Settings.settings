@@ -20,5 +20,17 @@
     <Setting Name="SavedSearches" Type="System.String" Scope="User">
       <Value Profile="(Default)">[ { "Group": "Shopping List", "Order": 0.0, "Species": "Allosaurus", "MinLevel": 92, "MaxLevel": null, "Female": true }, { "Group": "Worries", "Order": 175.0, "Species": "Alpha Carnotaurus", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 50.0, "Species": "Alpha Leedsichthys", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 125.0, "Species": "Alpha Megalodon", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 192.1875, "Species": "Alpha Mosasaur", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 287.5, "Species": "Alpha Raptor", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 443.75, "Species": "Alpha T-Rex", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 521.875, "Species": "Giganotosaurus", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 610.9375, "Species": "Titanosaur", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Shopping List", "Order": 87.5, "Species": "Baryonyx", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Shopping List", "Order": 200.0, "Species": "Dire Bear", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Worries", "Order": 292.1875, "Species": "Diseased Leech", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Shopping List", "Order": 300.0, "Species": "Quetzal", "MinLevel": null, "MaxLevel": null, "Female": null }, { "Group": "Shopping List", "Order": 419.921875, "Species": "Rex", "MinLevel": 100, "MaxLevel": null, "Female": null }, { "Group": "Shopping List", "Order": 510.9375, "Species": "Yutyrannus", "MinLevel": 84, "MaxLevel": null, "Female": null } ]</Value>
     </Setting>
+    <Setting Name="MainWindowLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">-10000</Value>
+    </Setting>
+    <Setting Name="MainWindowTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">-10000</Value>
+    </Setting>
+    <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1352</Value>
+    </Setting>
+    <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">800</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

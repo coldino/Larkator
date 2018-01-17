@@ -35,6 +35,7 @@ namespace LarkatorGUI
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        [System.Diagnostics.DebuggerDisplay("X={x}, Y={y}, CX={cx}, CY={cy}")]
         internal struct WINDOWPOS
         {
             public IntPtr hwnd;

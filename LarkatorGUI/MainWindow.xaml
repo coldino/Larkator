@@ -11,9 +11,13 @@
         xmlns:sysCol="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="root"
-        SourceInitialized="Window_SourceInitialized" MaxHeight="800" MinHeight="240"
-        Title="{Binding WindowTitle}" SizeToContent="WidthAndHeight" Background="{DynamicResource WindowBackgroundBrush}"
-        Loaded="Window_Loaded">
+        SourceInitialized="Window_SourceInitialized" Loaded="Window_Loaded"
+        Title="{Binding WindowTitle}" Background="{DynamicResource WindowBackgroundBrush}"
+        MaxHeight="800" MinHeight="240"
+        Left="{Binding Source={StaticResource Settings}, Path=Default.MainWindowLeft, Mode=TwoWay}"
+        Top="{Binding Source={StaticResource Settings}, Path=Default.MainWindowTop, Mode=TwoWay}"
+        Width="{Binding Source={StaticResource Settings}, Path=Default.MainWindowWidth, Mode=TwoWay}"
+        Height="{Binding Source={StaticResource Settings}, Path=Default.MainWindowHeight, Mode=TwoWay}">
     <Window.Resources>
         <local:SearchResultToTooltipConverter x:Key="SearchResultToTooltipConverter"/>
         <local:DinoToTooltipConverter x:Key="DinoToTooltipConverter"/>
@@ -139,14 +143,16 @@
         </DataTemplate>
     </Window.Resources>
     <DockPanel>
-        <Grid x:Name="statusPanel" DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" MinWidth="128"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding StatusText}"/>
-            <TextBlock Grid.Column="1" Text="{Binding StatusDetailText}"/>
-        </Grid>
+        <Border x:Name="statusPanel" DockPanel.Dock="Bottom" Background="#33000000" Padding="8,6,8,3">
+            <Grid Height="16" TextBlock.Foreground="AntiqueWhite">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" MinWidth="200"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding StatusText}"/>
+                <TextBlock Grid.Column="1" Text="{Binding StatusDetailText}" TextAlignment="Right"/>
+            </Grid>
+        </Border>
         <Grid TextBlock.Foreground="AntiqueWhite">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -156,16 +162,15 @@
             <Border x:Name="leftPanel" Grid.Column="0" Width="240" MinHeight="200" Padding="8" Background="{DynamicResource WindowBackgroundBrush}">
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Bottom">
-                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTames_Click">
-                            <Underline>Show Tames</Underline>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTheHunt_Click">
-                            <Underline>Show The Hunt</Underline>
-                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTames_Click"><Underline><Run Text="Show Tames"/></Underline></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" MouseDown="ShowTheHunt_Click"><Underline><Run Text="Show The Hunt"/></Underline></TextBlock>
                     </Grid>
                     <StackPanel>
-                        <TextBlock Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center"><Run Text="The Hunt"/></TextBlock>
-                        <TextBlock Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center"><Run Text="Tames"/></TextBlock>
+
+                        <Grid>
+                            <TextBlock Visibility="{Binding ShowHunt, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center" Text="The Hunt"/>
+                            <TextBlock Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}" FontSize="24" TextAlignment="Center"  Text="Tames"/>
+                        </Grid>
 
                         <Grid TextBlock.Foreground="#44ffffff" Margin="0,16,0,0">
                             <Grid.ColumnDefinitions>
@@ -188,6 +193,11 @@
                               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                               SelectionChanged="Searches_SelectionChanged" SelectionMode="Single"
                               lvl:ListViewLayoutManager.Enabled="True" Padding="-1" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding ElementName=root}">
+                            <ListView.Resources>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </ListView.Resources>
                             <ListView.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.ContainerStyle>
@@ -208,7 +218,7 @@
                                 </GroupStyle>
                             </ListView.GroupStyle>
                             <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
+                                <Style TargetType="{x:Type ListViewItem}">
                                     <Style.Resources>
                                         <SolidColorBrush x:Key="ListItemHoverFill" Color="#44F1FBFF"/>
                                         <SolidColorBrush x:Key="ListItemSelectedFill" Color="#22F1FBFF"/>
@@ -219,13 +229,13 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Border CornerRadius="2" SnapsToDevicePixels="True" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-                                                    <Border Name="InnerBorder" CornerRadius="1" BorderThickness="0">
+                                                    <Border x:Name="InnerBorder" CornerRadius="1" BorderThickness="0">
                                                         <Grid>
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition MaxHeight="11" />
                                                                 <RowDefinition />
                                                             </Grid.RowDefinitions>
-                                                            <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF" />
+                                                            <Rectangle x:Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF" />
                                                             <GridViewRowPresenter Grid.RowSpan="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                                         </Grid>
                                                     </Border>
@@ -270,11 +280,6 @@
                                     <Setter Property="BorderThickness" Value="0"/>
                                 </Style>
                             </ListView.ItemContainerStyle>
-                            <ListView.Resources>
-                                <Style TargetType="GridViewColumnHeader">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </Style>
-                            </ListView.Resources>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn lvl:ProportionalColumn.Width="6">
@@ -299,7 +304,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <local:ListViewHackyCell Padding="0">
-                                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                                    <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
                                                 </local:ListViewHackyCell>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -308,7 +313,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <local:ListViewHackyCell Padding="0">
-                                                    <TextBlock Text="{Binding MaxLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                                    <TextBlock Text="{Binding MaxLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" Margin="0" Padding="0" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
                                                 </local:ListViewHackyCell>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -335,11 +340,11 @@
                                 <ComboBox x:Name="speciesCombo" Text="{Binding Species}"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                                     <TextBlock Text="Min"/>
-                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                    <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                                     <TextBlock Text="Max"/>
-                                    <TextBlock Text="{Binding MinLevel, Converter={StaticResource OptionalIntConverter}, ConverterParameter='-'}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                    <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
                                 </StackPanel>
                                 <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" />
                             </StackPanel>
@@ -354,38 +359,43 @@
                         <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
                     </Canvas>
                     <fa:ImageAwesome Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                                     Icon="cog" Spin="True" SpinDuration="3" Width="360" Height="360" Foreground="#44ffffff"/>
+                                     Icon="cog" Spin="True" SpinDuration="3" Width="360" Height="360" Foreground="#88ffffff"/>
                 </Grid>
             </Viewbox>
             <Grid x:Name="rightPanel" Grid.Column="2" Width="360" MinHeight="200">
                 <Border MinHeight="200" Padding="8" Background="{DynamicResource WindowBackgroundBrush}">
-                    <StackPanel>
-                        <TextBlock FontSize="24" TextAlignment="Center" Text="The Chase"/>
+                    <DockPanel LastChildFill="True">
 
-                        <Grid TextBlock.Foreground="#44ffffff" Margin="0,16,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.5*"/>
-                                <ColumnDefinition Width="1.5*"/>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Sex" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Lvl" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Pos" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Hp" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="St" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="5" Text="We" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="6" Text="Me" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="7" Text="Sp" TextAlignment="Center"/>
-                        </Grid>
+                        <fa:ImageAwesome DockPanel.Dock="Bottom" Icon="cogs" Width="30" Height="30" Foreground="#44ffffff" ToolTip="Settings" MouseDown="Settings_Click"/>
 
-                        <ItemsControl x:Name="resultsList" TextBlock.FontSize="16" ItemTemplate="{DynamicResource DinoTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+                        <StackPanel>
+                            <TextBlock FontSize="24" TextAlignment="Center" Text="The Chase"/>
 
-                    </StackPanel>
+                            <Grid TextBlock.Foreground="#44ffffff" Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Sex" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="Lvl" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="Pos" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="Hp" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="St" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="We" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="6" Text="Me" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="7" Text="Sp" TextAlignment="Center"/>
+                            </Grid>
+
+                            <ItemsControl x:Name="resultsList" TextBlock.FontSize="16" ItemTemplate="{DynamicResource DinoTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+
+                        </StackPanel>
+                    </DockPanel>
                 </Border>
             </Grid>
         </Grid>
