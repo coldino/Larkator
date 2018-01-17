@@ -206,6 +206,7 @@ namespace LarkatorGUI
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            await UpdateArkToolsData();
             await ReReadArk();
         }
 
@@ -373,6 +374,20 @@ namespace LarkatorGUI
                 ListSearches.Clear();
                 foreach (var search in searches)
                     ListSearches.Add(search);
+            }
+        }
+
+        private async Task UpdateArkToolsData()
+        {
+            StatusText = "Updating ark-tools database";
+            try
+            {
+                await ArkReader.ExecuteArkTools("update-data");
+                StatusText = "Updated ark-tools database";
+            }
+            catch (Exception e)
+            {
+                StatusText = "Failed to update ark-tools database: " + e.Message;
             }
         }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LarkatorGUI
@@ -21,7 +22,6 @@ namespace LarkatorGUI
         public bool Tamed { get; private set; }
 
         Dictionary<string, string> ClassMapping = new Dictionary<string, string>();
-        private Process process;
         private bool executing;
         private string outputDir;
 
@@ -84,41 +84,21 @@ namespace LarkatorGUI
             FoundDinos.Clear();
         }
 
-        private async Task ExecuteArkTools(string op, string saveFile, string outDir)
+        public static async Task ExecuteArkTools(string op, params string[] args)
         {
             var exe = Properties.Resources.ArkToolsExe;
             var exeDir = Path.GetDirectoryName(Properties.Settings.Default.ArkTools);
-            var commandLine = $"/S /C {exe} -p {op} \"{saveFile}\" \"{outDir}\"";
+            var sb = new StringBuilder($"/S /C {exe} -p {op}");
+            foreach (var arg in args)
+                sb.Append(" \"" + arg + "\"");
 
-            var completionTask = new TaskCompletionSource<int>();
-            var psi = new ProcessStartInfo("cmd.exe", commandLine)
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                ErrorDialog = true,
-                WorkingDirectory = exeDir,
-            };
-            process = new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo = psi,
-            };
+            var result = await ExecuteCommand(sb.ToString(), exeDir);
 
-            string collectedErrors = "";
-            process.ErrorDataReceived += (s, e) => { if (!String.IsNullOrWhiteSpace(e.Data)) collectedErrors += e.Data; };
-            process.Exited += (s, e) => completionTask.SetResult(process.ExitCode);
-            process.Start();
-            process.BeginErrorReadLine();
-            await completionTask.Task;
-            process.CancelErrorRead();
+            if (!String.IsNullOrWhiteSpace(result.ErrorOutput))
+                throw new ExternalToolsException(result.ErrorOutput);
 
-            if (!String.IsNullOrWhiteSpace(collectedErrors))
-                throw new ExternalToolsException(collectedErrors);
-
-            if (process.ExitCode != 0)
-                throw new ExternalToolsException("ARK Tools failed with no output but exit code " + process.ExitCode);
+            if (result.ExitCode != 0)
+                throw new ExternalToolsException("ARK Tools failed with no output but exit code " + result.ExitCode);
         }
 
         private async Task LoadClassesJson()
@@ -150,7 +130,36 @@ namespace LarkatorGUI
             LoadedSpecies.Add(speciesName);
         }
 
-        private async Task<string> ReadFileAsync(string path)
+        private static async Task<ProcessResult> ExecuteCommand(string commandLine, string workingDir)
+        {
+            var completionTask = new TaskCompletionSource<int>();
+            var psi = new ProcessStartInfo("cmd.exe", commandLine)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                ErrorDialog = true,
+                WorkingDirectory = workingDir,
+            };
+            var process = new Process
+            {
+                EnableRaisingEvents = true,
+                StartInfo = psi,
+            };
+
+            var collectedErrors = new StringBuilder();
+            process.ErrorDataReceived += (s, e) => { if (!String.IsNullOrWhiteSpace(e.Data)) collectedErrors.Append(e.Data); };
+            process.Exited += (s, e) => completionTask.SetResult(process.ExitCode);
+            process.Start();
+            process.BeginErrorReadLine();
+            await completionTask.Task;
+            process.CancelErrorRead();
+
+            return new ProcessResult { ErrorOutput = collectedErrors.ToString(), ExitCode = process.ExitCode };
+        }
+
+        private static async Task<string> ReadFileAsync(string path)
         {
             string content;
             using (var reader = File.OpenText(path))
@@ -159,6 +168,12 @@ namespace LarkatorGUI
             }
 
             return content;
+        }
+
+        private class ProcessResult
+        {
+            public string ErrorOutput { get; set; }
+            public int ExitCode { get; set; }
         }
     }
 }
