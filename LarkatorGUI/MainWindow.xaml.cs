@@ -265,22 +265,6 @@ namespace LarkatorGUI
             MarkSearchesChanged();
         }
 
-#if OBSOLETE
-        private async void ProcessNow_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsLoading) return;
-
-            await ReReadArk(true);
-        }
-
-        private async void WildTamed_Toggle(object sender, RoutedEventArgs e)
-        {
-            var btn = (ToggleButton)sender;
-            arkReaderWild.Tamed = (btn.IsChecked == true);
-            await ReReadArk(true);
-        }
-#endif
-
         private void AdjustableInteger_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var tb = (TextBlock)sender;
@@ -396,7 +380,8 @@ namespace LarkatorGUI
             await PerformConversion(force);
             await LoadSearchSpecies();
 
-            UpdateSearchResults(new List<SearchCriteria>());
+            var currentSearch = searchesList.SelectedItems.Cast<SearchCriteria>().ToList();
+            UpdateSearchResults(currentSearch);
         }
 
         private async Task LoadSearchSpecies()

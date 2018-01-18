@@ -45,7 +45,8 @@ namespace LarkatorGUI
                 await RunArkTools();
                 ClassMapping.Clear();
             }
-            else if (ClassMapping.Count == 0)
+
+            if (ClassMapping.Count == 0)
             {
                 await LoadClassesJson();
             }
