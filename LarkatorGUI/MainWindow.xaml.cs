@@ -378,6 +378,8 @@ namespace LarkatorGUI
 
         private async Task ReReadArk(bool force = false)
         {
+            if (IsLoading) return;
+
             await PerformConversion(force);
             await LoadSearchSpecies();
 

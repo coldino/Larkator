@@ -43,7 +43,6 @@ namespace LarkatorGUI
             if (force || IsConversionRequired())
             {
                 await RunArkTools();
-                ClassMapping.Clear();
             }
 
             if (ClassMapping.Count == 0)
@@ -76,8 +75,14 @@ namespace LarkatorGUI
             }
 
             executing = true;
-            await ExecuteArkTools(Tamed ? "tamed" : "wild", Properties.Settings.Default.SaveFile, outputDir);
-            executing = false;
+            try
+            {
+                await ExecuteArkTools(Tamed ? "tamed" : "wild", Properties.Settings.Default.SaveFile, outputDir);
+            }
+            finally
+            {
+                executing = false;
+            }
 
             // Clear previously loaded data
             ClassMapping.Clear();
@@ -110,6 +115,9 @@ namespace LarkatorGUI
                 .Select(mapping => new { Cls = mapping["cls"].Value<string>(), Name = mapping["name"].Value<string>() })
                 .Where(m => !m.Cls.Contains("BP_Ocean_C"))
                 .ToDictionary(m => m.Name, m => m.Cls);
+
+            if (ClassMapping.Count <= 0)
+                throw new ExternalToolsException("ARK Tools produced no classes output");
         }
 
         private async Task LoadSpecies(string speciesName)
