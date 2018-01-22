@@ -63,6 +63,10 @@
                     <local:NumericEntryControl Grid.Row="1" Grid.Column="1" ToolTip="The step between levels, typically 4 for 120 or 5 for 150 (only affects filter adjustments)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.LevelStep, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
                                                MaxValue="100" MinValue="1" Increment="1" LargeIncrement="1"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Conversion Delay (ms)</TextBlock>
+                    <local:NumericEntryControl Grid.Row="2" Grid.Column="1" ToolTip="The delay between detecting a change to the saved ark and running the conversion process (in milliseconds)"
+                                               Value="{Binding Source={StaticResource Model}, Path=Settings.ConvertDelay, Mode=TwoWay}" MaxWidth="110" HorizontalAlignment="Right"
+                                               MaxValue="10000" MinValue="200" Increment="100" LargeIncrement="500"/>
                 </Grid>
             </TabItem>
         </TabControl>

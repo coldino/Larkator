@@ -164,5 +164,17 @@ namespace LarkatorGUI.Properties {
                 this["MainWindowHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        public int ConvertDelay {
+            get {
+                return ((int)(this["ConvertDelay"]));
+            }
+            set {
+                this["ConvertDelay"] = value;
+            }
+        }
     }
 }

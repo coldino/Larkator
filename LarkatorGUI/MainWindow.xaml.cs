@@ -142,6 +142,7 @@ namespace LarkatorGUI
             fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
             fileWatcher.Renamed += FileWatcher_Changed;
             fileWatcher.EnableRaisingEvents = true;
+            reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
             reloadTimer.Tick += ReloadTimer_Tick;
 
             // Sort the results
@@ -560,7 +561,14 @@ namespace LarkatorGUI
             var settings = new SettingsWindow();
             settings.ShowDialog();
 
+            OnSettingsChanged();
+        }
+
+        private void OnSettingsChanged()
+        {
             EnsureOutputDirectory();
+
+            reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }
     }
 }
