@@ -14,8 +14,7 @@ Larkator uses your ARK save file to help you locate both wild and tamed creature
  - Helps you find your lost tames
  - Creature stats are shown to help you find that elusive next tame
  - Automatically re-reads your save file when it changes
-
-Currently only has a map for the island, although it will load any ARK and give useful coordinates.
+ - Supports all five of the standard ARK maps
 
 ### Requirements
 Larkator requires **ark-tools** to be installed (or at least, extracted).
@@ -28,11 +27,12 @@ or directly from [Qowyn/ark-tools](https://github.com/Qowyn/ark-tools/releases).
 ### Limitations
 Larkator is already very useful, but it is very new and is limited in some ways.
 
- - Only has a map for the island, so far
  - The search and results lists do not scroll if there are too many entries
  - None of the new Aberation stats are shown
 
 ### Installation
+Windows makes installing a simple app into a series of 'yes I'm sure' steps. Here's each little detail for anyone who's unsure:
+
 Note: If running Windows 10 you might need to enable installing apps from outside the app store...
 Open **Settings** and go to **Apps**. Under **App & Features** the first setting is called **Installing apps**. If this is set to "Allow apps from the Store only" then set it either "Warn me..." or "Allow apps from anywhere", depending on your level of trust. Warn is the safest.
 
