@@ -9,11 +9,11 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:sysCol="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        x:Name="root"
         SourceInitialized="Window_SourceInitialized" Loaded="Window_Loaded"
         Title="{Binding WindowTitle}" Background="{DynamicResource WindowBackgroundBrush}"
-        MaxHeight="800" MinHeight="240"
+        MaxHeight="1000" MinHeight="240"
         Left="{Binding Source={StaticResource Settings}, Path=Default.MainWindowLeft, Mode=TwoWay}"
         Top="{Binding Source={StaticResource Settings}, Path=Default.MainWindowTop, Mode=TwoWay}"
         Width="{Binding Source={StaticResource Settings}, Path=Default.MainWindowWidth, Mode=TwoWay}"
@@ -129,8 +129,8 @@
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="scale" CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1" />
-                        <TranslateTransform X="{Binding Path=Dino.Location, Converter={StaticResource PositionToXConverter}}"
-                                            Y="{Binding Path=Dino.Location, Converter={StaticResource PositionToYConverter}}"/>
+                        <TranslateTransform local:MapPositionConverter.Position="{Binding Path=Dino.Location}"
+                                            local:MapPositionConverter.Calibration="{Binding ElementName=root, Path=DataContext.MapCalibration}"/>
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -142,7 +142,7 @@
             <Grid/>
         </DataTemplate>
     </Window.Resources>
-    <DockPanel>
+    <DockPanel x:Name="root">
         <Border x:Name="statusPanel" DockPanel.Dock="Bottom" Background="#33000000" Padding="8,6,8,3">
             <Grid Height="16" TextBlock.Foreground="AntiqueWhite">
                 <Grid.ColumnDefinitions>
@@ -352,9 +352,9 @@
                     </StackPanel>
                 </DockPanel>
             </Border>
-            <Viewbox Grid.Column="1" MinWidth="240" MaxWidth="800" MaxHeight="800">
+            <Viewbox Grid.Column="1" MinWidth="240" MaxWidth="1000" MaxHeight="1000">
                 <Grid>
-                    <Image Source="imgs/hires_map.png" />
+                    <Image x:Name="image" Source="{Binding MapImage}" Width="1000" Height="1000" />
                     <Canvas>
                         <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
                     </Canvas>
@@ -366,7 +366,13 @@
                 <Border MinHeight="200" Padding="8" Background="{DynamicResource WindowBackgroundBrush}">
                     <DockPanel LastChildFill="True">
 
-                        <fa:ImageAwesome DockPanel.Dock="Bottom" Icon="cogs" Width="30" Height="30" Foreground="#44ffffff" ToolTip="Settings" MouseDown="Settings_Click"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                            <StackPanel x:Name="devButtons" Visibility="Collapsed" Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Bug" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Use dummy data" MouseDown="DummyData_Click"/>
+                                <fa:ImageAwesome Icon="crop" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Calibration" MouseDown="Calibration_Click"/>
+                            </StackPanel>
+                            <fa:ImageAwesome Icon="cogs" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Settings" MouseDown="Settings_Click"/>
+                        </StackPanel>
 
                         <StackPanel>
                             <TextBlock FontSize="24" TextAlignment="Center" Text="The Chase"/>

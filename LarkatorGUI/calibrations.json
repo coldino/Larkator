@@ -1,0 +1,37 @@
+[
+	{
+		"Filename": "TheIsland",
+		"OffsetX": 13.75,
+		"OffsetY": 23.75,
+		"ScaleX": 9.8875,
+		"ScaleY": 9.625
+	},
+	{
+		"Filename": "TheCenter",
+		"OffsetX": 14.0,
+		"OffsetY": 23.75,
+		"ScaleX": 9.9,
+		"ScaleY": 9.625
+	},
+	{
+		"Filename": "Aberration",
+		"OffsetX": 15.125,
+		"OffsetY": 19.0,
+		"ScaleX": 9.8875,
+		"ScaleY": 9.7
+	},
+	{
+		"Filename": "Ragnarok",
+		"OffsetX": 15.125,
+		"OffsetY": 18.875,
+		"ScaleX": 9.8875,
+		"ScaleY": 9.7125
+	},
+	{
+		"Filename": "ScorchedEarth",
+		"OffsetX": 13.875,
+		"OffsetY": 21.125,
+		"ScaleX": 9.9125,
+		"ScaleY": 9.6875
+	}
+]

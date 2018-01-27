@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace LarkatorGUI
@@ -43,6 +44,8 @@ namespace LarkatorGUI
         }
 
         public string WindowTitle { get { return $"{Properties.Resources.ProgramName} {ApplicationVersion}"; } }
+        public MapCalibration MapCalibration { get; private set; }
+        public ImageSource MapImage { get; private set; }
 
         public bool IsLoading
         {
@@ -92,6 +95,15 @@ namespace LarkatorGUI
             set { SetValue(ShowTamesProperty, value); }
         }
 
+        public ImageSource ImageSource
+        {
+            get { return (ImageSource)GetValue(ImageSourceProperty); }
+            set { SetValue(ImageSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty ImageSourceProperty =
+            DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(MainWindow), new PropertyMetadata(null));
+
         public static readonly DependencyProperty ShowTamesProperty =
             DependencyProperty.Register("ShowTames", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
 
@@ -121,7 +133,7 @@ namespace LarkatorGUI
         ArkReader arkReaderTamed;
         FileSystemWatcher fileWatcher;
         DispatcherTimer reloadTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-
+        private List<MapCalibration> mapCalibrations;
         readonly List<bool?> nullableBoolValues = new List<bool?> { null, false, true };
 
         public MainWindow()
@@ -131,19 +143,19 @@ namespace LarkatorGUI
             arkReaderWild = new ArkReader(true);
             arkReaderTamed = new ArkReader(false);
 
+            LoadCalibrations();
+            DiscoverCalibration();
+
             DataContext = this;
 
             InitializeComponent();
 
+            devButtons.Visibility = (ApplicationVersion == "DEVELOPMENT") ? Visibility.Visible : Visibility.Collapsed;
+
             LoadSavedSearches();
             EnsureOutputDirectory();
-
-            // Setup file watcher
-            fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
-            fileWatcher.Renamed += FileWatcher_Changed;
-            fileWatcher.EnableRaisingEvents = true;
-            reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
-            reloadTimer.Tick += ReloadTimer_Tick;
+            SetupFileWatcher();
+            CheckIfArkChanged(false);
 
             // Sort the results
             resultsList.Items.SortDescriptions.Add(new SortDescription("Dino.BaseLevel", ListSortDirection.Descending));
@@ -155,6 +167,41 @@ namespace LarkatorGUI
             // Add grouping to the searches list
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(searchesList.ItemsSource);
             view.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+        }
+
+        private void SetupFileWatcher()
+        {
+            if (fileWatcher != null) fileWatcher.EnableRaisingEvents = false;
+            fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
+            fileWatcher.Renamed += FileWatcher_Changed;
+            fileWatcher.EnableRaisingEvents = true;
+            reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
+            reloadTimer.Tick += ReloadTimer_Tick;
+        }
+
+        private void LoadCalibrations()
+        {
+            mapCalibrations = JsonConvert.DeserializeObject<List<MapCalibration>>(Properties.Resources.calibrationsJson);
+        }
+
+        private void DiscoverCalibration()
+        {
+            var filename = Properties.Settings.Default.SaveFile;
+            filename = Path.GetFileNameWithoutExtension(filename);
+            var best = mapCalibrations.FirstOrDefault(cal => filename.StartsWith(cal.Filename));
+            if (best == null)
+            {
+                StatusText = "Warning: Unable to determine map from filename - defaulting to The Island";
+                MapCalibration = mapCalibrations.Single(cal => cal.Filename == "TheIsland");
+            }
+            else
+            {
+                MapCalibration = best;
+            }
+
+            var imgFilename = $"pack://application:,,,/imgs/map_{MapCalibration.Filename}.jpg";
+            MapImage = (new ImageSourceConverter()).ConvertFromString(imgFilename) as ImageSource;
+            if (image != null) image.Source = MapImage;
         }
 
         private void ValidateWindowPositionAndSize()
@@ -187,11 +234,49 @@ namespace LarkatorGUI
             }
         }
 
+        private void CheckIfArkChanged(bool reconvert = true)
+        {
+            var arkChanged = false;
+            try
+            {
+                var lastArk = File.ReadAllText(Path.Combine(Properties.Settings.Default.OutputDir, Properties.Resources.LastArkFile));
+                if (lastArk != Properties.Settings.Default.SaveFile) arkChanged = true;
+            }
+            catch
+            {
+                arkChanged = true;
+            }
+
+            if (arkChanged)
+            {
+                arkReaderTamed.ForceNextConversion = true;
+                arkReaderWild.ForceNextConversion = true;
+
+                if (reconvert)
+                {
+                    NotifyArkChanged();
+                }
+            }
+        }
+
+        private void NotifyArkChanged()
+        {
+            // Cause a fresh conversion of the new ark
+            Dispatcher.Invoke(() => ReReadArk(force: true), DispatcherPriority.Background);
+
+            // Ensure the file watcher is watching the right directory
+            fileWatcher.Path = Path.GetDirectoryName(Properties.Settings.Default.SaveFile);
+        }
+
         private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             if (!String.Equals(e.FullPath, Properties.Settings.Default.SaveFile)) return;
 
-            Dispatcher.Invoke(() => StatusText = "Detected change to saved ARK...");
+            Dispatcher.Invoke(() =>
+            {
+                StatusText = "Detected change to saved ARK...";
+                StatusDetailText = "...waiting";
+            });
 
             // Cancel any existing timer to ensure we're not called multiple times
             if (reloadTimer.IsEnabled) reloadTimer.Stop();
@@ -245,6 +330,36 @@ namespace LarkatorGUI
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
         }
 
+        private void Calibration_Click(object sender, MouseButtonEventArgs e)
+        {
+            var win = new CalibrationWindow(new Calibration { Bounds = new Bounds() });
+            win.ShowDialog();
+        }
+
+        private void DummyData_Click(object sender, MouseButtonEventArgs e)
+        {
+            ListResults.Clear();
+
+            var dummyData = new Dino[] {
+                new Dino { Location=new Position{ Lat=10,Lon=10 }, Type="Testificate", Name="10,10" },
+                new Dino { Location=new Position{ Lat=90,Lon=10 }, Type="Testificate", Name="90,10" },
+                new Dino { Location=new Position{ Lat=10,Lon=90 }, Type="Testificate", Name="10,90" },
+                new Dino { Location=new Position{ Lat=90,Lon=90 }, Type="Testificate", Name="90,90" },
+                new Dino { Location=new Position{ Lat=50,Lon=50 }, Type="Testificate", Name="50,50" },
+            };
+
+            var rnd = new Random();
+            foreach (var result in dummyData)
+            {
+                result.Id = (ulong)rnd.Next();
+                DinoViewModel vm = new DinoViewModel(result) { Color = Colors.Green };
+                ListResults.Add(vm);
+            }
+
+            var cv = (CollectionView)CollectionViewSource.GetDefaultView(ListResults);
+            cv.Refresh();
+        }
+
         private async void SaveSearch_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
@@ -253,10 +368,20 @@ namespace LarkatorGUI
             {
                 NewSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException) // no entries for .Max - ignore
             { }
 
-            await arkReaderWild.EnsureSpeciesIsLoaded(NewSearch.Species);
+            IsLoading = true;
+            try
+            {
+                StatusText = $"Loading {NewSearch.Species}...";
+                await arkReaderWild.EnsureSpeciesIsLoaded(NewSearch.Species);
+                StatusText = $"Ready";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
 
             ListSearches.Add(NewSearch);
             NewSearch = null;
@@ -389,13 +514,29 @@ namespace LarkatorGUI
 
         private async Task LoadSearchSpecies()
         {
-            var species = arkReaderWild.AllSpecies.Distinct();
-            foreach (var speciesName in species)
-                await arkReaderWild.EnsureSpeciesIsLoaded(speciesName);
+            IsLoading = true;
+            try
+            {
+                var species = arkReaderWild.AllSpecies.Distinct();
+                foreach (var speciesName in species)
+                {
+                    StatusText = $"Loading {speciesName}...";
+                    await arkReaderWild.EnsureSpeciesIsLoaded(speciesName);
+                }
 
-            species = arkReaderTamed.AllSpecies.Distinct();
-            foreach (var speciesName in species)
-                await arkReaderTamed.EnsureSpeciesIsLoaded(speciesName);
+                species = arkReaderTamed.AllSpecies.Distinct();
+                foreach (var speciesName in species)
+                {
+                    StatusText = $"Loading {speciesName}...";
+                    await arkReaderTamed.EnsureSpeciesIsLoaded(speciesName);
+                }
+
+                StatusText = "Ready";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private void UpdateSearchResults(IList<SearchCriteria> searches)
@@ -437,15 +578,21 @@ namespace LarkatorGUI
 
         private async Task PerformConversion(bool force)
         {
+            string arkDirName = Path.GetFileNameWithoutExtension(Properties.Settings.Default.SaveFile);
+
             IsLoading = true;
             try
             {
+                StatusDetailText = "...converting";
                 StatusText = "Processing saved ARK : Wild";
-                await arkReaderWild.PerformConversion(force);
+                await arkReaderWild.PerformConversion(force, arkDirName);
                 StatusText = "Processing saved ARK : Tamed";
-                await arkReaderTamed.PerformConversion(force);
+                await arkReaderTamed.PerformConversion(force, arkDirName);
                 StatusText = "ARK processing completed";
                 StatusDetailText = $"{arkReaderWild.NumberOfSpecies} wild and {arkReaderTamed.NumberOfSpecies} species located";
+
+                // Write path to last ark into the output folder so we can check when we change ARKs
+                File.WriteAllText(Path.Combine(Properties.Settings.Default.OutputDir, Properties.Resources.LastArkFile), Properties.Settings.Default.SaveFile);
             }
             catch (Exception ex)
             {
@@ -568,7 +715,10 @@ namespace LarkatorGUI
 
         private void OnSettingsChanged()
         {
+            DiscoverCalibration();
             EnsureOutputDirectory();
+            CheckIfArkChanged();
+            UpdateCurrentSearch();
 
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }

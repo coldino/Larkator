@@ -21,6 +21,8 @@ namespace LarkatorGUI
         public int NumberOfSpecies { get { return ClassMapping.Count; } }
         public bool Tamed { get; private set; }
 
+        public bool ForceNextConversion { get; set; }
+
         Dictionary<string, string> ClassMapping = new Dictionary<string, string>();
         private bool executing;
         private string outputDir;
@@ -35,13 +37,14 @@ namespace LarkatorGUI
             if (!Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
         }
 
-        public async Task PerformConversion(bool force = false)
+        public async Task PerformConversion(bool force, string dirName)
         {
-            outputDir = Path.Combine(Properties.Settings.Default.OutputDir, Tamed ? "tamed" : "wild");
+            outputDir = Path.Combine(Properties.Settings.Default.OutputDir, dirName, Tamed ? "tamed" : "wild");
             EnsureDirectory(outputDir);
 
-            if (force || IsConversionRequired())
+            if (force || ForceNextConversion || IsConversionRequired())
             {
+                ForceNextConversion = false;
                 await RunArkTools();
             }
 
@@ -116,8 +119,10 @@ namespace LarkatorGUI
                 .Where(m => !m.Cls.Contains("BP_Ocean_C"))
                 .ToDictionary(m => m.Name, m => m.Cls);
 
+#if WARN_ON_EMPTY_CLASSES
             if (ClassMapping.Count <= 0)
                 throw new ExternalToolsException("ARK Tools produced no classes output");
+#endif
         }
 
         private async Task LoadSpecies(string speciesName)

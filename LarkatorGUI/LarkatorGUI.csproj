@@ -97,6 +97,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\program files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Runtime.Serialization.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -116,6 +121,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArkReader.cs" />
+    <Compile Include="CalibrationWindow.xaml.cs">
+      <DependentUpon>CalibrationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DinoViewModel.cs" />
     <Compile Include="ExternalToolsException.cs" />
     <Compile Include="DirectoryEntryBox.xaml.cs">
@@ -129,6 +137,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters.cs" />
+    <Compile Include="MapPositionConverter.cs" />
     <Compile Include="NumericEntryControl.xaml.cs">
       <DependentUpon>NumericEntryControl.xaml</DependentUpon>
     </Compile>
@@ -143,6 +152,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WindowAspectRatio.cs" />
+    <Page Include="CalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DirectoryEntryBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -189,6 +202,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="calibrations.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -216,9 +230,6 @@
     <Resource Include="imgs\nogender.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="imgs\hires_map.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="compass.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +243,13 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imgs\map_Aberration.jpg" />
+    <Resource Include="imgs\map_Ragnarok.jpg" />
+    <Resource Include="imgs\map_ScorchedEarth.jpg" />
+    <Resource Include="imgs\map_TheCenter.jpg" />
+    <Resource Include="imgs\map_TheIsland.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
