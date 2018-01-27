@@ -616,10 +616,7 @@ namespace LarkatorGUI
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            SearchCriteria sourceItem = dropInfo.Data as SearchCriteria;
-            SearchCriteria targetItem = dropInfo.TargetItem as SearchCriteria;
-
-            if (sourceItem != null && targetItem != null)
+            if (dropInfo.TargetItem is SearchCriteria targetItem && dropInfo.Data is SearchCriteria sourceItem)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Move;
@@ -639,22 +636,30 @@ namespace LarkatorGUI
 
             // Try to figure out the other item to insert between, or pick a boundary
             var options = ListSearches
-                .OrderBy(sc => sc.Group).ThenBy(sc => sc.Order).ThenBy(sc => sc.Species).ThenBy(sc => sc.MinLevel).ThenBy(sc => sc.MaxLevel)
-                .Where(sc => (ip == RelativeInsertPosition.BeforeTargetItem) ? sc.Order < targetItem.Order : sc.Order > targetItem.Order).ToArray();
+                .Where(sc => sc != sourceItem)
+                .Where(sc => sc.Group == targetItem.Group)
+                .OrderBy(sc => sc.Order)
+                .ToArray();
 
-            double bound;
-            if (options.Length > 0)
-            {
-                var otherItem = (ip == RelativeInsertPosition.BeforeTargetItem) ? options.Last() : options.First();
-                bound = otherItem.Order;
-            }
-            else
-            {
-                bound = targetItem.Order + ((ip == RelativeInsertPosition.BeforeTargetItem) ? -100 : 100);
-            }
+            var above = options.Where(sc => sc.Order < targetItem.Order).OrderByDescending(sc => sc.Order).FirstOrDefault();
+            var below = options.Where(sc => sc.Order > targetItem.Order).OrderBy(sc => sc.Order).FirstOrDefault();
 
-            // Update the order to be mid-way between the two
-            sourceItem.Order = (targetItem.Order + bound) / 2;
+            var aboveOrder = (above == null) ? options.Min(sc => sc.Order) - 1 : above.Order;
+            var belowOrder = (below == null) ? options.Max(sc => sc.Order) + 1 : below.Order;
+
+            // Update the order to be mid-way between either above or below, based on drag insert position
+            sourceItem.Order = (targetItem.Order + (ip.HasFlag(RelativeInsertPosition.AfterTargetItem) ? belowOrder : aboveOrder)) / 2;
+
+            // Renumber the results
+            var orderedSearches = ListSearches
+                .OrderBy(sc => sc.Group)
+                .ThenBy(sc => sc.Order)
+                .ToArray();
+
+            for (var i = 0; i < orderedSearches.Length; i++)
+            {
+                orderedSearches[i].Order = i;
+            }
 
             // Force binding update
             CollectionViewSource.GetDefaultView(searchesList.ItemsSource).Refresh();

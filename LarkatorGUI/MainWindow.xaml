@@ -11,9 +11,10 @@
         xmlns:sysCol="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
+        x:Name="root"
         SourceInitialized="Window_SourceInitialized" Loaded="Window_Loaded"
         Title="{Binding WindowTitle}" Background="{DynamicResource WindowBackgroundBrush}"
-        MaxHeight="1000" MinHeight="240"
+        MaxHeight="1016" MinHeight="240"
         Left="{Binding Source={StaticResource Settings}, Path=Default.MainWindowLeft, Mode=TwoWay}"
         Top="{Binding Source={StaticResource Settings}, Path=Default.MainWindowTop, Mode=TwoWay}"
         Width="{Binding Source={StaticResource Settings}, Path=Default.MainWindowWidth, Mode=TwoWay}"
@@ -28,16 +29,6 @@
         <local:GenderToImageConverter x:Key="GenderToImageConverter"/>
         <local:GenderToLetterConverter x:Key="GenderToLetterConverter"/>
         <SolidColorBrush x:Key="MaleSymbolBrush" Color="#FF050C93"/>
-        <sysCol:ArrayList x:Key="DummyData">
-            <common:Dino Name="Dummy" BaseLevel="100" Female="False" Id="213412341234" Type="Allosaurus">
-                <common:Dino.Location>
-                    <common:Position Lat="10" Lon="20"/>
-                </common:Dino.Location>
-                <common:Dino.WildLevels>
-                    <common:StatPoints Health="1" Melee="2"/>
-                </common:Dino.WildLevels>
-            </common:Dino>
-        </sysCol:ArrayList>
         <DataTemplate x:Key="SearchCriteriaTemplate" DataType="{x:Type common:SearchCriteria}">
             <Grid Margin="0,2">
                 <Grid.ColumnDefinitions>
@@ -142,7 +133,7 @@
             <Grid/>
         </DataTemplate>
     </Window.Resources>
-    <DockPanel x:Name="root">
+    <DockPanel>
         <Border x:Name="statusPanel" DockPanel.Dock="Bottom" Background="#33000000" Padding="8,6,8,3">
             <Grid Height="16" TextBlock.Foreground="AntiqueWhite">
                 <Grid.ColumnDefinitions>
@@ -192,7 +183,8 @@
                               Background="Transparent" BorderThickness="0"
                               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                               SelectionChanged="Searches_SelectionChanged" SelectionMode="Single"
-                              lvl:ListViewLayoutManager.Enabled="True" Padding="-1" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding ElementName=root}">
+                              lvl:ListViewLayoutManager.Enabled="True" Padding="-1"
+                              dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding ElementName=root}">
                             <ListView.Resources>
                                 <Style TargetType="{x:Type GridViewColumnHeader}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -356,7 +348,7 @@
                 <Grid>
                     <Image x:Name="image" Source="{Binding MapImage}" Width="1000" Height="1000" />
                     <Canvas>
-                        <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+                        <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding ListResults}"/>
                     </Canvas>
                     <fa:ImageAwesome Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                                      Icon="cog" Spin="True" SpinDuration="3" Width="360" Height="360" Foreground="#88ffffff"/>
@@ -398,7 +390,7 @@
                                 <TextBlock Grid.Column="7" Text="Sp" TextAlignment="Center"/>
                             </Grid>
 
-                            <ItemsControl x:Name="resultsList" TextBlock.FontSize="16" ItemTemplate="{DynamicResource DinoTemplate}" ItemsSource="{Binding ListResults}" d:DataContext="{StaticResource DummyData}"/>
+                            <ItemsControl x:Name="resultsList" TextBlock.FontSize="16" ItemTemplate="{DynamicResource DinoTemplate}" ItemsSource="{Binding ListResults}"/>
 
                         </StackPanel>
                     </DockPanel>
