@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -81,52 +80,44 @@ namespace LarkatorGUI
         }
     }
 
-    [DataContract]
     public class Calibration : DependencyObject
     {
-        [JsonIgnore]
         public Bounds Bounds
         {
             get { return (Bounds)GetValue(BoundsProperty); }
             set { SetValue(BoundsProperty, value); }
         }
 
-        [DataMember]
         public string Filename
         {
             get { return (string)GetValue(FilenameProperty); }
             set { SetValue(FilenameProperty, value); }
         }
 
-        [DataMember]
         public double OffsetX
         {
             get { return (double)GetValue(OffsetXProperty); }
             set { SetValue(OffsetXProperty, value); }
         }
 
-        [DataMember]
         public double OffsetY
         {
             get { return (double)GetValue(OffsetYProperty); }
             set { SetValue(OffsetYProperty, value); }
         }
 
-        [DataMember]
         public double ScaleX
         {
             get { return (double)GetValue(ScaleXProperty); }
             set { SetValue(ScaleXProperty, value); }
         }
 
-        [DataMember]
         public double ScaleY
         {
             get { return (double)GetValue(ScaleYProperty); }
             set { SetValue(ScaleYProperty, value); }
         }
 
-        [JsonIgnore]
         public string Output
         {
             get { return (string)GetValue(OutputProperty); }
@@ -172,7 +163,18 @@ namespace LarkatorGUI
             OffsetX = minX - ScaleX * 10;
             OffsetY = minY - ScaleY * 10;
 
-            Output = JsonConvert.SerializeObject(this, Formatting.Indented);
+            Output = RecreateOutput();
+        }
+
+        private string RecreateOutput()
+        {
+            return $"{{\n" +
+                $"  \"Filename\": \"{Filename}\",\n" +
+                $"  \"OffsetX\": \"{OffsetX}\",\n" +
+                $"  \"OffsetY\": \"{OffsetY}\",\n" +
+                $"  \"ScaleX\": \"{ScaleX}\",\n" +
+                $"  \"ScaleY\": \"{ScaleY}\"\n" +
+                $"}},";
         }
     }
 
