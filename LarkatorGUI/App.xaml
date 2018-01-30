@@ -8,8 +8,11 @@
     <Application.Resources>
 
         <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FF2D6BA8"/>
+        <SolidColorBrush x:Key="SelectionBackgroundBrush" Color="#22FAEBD7"/>
+
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <local:OptionalIntConverter x:Key="OptionalIntConverter"/>
+
         <prop:Settings x:Key="Settings"/>
 
     </Application.Resources>

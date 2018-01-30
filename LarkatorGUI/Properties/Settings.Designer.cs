@@ -176,5 +176,29 @@ namespace LarkatorGUI.Properties {
                 this["ConvertDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int ListFontSize {
+            get {
+                return ((int)(this["ListFontSize"]));
+            }
+            set {
+                this["ListFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        public double PinScale {
+            get {
+                return ((double)(this["PinScale"]));
+            }
+            set {
+                this["PinScale"] = value;
+            }
+        }
     }
 }

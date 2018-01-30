@@ -107,11 +107,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddIntConverter.cs" />
     <Compile Include="ArkReader.cs" />
     <Compile Include="CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DinoViewModel.cs" />
+    <Compile Include="DummyMainWindow.cs" />
     <Compile Include="ExternalToolsException.cs" />
     <Compile Include="DirectoryEntryBox.xaml.cs">
       <DependentUpon>DirectoryEntryBox.xaml</DependentUpon>
@@ -119,6 +121,7 @@
     <Compile Include="FileEntryBox.xaml.cs">
       <DependentUpon>FileEntryBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FontSizeHelper.cs" />
     <Compile Include="ListViewHackyCell.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -207,10 +210,6 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3c4c5a9e-9165-4074-ae85-df62931457eb}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ListViewLayout\ListViewLayout.csproj">
-      <Project>{916a9879-3f2d-471f-aafa-28f0c8a7ffa9}</Project>
-      <Name>ListViewLayout</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
