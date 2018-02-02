@@ -59,6 +59,10 @@ Open **Settings** and go to **Apps**. Under **App & Features** the first setting
  - While ingame, use the command `saveworld` to force the game to save - Larkator will update immediately
  - Locate that max-level Quetzal and go get it!
 
+### Known Issues
+ 1) Larger saved arks cause ark-tools to generate an OutOfMemory error. To avoid this the memory allocated to ark-tools.exe must be upped.
+    To achieve this, create simple text file beside ark-tools.exe called **ark-tools.l4j.ini**. It should contain only the text **-Xmx4G**.
+
 ### License
 Larkator is Open Source and released under the MIT license. Contributions are encouraged.
 
