@@ -27,10 +27,10 @@
       <Value Profile="(Default)">-10000</Value>
     </Setting>
     <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1352</Value>
+      <Value Profile="(Default)">1252</Value>
     </Setting>
     <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">800</Value>
+      <Value Profile="(Default)">700</Value>
     </Setting>
     <Setting Name="ConvertDelay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2000</Value>

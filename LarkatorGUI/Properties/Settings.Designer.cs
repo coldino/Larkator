@@ -143,7 +143,7 @@ namespace LarkatorGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1352")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1252")]
         public double MainWindowWidth {
             get {
                 return ((double)(this["MainWindowWidth"]));
@@ -155,7 +155,7 @@ namespace LarkatorGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("800")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
         public double MainWindowHeight {
             get {
                 return ((double)(this["MainWindowHeight"]));

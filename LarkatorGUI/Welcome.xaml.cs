@@ -1,21 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LarkatorGUI
 {
@@ -67,6 +56,14 @@ namespace LarkatorGUI
             LetsGoButton.IsEnabled = toolsGood && saveGood;
         }
 
+        private string CheckFile(string fullpath)
+        {
+            if (String.IsNullOrWhiteSpace(fullpath) || !File.Exists(fullpath))
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            else
+                return Path.GetDirectoryName(fullpath);
+        }
+
         private void BrowseArkTools_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog()
@@ -74,15 +71,16 @@ namespace LarkatorGUI
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
-                DefaultExt = "ark-tools.exe",
-                DereferenceLinks = true,
-                Filter = "ARK Tools Executable|ark-tools.exe",
+                DereferenceLinks = false,
                 Multiselect = false,
+                DefaultExt = "ark-tools.exe",
+                Filter = "ARK Tools Executable|ark-tools.exe",
                 Title = "Locate ark-tools.exe...",
                 FileName = ArkToolsPath,
+                InitialDirectory = CheckFile(ArkToolsPath),
             };
 
-            var result = dialog.ShowDialog();
+            var result = dialog.ShowDialog(this);
             if (result == true)
             {
                 ArkToolsPath = dialog.FileName;
@@ -96,15 +94,16 @@ namespace LarkatorGUI
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
-                DefaultExt = ".ark",
-                DereferenceLinks = true,
-                Filter = "ARK Save File|*.ark",
+                DereferenceLinks = false,
                 Multiselect = false,
+                DefaultExt = ".ark",
+                Filter = "ARK Save File|*.ark",
                 Title = "Locate saved ARK...",
                 FileName = SaveFilePath,
+                InitialDirectory = CheckFile(SaveFilePath),
             };
 
-            var result = dialog.ShowDialog();
+            var result = dialog.ShowDialog(this);
             if (result == true)
             {
                 SaveFilePath = dialog.FileName;
@@ -113,8 +112,6 @@ namespace LarkatorGUI
 
         private void LetsGoButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Let's go!");
-
             Properties.Settings.Default.ArkTools = ArkToolsPath;
             Properties.Settings.Default.SaveFile = SaveFilePath;
 
