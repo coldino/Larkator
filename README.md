@@ -25,9 +25,8 @@ or directly from [Qowyn/ark-tools](https://github.com/Qowyn/ark-tools/releases).
 (note: Larkator now updates the ark-tools database (*update-data*) each time it is launched)
 
 ### Limitations
-Larkator is already very useful, but it is very new and is limited in some ways.
+Larkator is already very useful, but it is still new and is limited in some ways.
 
- - The search and results lists do not scroll if there are too many entries
  - None of the new Aberation stats are shown
 
 ### Installation
@@ -43,8 +42,7 @@ For full step-by-step installation instructions refer to the [wiki](https://gith
  - Locate that max-level Quetzal and go get it!
 
 ### Known Issues
- 1) Larger saved arks cause ark-tools to generate an OutOfMemory error. To avoid this the memory allocated to ark-tools.exe must be upped.
-    To achieve this, create a simple text file in the same directory as ark-tools.exe and call it **ark-tools.l4j.ini**. It should contain only the text **-Xmx4G**.
+See the [known issues](https://github.com/coldino/Larkator/wiki/Known-Issues) page on the wiki.
 
 ### License
 Larkator is Open Source and released under the MIT license. Contributions are encouraged.
