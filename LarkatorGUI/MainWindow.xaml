@@ -100,7 +100,7 @@
             <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.PanningMode" Value="VerticalOnly"/>
             <Setter Property="Stylus.IsFlicksEnabled" Value="True"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
@@ -195,6 +195,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <FrameworkElement x:Name="dummyElement"/>
+
         <Border x:Name="statusPanel" Grid.Row="1" Background="#33000000" Padding="8,6,8,3">
             <Grid Height="16" TextBlock.Foreground="AntiqueWhite">
                 <Grid.ColumnDefinitions>
@@ -270,7 +272,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn >
+                        <DataGridTemplateColumn Visibility="{Binding DataContext.ShowHunt, Source={x:Reference dummyElement}, Converter={StaticResource BoolToVisibilityConverter}}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="RemoveSearch_Click" Padding="0" Margin="0">
