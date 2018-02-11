@@ -490,6 +490,8 @@ namespace LarkatorGUI
                 UpdateCurrentSearch();
 
             MarkSearchesChanged();
+
+            e.Handled = true;
         }
 
         private void AdjustableGender_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -510,6 +512,8 @@ namespace LarkatorGUI
                 UpdateCurrentSearch();
 
             MarkSearchesChanged();
+
+            e.Handled = true;
         }
 
         private void Result_MouseEnter(object sender, MouseEventArgs e)
