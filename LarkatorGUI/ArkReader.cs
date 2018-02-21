@@ -114,15 +114,27 @@ namespace LarkatorGUI
         {
             string content = await ReadFileAsync(Path.Combine(outputDir, Properties.Resources.ClassesJson));
             var classesOutput = JArray.Parse(content);
-            ClassMapping = classesOutput
-                .Select(mapping => new { Cls = mapping["cls"].Value<string>(), Name = mapping["name"].Value<string>() })
-                .Where(m => !m.Cls.Contains("BP_Ocean_C"))
-                .ToDictionary(m => m.Name, m => m.Cls);
 
-#if WARN_ON_EMPTY_CLASSES
-            if (ClassMapping.Count <= 0)
-                throw new ExternalToolsException("ARK Tools produced no classes output");
-#endif
+            ClassMapping = new Dictionary<string, string>();
+            foreach (var mapping in classesOutput.OrderBy(mapping => mapping["cls"].Value<string>().Length))
+            {
+                var cls = mapping["cls"].Value<string>();
+                var name = mapping["name"].Value<string>();
+
+                if (ClassMapping.ContainsKey(name))
+                    name = GenerateNameVariant(name, cls);
+
+                ClassMapping.Add(name, cls);
+            }
+        }
+
+        private string GenerateNameVariant(string name, string cls)
+        {
+            var clsParts = cls.Split('_');
+            if (clsParts.Length > 3 && clsParts.Last() == "C" && clsParts[clsParts.Length - 3] == "BP")
+                return $"{name} ({clsParts[clsParts.Length - 2]})";
+
+            return name + "*";
         }
 
         private async Task LoadSpecies(string speciesName)
@@ -136,6 +148,10 @@ namespace LarkatorGUI
             {
                 var contents = await ReadFileAsync(path);
                 FoundDinos[speciesName] = JsonConvert.DeserializeObject<List<Dino>>(contents);
+                if (FoundDinos[speciesName].Count > 0 && FoundDinos[speciesName].First().Type != speciesName)
+                {
+                    FoundDinos[speciesName].ForEach(d => d.Type = speciesName);
+                }
             }
             else
             {
