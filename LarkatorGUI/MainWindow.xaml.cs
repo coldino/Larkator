@@ -96,6 +96,15 @@ namespace LarkatorGUI
             set { SetValue(ImageSourceProperty, value); }
         }
 
+        public string SearchText
+        {
+            get { return (string)GetValue(SearchTextProperty); }
+            set { SetValue(SearchTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty SearchTextProperty =
+            DependencyProperty.Register("SearchText", typeof(string), typeof(MainWindow), new PropertyMetadata(""));
+
         public static readonly DependencyProperty ImageSourceProperty =
             DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(MainWindow), new PropertyMetadata(null));
 
@@ -131,6 +140,9 @@ namespace LarkatorGUI
         private List<MapCalibration> mapCalibrations;
         private readonly string appVersion;
         readonly List<bool?> nullableBoolValues = new List<bool?> { null, false, true };
+        DateTime nameSearchTime;
+        string nameSearchArg;
+        bool nameSearchRunning;
 
         public MainWindow()
         {
@@ -163,6 +175,8 @@ namespace LarkatorGUI
             var cmdThrowExceptionAndExit = new RoutedCommand();
             cmdThrowExceptionAndExit.InputGestures.Add(new KeyGesture(Key.F2, ModifierKeys.Control));
             CommandBindings.Add(new CommandBinding(cmdThrowExceptionAndExit, (o, e) => Dev_GenerateException_Click(null, null)));
+
+            DependencyPropertyDescriptor.FromProperty(SearchTextProperty, typeof(MainWindow)).AddValueChanged(DataContext, (s,e) => TriggerNameSearch());
         }
 
         private static string CalculateApplicationVersion()
@@ -318,6 +332,24 @@ namespace LarkatorGUI
             UpdateCurrentSearch();
 
             MarkSearchesChanged();
+        }
+
+        private void ClearSearch_Click(object sender, RoutedEventArgs e)
+        {
+            SearchText = "";
+
+            TriggerNameSearch(true);
+        }
+
+        private void Search_Click(object sender, MouseButtonEventArgs e)
+        {
+            TriggerNameSearch(true);
+        }
+
+        private void SearchText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                TriggerNameSearch(true);
         }
 
         private void MapPin_Click(object sender, MouseButtonEventArgs ev)
@@ -522,7 +554,7 @@ namespace LarkatorGUI
             if (fe == null) return;
             var dino = fe.DataContext as DinoViewModel;
             if (dino == null) return;
-            dino.Highlight = true;
+            //dino.Highlight = true;
         }
 
         private void Result_MouseLeave(object sender, MouseEventArgs e)
@@ -531,7 +563,7 @@ namespace LarkatorGUI
             if (fe == null) return;
             var dino = fe.DataContext as DinoViewModel;
             if (dino == null) return;
-            dino.ClearValue(DinoViewModel.HighlightProperty);
+            //dino.ClearValue(DinoViewModel.HighlightProperty);
         }
 
         private void ResultList_Sorting(object sender, DataGridSortingEventArgs e)
@@ -660,6 +692,8 @@ namespace LarkatorGUI
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
+
+            TriggerNameSearch(true);
         }
 
         private async Task PerformConversion(bool force)
@@ -769,6 +803,8 @@ namespace LarkatorGUI
             ListSearches.Clear();
             foreach (var search in searches)
                 ListSearches.Add(search);
+
+            TriggerNameSearch(true);
         }
 
         private void ShowWildSearches()
@@ -805,6 +841,41 @@ namespace LarkatorGUI
 
             foreach (var o in dataGrid.Columns.Zip(widths, (col, width) => new { col, width }))
                 o.col.Width = o.width;
+        }
+
+        private void TriggerNameSearch(bool immediate=false)
+        {
+            nameSearchTime = DateTime.Now + TimeSpan.FromSeconds(immediate ? 0.01 : 0.5);
+            nameSearchArg = SearchText;
+
+            if (!nameSearchRunning)
+            {
+                nameSearchRunning = true;
+                Dispatcher.Invoke(WaitForNameSearch, DispatcherPriority.Background);
+            }
+        }
+
+        private async Task WaitForNameSearch()
+        {
+            while (nameSearchTime > DateTime.Now)
+            {
+                await Task.Delay(100);
+            }
+
+            nameSearchRunning = false;
+            
+            var searchText = nameSearchArg.Trim();
+
+            if (String.IsNullOrWhiteSpace(searchText) || searchText.Length < 2)
+            {
+                foreach (var dvm in ListResults)
+                    dvm.Highlight = false;
+            }
+            else
+            {
+                foreach (var dvm in ListResults)
+                    dvm.Highlight = (dvm.Dino.Name != null) && dvm.Dino.Name.Contains(searchText);
+            }
         }
     }
 }

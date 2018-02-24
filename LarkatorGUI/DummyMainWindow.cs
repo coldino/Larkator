@@ -9,6 +9,8 @@ namespace LarkatorGUI
     {
         public string ApplicationVersion { get => "DUMMY"; }
 
+        public string SearchText { get; set; } = "search";
+
         public Collection<SearchCriteria> ListSearches { get => searches; }
         public Collection<DinoViewModel> ListResults { get => results; }
 

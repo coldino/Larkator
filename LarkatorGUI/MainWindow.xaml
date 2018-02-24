@@ -45,12 +45,19 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
+        <Style x:Key="ClearTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Foreground" Value="AntiqueWhite"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+        </Style>
+
         <Style x:Key="CleanRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource SelectionBackgroundBrush}" />
+                    <Setter Property="Background" Value="#4884" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -285,7 +292,22 @@
                 </DataGrid>
 
                 <StackPanel Grid.Row="2" Orientation="Vertical">
-                    <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click" Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8" Visibility="{Binding ShowTames, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Border BorderThickness="0,0,0,1" BorderBrush="#4FFF">
+                            <StackPanel Orientation="Horizontal" TextBlock.FontSize="{Binding Source={StaticResource Settings}, Path=Default.ListFontSize}">
+                                <TextBox x:Name="searchText" Width="140" AcceptsReturn="False" Style="{StaticResource ClearTextBox}"
+                                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="SearchText_KeyDown"
+                                         VerticalContentAlignment="Bottom" Padding="2,0,2,2" local:FontSizeHelper.RelativeFontSize="+2"/>
+                                <Button Click="ClearSearch_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}"
+                                        Margin="4,4,8,3" Padding="3,0" ToolTip="Clear search term">
+                                    <fa:ImageAwesome Icon="Close" Width="10" Foreground="AntiqueWhite" Opacity="0.6"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <fa:ImageAwesome Icon="Search" Width="24" Foreground="AntiqueWhite" Margin="8,0,0,0" Opacity="0.6" MouseDown="Search_Click"/>
+                    </StackPanel>
+                    <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click"
+                            Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
                         <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
                             <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True"/>
@@ -335,7 +357,7 @@
                 <DataGrid Grid.Row="1" x:Name="resultsList" Margin="8" AutoGenerateColumns="False" IsReadOnly="True"
                           ItemsSource="{Binding Source={StaticResource OrderedResults}}"
                           TextBlock.FontSize="{Binding Default.ListFontSize, Source={StaticResource Settings}}"
-                          SelectionMode="Single" SelectionUnit="FullRow" CanUserSortColumns="True" Sorting="ResultList_Sorting"
+                          SelectionMode="Extended" SelectionUnit="FullRow" CanUserSortColumns="True" Sorting="ResultList_Sorting"
                           Style="{DynamicResource CleanDataGridStyle}" RowStyle="{DynamicResource CleanDinoRowStyle}"
                           ColumnHeaderStyle="{DynamicResource CleanColumnHeaderStyle}" CellStyle="{DynamicResource CleanCellStyle}"
                           >
