@@ -429,8 +429,7 @@ namespace LarkatorGUI
                 ListResults.Add(vm);
             }
 
-            var cv = (CollectionView)CollectionViewSource.GetDefaultView(ListResults);
-            cv.Refresh();
+            ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
         }
 
         private async void SaveSearch_Click(object sender, RoutedEventArgs e)
