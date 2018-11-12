@@ -2,13 +2,15 @@
     
     {
         "Filename": "TheIsland",
-        "OffsetX": "17.25",
-        "OffsetY": "23.75",
-        "ScaleX": "9.575",
-        "ScaleY": "9.625"
+        "Units": 8000,
+        "OffsetX": 17.25,
+        "OffsetY": 23.75,
+        "ScaleX": 9.575,
+        "ScaleY": 9.625
     },
     {
         "Filename": "TheCenter",
+        "Units": 8000,
         "OffsetX": 14.0,
         "OffsetY": 23.75,
         "ScaleX": 9.9,
@@ -16,6 +18,7 @@
     },
     {
         "Filename": "Aberration",
+        "Units": 8000,
         "OffsetX": 15.125,
         "OffsetY": 19.0,
         "ScaleX": 9.8875,
@@ -23,6 +26,7 @@
     },
     {
         "Filename": "Ragnarok",
+        "Units": 13100,
         "OffsetX": 15.125,
         "OffsetY": 18.875,
         "ScaleX": 9.8875,
@@ -30,6 +34,7 @@
     },
     {
         "Filename": "ScorchedEarth",
+        "Units": 8000,
         "OffsetX": 13.875,
         "OffsetY": 21.125,
         "ScaleX": 9.9125,
@@ -37,9 +42,10 @@
     },
     {
         "Filename": "Extinction",
-        "OffsetX": "92.375",
-        "OffsetY": "86.125",
-        "ScaleX": "8.4625",
-        "ScaleY": "8.2875"
+        "Units": 8000,
+        "OffsetX": 92.375,
+        "OffsetY": 86.125,
+        "ScaleX": 8.4625,
+        "ScaleY": 8.2875
     }
 ]

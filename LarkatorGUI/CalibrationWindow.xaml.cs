@@ -70,6 +70,16 @@ namespace LarkatorGUI
         {
             return cal * (1 - mult) + x * mult;
         }
+
+        private void Filename_TextChanged(object sender, TextChangedEventArgs e)
+        {
+           calibration.Image = $"imgs\\map_{((TextBox)sender).Text}.jpg";
+        }
+
+        private void UpdateOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            calibration.Recalculate();
+        }
     }
 
     public class ExampleCalibration : Calibration
@@ -92,6 +102,18 @@ namespace LarkatorGUI
         {
             get { return (string)GetValue(FilenameProperty); }
             set { SetValue(FilenameProperty, value); }
+        }
+
+        public string Image
+        {
+            get { return (string)GetValue(ImageProperty); }
+            set { SetValue(ImageProperty, value); }
+        }
+
+        public int Units
+        {
+            get { return (int)GetValue(UnitsProperty); }
+            set { SetValue(UnitsProperty, value); }
         }
 
         public double OffsetX
@@ -142,6 +164,9 @@ namespace LarkatorGUI
         public static readonly DependencyProperty ImageProperty =
             DependencyProperty.Register("Image", typeof(string), typeof(Calibration), new PropertyMetadata(""));
 
+        public static readonly DependencyProperty UnitsProperty =
+            DependencyProperty.Register("Units", typeof(int), typeof(Calibration), new PropertyMetadata(0));
+
         public static readonly DependencyProperty FilenameProperty =
             DependencyProperty.Register("Filename", typeof(string), typeof(Calibration), new PropertyMetadata(""));
 
@@ -170,10 +195,11 @@ namespace LarkatorGUI
         {
             return $"{{\n" +
                 $"  \"Filename\": \"{Filename}\",\n" +
-                $"  \"OffsetX\": \"{OffsetX}\",\n" +
-                $"  \"OffsetY\": \"{OffsetY}\",\n" +
-                $"  \"ScaleX\": \"{ScaleX}\",\n" +
-                $"  \"ScaleY\": \"{ScaleY}\"\n" +
+                $"  \"Units\": {Units},\n" +
+                $"  \"OffsetX\": {OffsetX},\n" +
+                $"  \"OffsetY\": {OffsetY},\n" +
+                $"  \"ScaleX\": {ScaleX},\n" +
+                $"  \"ScaleY\": {ScaleY}\n" +
                 $"}},";
         }
     }

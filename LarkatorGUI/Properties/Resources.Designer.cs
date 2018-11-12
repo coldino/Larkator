@@ -61,69 +61,36 @@ namespace LarkatorGUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ark-tools.exe.
-        /// </summary>
-        internal static string ArkToolsExe {
-            get {
-                return ResourceManager.GetString("ArkToolsExe", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to [
-        ///	{
-        ///		&quot;Filename&quot;: &quot;TheIsland&quot;,
-        ///		&quot;OffsetX&quot;: 13.75,
-        ///		&quot;OffsetY&quot;: 23.75,
-        ///		&quot;ScaleX&quot;: 9.8875,
-        ///		&quot;ScaleY&quot;: 9.625
-        ///	},
-        ///	{
-        ///		&quot;Filename&quot;: &quot;TheCenter&quot;,
-        ///		&quot;OffsetX&quot;: 14.0,
-        ///		&quot;OffsetY&quot;: 23.75,
-        ///		&quot;ScaleX&quot;: 9.9,
-        ///		&quot;ScaleY&quot;: 9.625
-        ///	},
-        ///	{
-        ///		&quot;Filename&quot;: &quot;Aberration&quot;,
-        ///		&quot;OffsetX&quot;: 15.125,
-        ///		&quot;OffsetY&quot;: 19.0,
-        ///		&quot;ScaleX&quot;: 9.8875,
-        ///		&quot;ScaleY&quot;: 9.7
-        ///	},
-        ///	{
-        ///		&quot;Filename&quot;: &quot;Ragnarok&quot;,
-        ///		&quot;OffsetX&quot;: 15.125,
-        ///		&quot;OffsetY&quot;: 18.875,
-        ///		&quot;ScaleX&quot;: 9.8875,
-        ///		&quot;ScaleY&quot;: 9.7125
-        ///	},
-        ///	{
-        ///		&quot;Filename&quot;: &quot;ScorchedEarth&quot;,
-        /// [rest of string was truncated]&quot;;.
+        ///    
+        ///    {
+        ///        &quot;Filename&quot;: &quot;TheIsland&quot;,
+        ///        &quot;OffsetX&quot;: &quot;17.25&quot;,
+        ///        &quot;OffsetY&quot;: &quot;23.75&quot;,
+        ///        &quot;ScaleX&quot;: &quot;9.575&quot;,
+        ///        &quot;ScaleY&quot;: &quot;9.625&quot;
+        ///    },
+        ///    {
+        ///        &quot;Filename&quot;: &quot;TheCenter&quot;,
+        ///        &quot;OffsetX&quot;: 14.0,
+        ///        &quot;OffsetY&quot;: 23.75,
+        ///        &quot;ScaleX&quot;: 9.9,
+        ///        &quot;ScaleY&quot;: 9.625
+        ///    },
+        ///    {
+        ///        &quot;Filename&quot;: &quot;Aberration&quot;,
+        ///        &quot;OffsetX&quot;: 15.125,
+        ///        &quot;OffsetY&quot;: 19.0,
+        ///        &quot;ScaleX&quot;: 9.8875,
+        ///        &quot;ScaleY&quot;: 9.7
+        ///    },
+        ///    {
+        ///        &quot;Filename&quot;: &quot;Ragnarok&quot;,
+        ///        &quot;OffsetX&quot;: 15 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string calibrationsJson {
             get {
                 return ResourceManager.GetString("calibrationsJson", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to classes.json.
-        /// </summary>
-        internal static string ClassesJson {
-            get {
-                return ResourceManager.GetString("ClassesJson", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to last_ark.txt.
-        /// </summary>
-        internal static string LastArkFile {
-            get {
-                return ResourceManager.GetString("LastArkFile", resourceCulture);
             }
         }
         

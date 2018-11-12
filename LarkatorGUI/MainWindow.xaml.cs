@@ -28,7 +28,7 @@ namespace LarkatorGUI
 
         public ObservableCollection<SearchCriteria> ListSearches { get; } = new ObservableCollection<SearchCriteria>();
         public Collection<DinoViewModel> ListResults { get; } = new Collection<DinoViewModel>();
-        public List<string> AllSpecies { get { return arkReaderWild.AllSpecies; } }
+        public List<string> AllSpecies { get { return arkReader.AllSpecies; } }
 
         public string ApplicationVersion
         {
@@ -133,8 +133,7 @@ namespace LarkatorGUI
             DependencyProperty.Register("StatusDetailText", typeof(string), typeof(MainWindow), new PropertyMetadata(""));
 
 
-        ArkReader arkReaderWild;
-        ArkReader arkReaderTamed;
+        ArkReader arkReader;
         FileSystemWatcher fileWatcher;
         DispatcherTimer reloadTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         private List<MapCalibration> mapCalibrations;
@@ -143,13 +142,13 @@ namespace LarkatorGUI
         DateTime nameSearchTime;
         string nameSearchArg;
         bool nameSearchRunning;
+        private string lastArk;
 
         public MainWindow()
         {
             ValidateWindowPositionAndSize();
 
-            arkReaderWild = new ArkReader(true);
-            arkReaderTamed = new ArkReader(false);
+            arkReader = new ArkReader();
 
             appVersion = CalculateApplicationVersion();
 
@@ -170,13 +169,12 @@ namespace LarkatorGUI
             LoadSavedSearches();
             EnsureOutputDirectory();
             SetupFileWatcher();
-            CheckIfArkChanged(false);
 
             var cmdThrowExceptionAndExit = new RoutedCommand();
             cmdThrowExceptionAndExit.InputGestures.Add(new KeyGesture(Key.F2, ModifierKeys.Control));
             CommandBindings.Add(new CommandBinding(cmdThrowExceptionAndExit, (o, e) => Dev_GenerateException_Click(null, null)));
 
-            DependencyPropertyDescriptor.FromProperty(SearchTextProperty, typeof(MainWindow)).AddValueChanged(DataContext, (s,e) => TriggerNameSearch());
+            DependencyPropertyDescriptor.FromProperty(SearchTextProperty, typeof(MainWindow)).AddValueChanged(DataContext, (s, e) => TriggerNameSearch());
         }
 
         private static string CalculateApplicationVersion()
@@ -256,35 +254,10 @@ namespace LarkatorGUI
             }
         }
 
-        private void CheckIfArkChanged(bool reconvert = true)
-        {
-            var arkChanged = false;
-            try
-            {
-                var lastArk = File.ReadAllText(Path.Combine(Properties.Settings.Default.OutputDir, Properties.Resources.LastArkFile));
-                if (lastArk != Properties.Settings.Default.SaveFile) arkChanged = true;
-            }
-            catch
-            {
-                arkChanged = true;
-            }
-
-            if (arkChanged)
-            {
-                arkReaderTamed.ForceNextConversion = true;
-                arkReaderWild.ForceNextConversion = true;
-
-                if (reconvert)
-                {
-                    NotifyArkChanged();
-                }
-            }
-        }
-
         private void NotifyArkChanged()
         {
             // Cause a fresh conversion of the new ark
-            Dispatcher.Invoke(() => ReReadArk(force: true), DispatcherPriority.Background);
+            Dispatcher.Invoke(() => ReReadArk(), DispatcherPriority.Background);
 
             // Ensure the file watcher is watching the right directory
             fileWatcher.Path = Path.GetDirectoryName(Properties.Settings.Default.SaveFile);
@@ -314,7 +287,7 @@ namespace LarkatorGUI
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await UpdateArkToolsData();
+            //await UpdateArkToolsData(); // Maybe fetch data file?
             await ReReadArk();
         }
 
@@ -383,7 +356,7 @@ namespace LarkatorGUI
             NewSearchActive = true;
             CreateSearchAvailable = false;
 
-            speciesCombo.ItemsSource = arkReaderWild.AllSpecies;
+            speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
         }
 
@@ -432,7 +405,7 @@ namespace LarkatorGUI
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
         }
 
-        private async void SaveSearch_Click(object sender, RoutedEventArgs e)
+        private void SaveSearch_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
 
@@ -442,18 +415,6 @@ namespace LarkatorGUI
             }
             catch (InvalidOperationException) // no entries for .Max - ignore
             { }
-
-            IsLoading = true;
-            try
-            {
-                StatusText = $"Loading {NewSearch.Species}...";
-                await arkReaderWild.EnsureSpeciesIsLoaded(NewSearch.Species);
-                StatusText = $"Ready";
-            }
-            finally
-            {
-                IsLoading = false;
-            }
 
             ListSearches.Add(NewSearch);
             NewSearch = null;
@@ -605,56 +566,15 @@ namespace LarkatorGUI
             }
         }
 
-        private async Task UpdateArkToolsData()
-        {
-            StatusText = "Updating ark-tools database";
-            try
-            {
-                await ArkReader.ExecuteArkTools("update-data");
-                StatusText = "Updated ark-tools database";
-            }
-            catch (Exception e)
-            {
-                StatusText = "Failed to update ark-tools database: " + e.Message;
-            }
-        }
-
-        private async Task ReReadArk(bool force = false)
+        private async Task ReReadArk()
         {
             if (IsLoading) return;
 
-            await PerformConversion(force);
-            await LoadSearchSpecies();
+            lastArk = Properties.Settings.Default.SaveFile;
+            await PerformConversion();
 
             var currentSearch = searchesList.SelectedItems.Cast<SearchCriteria>().ToList();
             UpdateSearchResults(currentSearch);
-        }
-
-        private async Task LoadSearchSpecies()
-        {
-            IsLoading = true;
-            try
-            {
-                var species = arkReaderWild.AllSpecies.Distinct();
-                foreach (var speciesName in species)
-                {
-                    StatusText = $"Loading {speciesName}...";
-                    await arkReaderWild.EnsureSpeciesIsLoaded(speciesName);
-                }
-
-                species = arkReaderTamed.AllSpecies.Distinct();
-                foreach (var speciesName in species)
-                {
-                    StatusText = $"Loading {speciesName}...";
-                    await arkReaderTamed.EnsureSpeciesIsLoaded(speciesName);
-                }
-
-                StatusText = "Ready";
-            }
-            finally
-            {
-                IsLoading = false;
-            }
         }
 
         private void UpdateSearchResults(IList<SearchCriteria> searches)
@@ -667,19 +587,19 @@ namespace LarkatorGUI
             {
                 // Find dinos that match the given searches
                 var found = new List<Dino>();
-                var reader = ShowTames ? arkReaderTamed : arkReaderWild;
+                var sourceDinos = ShowTames ? arkReader.TamedDinos : arkReader.WildDinos;
                 foreach (var search in searches)
                 {
                     if (String.IsNullOrWhiteSpace(search.Species))
                     {
-                        foreach (var speciesDinos in reader.FoundDinos.Values)
+                        foreach (var speciesDinos in sourceDinos.Values)
                             found.AddRange(speciesDinos);
                     }
                     else
                     {
-                        if (reader.FoundDinos.ContainsKey(search.Species))
+                        if (sourceDinos.ContainsKey(search.Species))
                         {
-                            var dinoList = reader.FoundDinos[search.Species];
+                            var dinoList = sourceDinos[search.Species];
                             found.AddRange(dinoList.Where(d => search.Matches(d)));
                         }
                     }
@@ -695,7 +615,7 @@ namespace LarkatorGUI
             TriggerNameSearch(true);
         }
 
-        private async Task PerformConversion(bool force)
+        private async Task PerformConversion()
         {
             string arkDirName = Path.GetFileNameWithoutExtension(Properties.Settings.Default.SaveFile);
 
@@ -703,15 +623,10 @@ namespace LarkatorGUI
             try
             {
                 StatusDetailText = "...converting";
-                StatusText = "Processing saved ARK : Wild";
-                await arkReaderWild.PerformConversion(force, arkDirName);
-                StatusText = "Processing saved ARK : Tamed";
-                await arkReaderTamed.PerformConversion(force, arkDirName);
+                StatusText = "Processing saved ARK";
+                await arkReader.PerformConversion(Properties.Settings.Default.SaveFile);
                 StatusText = "ARK processing completed";
-                StatusDetailText = $"{arkReaderWild.NumberOfSpecies} wild and {arkReaderTamed.NumberOfSpecies} tame species located";
-
-                // Write path to last ark into the output folder so we can check when we change ARKs
-                File.WriteAllText(Path.Combine(Properties.Settings.Default.OutputDir, Properties.Resources.LastArkFile), Properties.Settings.Default.SaveFile);
+                StatusDetailText = $"{arkReader.NumberOfWildSpecies} wild and {arkReader.NumberOfTamedSpecies} tame species located";
             }
             catch (Exception ex)
             {
@@ -795,7 +710,7 @@ namespace LarkatorGUI
         private void SetupTamedSearches()
         {
             var wildcard = new string[] { null };
-            var speciesList = wildcard.Concat(arkReaderTamed.AllSpecies).ToList();
+            var speciesList = wildcard.Concat(arkReader.TamedSpecies).ToList();
             var orderList = Enumerable.Range(0, speciesList.Count);
             var searches = speciesList.Zip(orderList, (species, order) => new SearchCriteria { Species = species, Order = order });
 
@@ -823,6 +738,14 @@ namespace LarkatorGUI
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }
 
+        private async void CheckIfArkChanged()
+        {
+            if (!EqualityComparer<string>.Default.Equals(lastArk, Properties.Settings.Default.SaveFile))
+            {
+                await ReReadArk();
+            }
+        }
+
         private void ForceFontSizeUpdate()
         {
             Dispatcher.Invoke(() => RefreshDataGridColumnWidths("GroupedSearchCriteria", searchesList), DispatcherPriority.ContextIdle);
@@ -842,7 +765,7 @@ namespace LarkatorGUI
                 o.col.Width = o.width;
         }
 
-        private void TriggerNameSearch(bool immediate=false)
+        private void TriggerNameSearch(bool immediate = false)
         {
             nameSearchTime = DateTime.Now + TimeSpan.FromSeconds(immediate ? 0.01 : 0.5);
             nameSearchArg = SearchText;
@@ -862,7 +785,7 @@ namespace LarkatorGUI
             }
 
             nameSearchRunning = false;
-            
+
             var searchText = nameSearchArg.Trim();
 
             if (String.IsNullOrWhiteSpace(searchText) || searchText.Length < 2)

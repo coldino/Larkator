@@ -92,8 +92,8 @@
     <Reference Include="GongSolutions.WPF.DragDrop, Version=1.2.0.57, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.2.0-alpha0057\lib\net46\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
@@ -209,6 +209,14 @@
     <Resource Include="imgs\male.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArkSavegameToolkit\SavegameToolkitAdditions\SavegameToolkitAdditions.csproj">
+      <Project>{ca24e3c7-3bee-4774-977e-e9253352cfb2}</Project>
+      <Name>SavegameToolkitAdditions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ArkSavegameToolkit\SavegameToolkit\SavegameToolkit.csproj">
+      <Project>{1a7b8e8c-7a2c-44ab-8077-59a5f1b2a7b5}</Project>
+      <Name>SavegameToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3c4c5a9e-9165-4074-ae85-df62931457eb}</Project>
       <Name>Common</Name>
