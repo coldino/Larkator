@@ -36,6 +36,18 @@
                     <TextBox Text="{Binding Bounds.Y2, Mode=TwoWay}" Width="64"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                    <TextBlock Text="Lat +" Margin="8,2"/>
+                    <TextBox Text="{Binding LatOffset, Mode=TwoWay}" Width="64"/>
+                    <TextBlock Text="/" Margin="8,2"/>
+                    <TextBox Text="{Binding LatDivisor, Mode=TwoWay}" Width="64"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                    <TextBlock Text="Lon +" Margin="8,2"/>
+                    <TextBox Text="{Binding LonOffset, Mode=TwoWay}" Width="64"/>
+                    <TextBlock Text="/" Margin="8,2"/>
+                    <TextBox Text="{Binding LonDivisor, Mode=TwoWay}" Width="64"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                     <TextBlock Text="ARK filename" Margin="8,2"/>
                     <TextBox Text="{Binding Filename, Mode=TwoWay}" Width="100" TextChanged="Filename_TextChanged"/>
                     <TextBlock Text="Image" Margin="8,2"/>
@@ -43,17 +55,13 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                     <TextBlock Text="+X" Margin="8,2"/>
-                    <TextBox Text="{Binding OffsetX}" Width="32"/>
+                    <TextBox Text="{Binding PixelOffsetX}" Width="32"/>
                     <TextBlock Text="+Y" Margin="8,2"/>
-                    <TextBox Text="{Binding OffsetY}" Width="32"/>
+                    <TextBox Text="{Binding PixelOffsetY}" Width="32"/>
                     <TextBlock Text="*X" Margin="8,2"/>
-                    <TextBox Text="{Binding ScaleX}" Width="64"/>
+                    <TextBox Text="{Binding PixelScaleX}" Width="64"/>
                     <TextBlock Text="*Y" Margin="8,2"/>
-                    <TextBox Text="{Binding ScaleY}" Width="64"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                    <TextBlock Text="Units" Margin="8,2"/>
-                    <TextBox Text="{Binding Units, Mode=TwoWay}" Width="60" TextChanged="UpdateOutput_TextChanged"/>
+                    <TextBox Text="{Binding PixelScaleY}" Width="64"/>
                 </StackPanel>
             </StackPanel>
             <TextBox Grid.Row="1" Text="{Binding Output}" Margin="8" MinWidth="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True"/>

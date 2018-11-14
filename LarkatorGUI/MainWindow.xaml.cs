@@ -2,13 +2,17 @@
 using GongSolutions.Wpf.DragDrop;
 using Larkator.Common;
 using Newtonsoft.Json;
+using SavegameToolkitAdditions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -167,7 +171,6 @@ namespace LarkatorGUI
             }, DispatcherPriority.Loaded);
 
             LoadSavedSearches();
-            EnsureOutputDirectory();
             SetupFileWatcher();
 
             var cmdThrowExceptionAndExit = new RoutedCommand();
@@ -222,6 +225,8 @@ namespace LarkatorGUI
             var imgFilename = $"pack://application:,,,/imgs/map_{MapCalibration.Filename}.jpg";
             MapImage = (new ImageSourceConverter()).ConvertFromString(imgFilename) as ImageSource;
             if (image != null) image.Source = MapImage;
+
+            arkReader.MapCalibration = MapCalibration;
         }
 
         private void ValidateWindowPositionAndSize()
@@ -238,19 +243,6 @@ namespace LarkatorGUI
                 settings.MainWindowWidth = (double)settings.Properties["MainWindowWidth"].DefaultValue;
                 settings.MainWindowHeight = (double)settings.Properties["MainWindowHeight"].DefaultValue;
                 settings.Save();
-            }
-        }
-
-        private void EnsureOutputDirectory()
-        {
-            if (String.IsNullOrWhiteSpace(Properties.Settings.Default.OutputDir))
-            {
-                Properties.Settings.Default.OutputDir = Path.Combine(Path.GetTempPath(), Properties.Resources.ProgramName);
-                if (!Directory.Exists(Properties.Settings.Default.OutputDir))
-                {
-                    Directory.CreateDirectory(Properties.Settings.Default.OutputDir);
-                    Properties.Settings.Default.Save();
-                }
             }
         }
 
@@ -287,8 +279,89 @@ namespace LarkatorGUI
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //await UpdateArkToolsData(); // Maybe fetch data file?
+            await UpdateArkToolsData();
             await ReReadArk();
+        }
+
+        private async Task UpdateArkToolsData()
+        {
+            StatusText = "Fetching latest species data...";
+
+            try
+            {
+                var targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Properties.Resources.ProgramName);
+                var targetFile = Path.Combine(targetFolder, "ark-data.json");
+                if (!Directory.Exists(targetFolder))
+                    Directory.CreateDirectory(targetFolder);
+
+                var fetchOkay = await FetchArkData(targetFile);
+                var loadOkay = await LoadArkData(targetFile);
+
+                if (!loadOkay) throw new ApplicationException("No species data available");
+                if (fetchOkay)
+                    StatusText = "Species data loaded";
+                else
+                    StatusText = "Using old species data - offline?";
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to fetch species data - Larkator cannot function");
+                Environment.Exit(3);
+            }
+        }
+
+        private async Task<bool> FetchArkData(string targetFile)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    if (File.Exists(targetFile))
+                        client.DefaultRequestHeaders.IfModifiedSince = new FileInfo(targetFile).LastWriteTimeUtc;
+
+                    using (var response = await client.GetAsync(Properties.Resources.ArkDataURL))
+                    {
+                        Debug.WriteLine("Response status = ", response.StatusCode);
+
+                        // Throw exception on failure
+                        response.EnsureSuccessStatusCode();
+
+                        Debug.WriteLine("Response was successful");
+
+                        // Don't do anything if the file hasn't changed
+                        if (response.StatusCode == HttpStatusCode.NotModified)
+                            return true;
+
+                        // Write the data to file
+                        using (var fileWriter = File.OpenWrite(targetFile))
+                        {
+                            await response.Content.CopyToAsync(fileWriter);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> LoadArkData(string targetFile)
+        {
+            return await Task.Run<bool>(() =>
+            {
+                try
+                {
+                    arkReader.SetArkData(ArkDataReader.ReadFromFile(targetFile));
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            });
         }
 
         private void Searches_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -729,7 +802,6 @@ namespace LarkatorGUI
         private void OnSettingsChanged()
         {
             DiscoverCalibration();
-            EnsureOutputDirectory();
             CheckIfArkChanged();
             UpdateCurrentSearch();
 

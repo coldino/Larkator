@@ -47,8 +47,8 @@ namespace LarkatorGUI
                 var pos = GetPosition(d);
                 if (cal == null || pos == null) return;
 
-                tx.X = pos.Lon * cal.ScaleX + cal.OffsetX;
-                tx.Y = pos.Lat * cal.ScaleY + cal.OffsetY;
+                tx.X = pos.Lon * cal.PixelScaleX + cal.PixelOffsetX;
+                tx.Y = pos.Lat * cal.PixelScaleY + cal.PixelOffsetY;
             }
             else
             {
@@ -60,11 +60,17 @@ namespace LarkatorGUI
     public class MapCalibration
     {
         public string Filename { get; set; }
+        
+        public double PixelOffsetX { get; set; }
+        public double PixelOffsetY { get; set; }
 
-        public double OffsetX { get; set; }
-        public double OffsetY { get; set; }
+        public double PixelScaleX { get; set; }
+        public double PixelScaleY { get; set; }
 
-        public double ScaleX { get; set; }
-        public double ScaleY { get; set; }
+        public double LatOffset { get; set; }
+        public double LonOffset { get; set; }
+
+        public double LatDivisor { get; set; }
+        public double LonDivisor { get; set; }
     }
 }

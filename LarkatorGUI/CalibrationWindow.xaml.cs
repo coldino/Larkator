@@ -92,6 +92,12 @@ namespace LarkatorGUI
 
     public class Calibration : DependencyObject
     {
+        public Calibration()
+        {
+            LatDivisor = LonDivisor = 8000;
+            LatOffset = LonOffset = 50;
+        }
+
         public Bounds Bounds
         {
             get { return (Bounds)GetValue(BoundsProperty); }
@@ -110,34 +116,52 @@ namespace LarkatorGUI
             set { SetValue(ImageProperty, value); }
         }
 
-        public int Units
+        public double PixelOffsetX
         {
-            get { return (int)GetValue(UnitsProperty); }
-            set { SetValue(UnitsProperty, value); }
+            get { return (double)GetValue(PixelOffsetXProperty); }
+            set { SetValue(PixelOffsetXProperty, value); }
         }
 
-        public double OffsetX
+        public double PixelOffsetY
         {
-            get { return (double)GetValue(OffsetXProperty); }
-            set { SetValue(OffsetXProperty, value); }
+            get { return (double)GetValue(PixelOffsetYProperty); }
+            set { SetValue(PixelOffsetYProperty, value); }
         }
 
-        public double OffsetY
+        public double PixelScaleX
         {
-            get { return (double)GetValue(OffsetYProperty); }
-            set { SetValue(OffsetYProperty, value); }
+            get { return (double)GetValue(PixelScaleXProperty); }
+            set { SetValue(PixelScaleXProperty, value); }
         }
 
-        public double ScaleX
+        public double PixelScaleY
         {
-            get { return (double)GetValue(ScaleXProperty); }
-            set { SetValue(ScaleXProperty, value); }
+            get { return (double)GetValue(PixelScaleYProperty); }
+            set { SetValue(PixelScaleYProperty, value); }
         }
 
-        public double ScaleY
+        public double LatOffset
         {
-            get { return (double)GetValue(ScaleYProperty); }
-            set { SetValue(ScaleYProperty, value); }
+            get { return (double)GetValue(LatOffsetProperty); }
+            set { SetValue(LatOffsetProperty, value); }
+        }
+
+        public double LonOffset
+        {
+            get { return (double)GetValue(LonOffsetProperty); }
+            set { SetValue(LonOffsetProperty, value); }
+        }
+
+        public double LatDivisor
+        {
+            get { return (double)GetValue(LatDivisorProperty); }
+            set { SetValue(LatDivisorProperty, value); }
+        }
+
+        public double LonDivisor
+        {
+            get { return (double)GetValue(LonDivisorProperty); }
+            set { SetValue(LonDivisorProperty, value); }
         }
 
         public string Output
@@ -149,24 +173,33 @@ namespace LarkatorGUI
         public static readonly DependencyProperty OutputProperty =
             DependencyProperty.Register("Output", typeof(string), typeof(Calibration), new PropertyMetadata(""));
 
-        public static readonly DependencyProperty ScaleYProperty =
-            DependencyProperty.Register("ScaleY", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty LonDivisorProperty =
+            DependencyProperty.Register("LonDivisor", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
 
-        public static readonly DependencyProperty ScaleXProperty =
-            DependencyProperty.Register("ScaleX", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty LatDivisorProperty =
+            DependencyProperty.Register("LatDivisor", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
 
-        public static readonly DependencyProperty OffsetYProperty =
-            DependencyProperty.Register("OffsetY", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty LonOffsetProperty =
+            DependencyProperty.Register("LonOffset", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
 
-        public static readonly DependencyProperty OffsetXProperty =
-            DependencyProperty.Register("OffsetX", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty LatOffsetProperty =
+            DependencyProperty.Register("LatOffset", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty PixelScaleYProperty =
+            DependencyProperty.Register("PixelScaleY", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty PixelScaleXProperty =
+            DependencyProperty.Register("PixelScaleX", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty PixelOffsetYProperty =
+            DependencyProperty.Register("PixelOffsetY", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty PixelOffsetXProperty =
+            DependencyProperty.Register("PixelOffsetX", typeof(double), typeof(Calibration), new PropertyMetadata(0.0));
 
         public static readonly DependencyProperty ImageProperty =
             DependencyProperty.Register("Image", typeof(string), typeof(Calibration), new PropertyMetadata(""));
-
-        public static readonly DependencyProperty UnitsProperty =
-            DependencyProperty.Register("Units", typeof(int), typeof(Calibration), new PropertyMetadata(0));
-
+        
         public static readonly DependencyProperty FilenameProperty =
             DependencyProperty.Register("Filename", typeof(string), typeof(Calibration), new PropertyMetadata(""));
 
@@ -182,11 +215,11 @@ namespace LarkatorGUI
             var maxX = Math.Max(Bounds.X1, Bounds.X2);
             var maxY = Math.Max(Bounds.Y1, Bounds.Y2);
 
-            ScaleX = (maxX - minX) / 80.0;
-            ScaleY = (maxY - minY) / 80.0;
+            PixelScaleX = (maxX - minX) / 80.0;
+            PixelScaleY = (maxY - minY) / 80.0;
 
-            OffsetX = minX - ScaleX * 10;
-            OffsetY = minY - ScaleY * 10;
+            PixelOffsetX = minX - PixelScaleX * 10;
+            PixelOffsetY = minY - PixelScaleY * 10;
 
             Output = RecreateOutput();
         }
@@ -195,11 +228,14 @@ namespace LarkatorGUI
         {
             return $"{{\n" +
                 $"  \"Filename\": \"{Filename}\",\n" +
-                $"  \"Units\": {Units},\n" +
-                $"  \"OffsetX\": {OffsetX},\n" +
-                $"  \"OffsetY\": {OffsetY},\n" +
-                $"  \"ScaleX\": {ScaleX},\n" +
-                $"  \"ScaleY\": {ScaleY}\n" +
+                $"  \"LatOffset\": {LatOffset},\n" +
+                $"  \"LatDivisor\": {LatDivisor},\n" +
+                $"  \"LonOffset\": {LonOffset},\n" +
+                $"  \"LonDivisor\": {LonDivisor},\n" +
+                $"  \"PixelOffsetX\": {PixelOffsetX},\n" +
+                $"  \"PixelOffsetY\": {PixelOffsetY},\n" +
+                $"  \"PixelScaleX\": {PixelScaleX},\n" +
+                $"  \"PixelScaleY\": {PixelScaleY}\n" +
                 $"}},";
         }
     }

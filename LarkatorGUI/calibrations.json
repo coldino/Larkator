@@ -1,51 +1,68 @@
 [
-    
     {
         "Filename": "TheIsland",
-        "Units": 8000,
-        "OffsetX": 17.25,
-        "OffsetY": 23.75,
-        "ScaleX": 9.575,
-        "ScaleY": 9.625
+        "LatOffset": 50,
+        "LatDivisor": 8000,
+        "LonOffset": 50,
+        "LonDivisor": 8000,
+        "PixelOffsetX": 18.375,
+        "PixelOffsetY": 23.75,
+        "PixelScaleX": 9.55,
+        "PixelScaleY": 9.625
     },
     {
         "Filename": "TheCenter",
-        "Units": 8000,
-        "OffsetX": 14.0,
-        "OffsetY": 23.75,
-        "ScaleX": 9.9,
-        "ScaleY": 9.625
+        "LatOffset": 30.30309,
+        "LatDivisor": 9584.15646605143,
+        "LonOffset": 55,
+        "LonDivisor": 9600.55903111401,
+        "PixelOffsetX": 18.875,
+        "PixelOffsetY": 50.75,
+        "PixelScaleX": 9.1,
+        "PixelScaleY": 9.1
     },
     {
         "Filename": "Aberration",
-        "Units": 8000,
-        "OffsetX": 15.125,
-        "OffsetY": 19.0,
-        "ScaleX": 9.8875,
-        "ScaleY": 9.7
+        "LatOffset": 50,
+        "LatDivisor": 8000,
+        "LonOffset": 50,
+        "LonDivisor": 8000,
+        "PixelOffsetX": 15.125,
+        "PixelOffsetY": 19.0,
+        "PixelScaleX": 9.8875,
+        "PixelScaleY": 9.7
     },
     {
         "Filename": "Ragnarok",
-        "Units": 13100,
-        "OffsetX": 15.125,
-        "OffsetY": 18.875,
-        "ScaleX": 9.8875,
-        "ScaleY": 9.7125
+        "LatOffset": 50,
+        "LatDivisor": 13100,
+        "LonOffset": 50,
+        "LonDivisor": 13100,
+        "PixelOffsetX": 15.25,
+        "PixelOffsetY": 19,
+        "PixelScaleX": 9.875,
+        "PixelScaleY": 9.7
     },
     {
         "Filename": "ScorchedEarth",
-        "Units": 8000,
-        "OffsetX": 13.875,
-        "OffsetY": 21.125,
-        "ScaleX": 9.9125,
-        "ScaleY": 9.6875
+        "LatOffset": 50,
+        "LatDivisor": 8000,
+        "LonOffset": 50,
+        "LonDivisor": 8000,
+        "PixelOffsetX": 13.875,
+        "PixelOffsetY": 21.125,
+        "PixelScaleX": 9.9125,
+        "PixelScaleY": 9.6875
     },
     {
         "Filename": "Extinction",
-        "Units": 8000,
-        "OffsetX": 92.375,
-        "OffsetY": 86.125,
-        "ScaleX": 8.4625,
-        "ScaleY": 8.2875
+        "LatOffset": 50,
+        "LatDivisor": 8000,
+        "LonOffset": 50,
+        "LonDivisor": 8000,
+        "PixelOffsetX": 92.375,
+        "PixelOffsetY": 86.125,
+        "PixelScaleX": 8.4625,
+        "PixelScaleY": 8.2875
     }
 ]

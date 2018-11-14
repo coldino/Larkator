@@ -13,7 +13,7 @@ namespace LarkatorGUI
 {
     public class ArkReader
     {
-        public int MapSize { get; set; } = 8000;
+        public MapCalibration MapCalibration { get; set; }
 
         public Dictionary<string, List<Dino>> WildDinos { get; } = new Dictionary<string, List<Dino>>();
         public Dictionary<string, List<Dino>> TamedDinos { get; } = new Dictionary<string, List<Dino>>();
@@ -22,10 +22,18 @@ namespace LarkatorGUI
         public List<string> WildSpecies { get; } = new List<string>();
         public int NumberOfTamedSpecies { get => TamedSpecies.Count; }
         public int NumberOfWildSpecies { get => WildSpecies.Count; }
-        
-        private ArkData arkData;
+
+        public void SetArkData(ArkData data)
+        {
+            arkData = data;
+
+            // Create some easy to use mappings for better performance
+            classMap = arkData.Creatures.ToDictionary(c => c.Class, c => c.Name);
+        }
 
         private static readonly string[] RAFT_CLASSES = { "Raft_BP_C", "MotorRaft_BP_C", "Barge_BP_C" };
+        private ArkData arkData;
+        private Dictionary<string, string> classMap;
 
         private static Task<(GameObjectContainer gameObjects, float gameTime)> ReadSavegameFile(string fileName)
         {
@@ -64,6 +72,9 @@ namespace LarkatorGUI
 
         public async Task PerformConversion(string saveFile)
         {
+            if (MapCalibration == null)
+                throw new ArgumentNullException(nameof(MapCalibration), "Callibration required");
+
             // Clear previously loaded data
             TamedSpecies.Clear();
             WildSpecies.Clear();
@@ -78,33 +89,41 @@ namespace LarkatorGUI
             var creatureObjects = gameObjectContainer
                 .Where(o => o.IsCreature() && !o.IsUnclaimedBaby() && !RAFT_CLASSES.Contains(o.ClassString))
                 .ToList();
-            
-            var tameObjects = creatureObjects.Where(o => !o.IsWild()).GroupBy(o => o.ClassString);
-            TamedSpecies.AddRange(tameObjects.Select(o => o.Key));
+
+            var tameObjects = creatureObjects.Where(o => !o.IsWild()).GroupBy(o => SpeciesName(o.ClassString));
+            TamedSpecies.AddRange(tameObjects.Select(o => o.Key).Distinct());
             foreach (var group in tameObjects)
                 TamedDinos.Add(group.Key, group.Select(o => ConvertCreature(o)).ToList());
 
-            var wildObjects = creatureObjects.Where(o => o.IsWild()).GroupBy(o => o.ClassString);
-            WildSpecies.AddRange(wildObjects.Select(o => o.Key));
+            var wildObjects = creatureObjects.Where(o => o.IsWild()).GroupBy(o => SpeciesName(o.ClassString));
+            WildSpecies.AddRange(wildObjects.Select(o => o.Key).Distinct());
             foreach (var group in wildObjects)
                 WildDinos.Add(group.Key, group.Select(o => ConvertCreature(o)).ToList());
 
-            AllSpecies.AddRange(creatureObjects.Select(o => o.ClassString).Distinct());
+            AllSpecies.AddRange(creatureObjects.Select(o => SpeciesName(o.ClassString)).Distinct());
+        }
+
+        private string SpeciesName(string className)
+        {
+            if (classMap.TryGetValue(className, out var output))
+                return output;
+
+            return className;
         }
 
         private Dino ConvertCreature(GameObject obj)
         {
             var dino = new Dino
             {
-                Type = obj.ClassString,
+                Type = SpeciesName(obj.ClassString),
                 Female = obj.IsFemale(),
                 Id = (ulong)obj.GetDinoId(),
                 BaseLevel = obj.GetBaseLevel(),
-                Name = obj.GetPropertyValue("TamedName", defaultValue:""),
+                Name = obj.GetPropertyValue("TamedName", defaultValue: ""),
                 Location = ConvertCoordsToLatLong(obj.Location),
                 WildLevels = new StatPoints(),
             };
-            
+
             var status = obj.CharacterStatusComponent();
             if (status != null)
             {
@@ -127,20 +146,9 @@ namespace LarkatorGUI
                 Y = location.Y,
                 Z = location.Z,
 
-                Lat = 50 + location.Y / 8000,
-                Lon = 50 + location.X / 8000,
+                Lat = MapCalibration.LatOffset + location.Y / MapCalibration.LatDivisor,
+                Lon = MapCalibration.LonOffset + location.X / MapCalibration.LonDivisor,
             };
-        }
-
-        private bool IsConversionRequired()
-        {
-            return true;
-
-            //var classFile = Path.Combine(outputDir, Properties.Resources.ClassesJson);
-            //if (!File.Exists(classFile)) return true;
-            //var arkTimestamp = File.GetLastWriteTimeUtc(Properties.Settings.Default.SaveFile);
-            //var convertTimestamp = File.GetLastWriteTimeUtc(classFile);
-            //return (arkTimestamp >= convertTimestamp);
         }
 
         private string GenerateNameVariant(string name, string cls)

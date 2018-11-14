@@ -124,4 +124,7 @@
   <data name="ProgramName" xml:space="preserve">
     <value>Larkator</value>
   </data>
+  <data name="ArkDataURL" xml:space="preserve">
+    <value>https://ark-data.seen-von-ragan.de/data/loc/ark_data.json</value>
+  </data>
 </root>

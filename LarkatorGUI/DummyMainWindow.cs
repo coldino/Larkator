@@ -35,10 +35,10 @@ namespace LarkatorGUI
         private MapCalibration calibration = new MapCalibration
         {
             Filename = "TheIsland",
-            OffsetX = 13.75,
-            OffsetY = 23.75,
-            ScaleX = 9.8875,
-            ScaleY = 9.625
+            PixelOffsetX = 13.75,
+            PixelOffsetY = 23.75,
+            PixelScaleX = 9.8875,
+            PixelScaleY = 9.625
         };
 
         public DummyMainWindow()

@@ -10,71 +10,83 @@
         Title="Settings" Background="{DynamicResource WindowBackgroundBrush}">
     <Window.Resources>
         <local:SettingsWindowModel x:Key="Model"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="AntiqueWhite"/>
+        </Style>
     </Window.Resources>
     <StackPanel>
-        <TabControl>
-            <TabItem Selector.IsSelected="True" Header="Paths &amp; Files">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">ARK Tools (ark-tools.exe)</TextBlock>
-                    <local:FileEntryBox Grid.Column="1" Grid.Row="0" Value="{Binding Source={StaticResource Model}, Path=Settings.ArkTools, Mode=TwoWay}"
+        <Grid Margin="2,4,0,16">
+            <Grid.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Margin" Value="3"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">ARK Tools (ark-tools.exe)</TextBlock>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="0">
+                <local:FileEntryBox Value="{Binding Source={StaticResource Model}, Path=Settings.ArkTools, Mode=TwoWay}"
                                         Filter="ARK Tools Executable|ark-tools.exe" DefaultExt="ark-tools.exe" Title="Locate ark-tools.exe"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Save file (.ark)</TextBlock>
-                    <local:FileEntryBox Grid.Column="1" Grid.Row="1" Value="{Binding Source={StaticResource Model}, Path=Settings.SaveFile, Mode=TwoWay}"
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Save file (.ark)</TextBlock>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="1">
+                <local:FileEntryBox Value="{Binding Source={StaticResource Model}, Path=Settings.SaveFile, Mode=TwoWay}"
                                         Filter="ARK Save File|*.ark" DefaultExt=".ark" Title="Locate saved ARK"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Output directory</TextBlock>
-                    <DockPanel Grid.Column="1" Grid.Row="2">
-                        <Button DockPanel.Dock="Right" Content="Reset" Click="ResetTmp_Click"/>
-                        <local:DirectoryEntryBox Value="{Binding Source={StaticResource Model}, Path=Settings.OutputDir, Mode=TwoWay}"
-                                                 Title="Choose a directory for temporary output files"/>
-                    </DockPanel>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Misc">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Max level</TextBlock>
-                    <local:NumericEntryControl Grid.Row="0" Grid.Column="1" ToolTip="The maximum level of normal spawns in the map (only affects filtering)"
+            </Border>
+
+            <Border Grid.Row="2" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Max level</TextBlock>
+            </Border>
+            <Border Grid.Row="2" Grid.Column="1">
+                <local:NumericEntryControl ToolTip="The maximum level of normal spawns in the map (only affects filtering)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.MaxLevel, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
-                                               MaxValue="1000" MinValue="1" Increment="1" LargeIncrement="5"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Level step</TextBlock>
-                    <local:NumericEntryControl Grid.Row="1" Grid.Column="1" ToolTip="The step between levels, typically 4 for 120 or 5 for 150 (only affects filter adjustments)"
+                                               MaxValue="1000" MinValue="1" Increment="1" LargeIncrement="5" Margin="0,0,2,0"/>
+            </Border>
+
+            <Border Grid.Row="3" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Level step</TextBlock>
+            </Border>
+            <Border Grid.Row="3" Grid.Column="1">
+                <local:NumericEntryControl ToolTip="The step between levels, typically 4 for 120 or 5 for 150 (only affects filter adjustments)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.LevelStep, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
-                                               MaxValue="100" MinValue="1" Increment="1" LargeIncrement="1"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">List font size</TextBlock>
-                    <local:NumericEntryControl Grid.Row="2" Grid.Column="1" ToolTip="Font size of the search filters and results  (requires a restart)"
+                                               MaxValue="100" MinValue="1" Increment="1" LargeIncrement="1" Margin="0,0,2,0"/>
+            </Border>
+
+            <Border Grid.Row="4" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">List font size</TextBlock>
+            </Border>
+            <Border Grid.Row="4" Grid.Column="1">
+                <local:NumericEntryControl ToolTip="Font size of the search filters and results  (requires a restart)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.ListFontSize, Mode=TwoWay}" MaxWidth="90" HorizontalAlignment="Right"
-                                               MaxValue="17" MinValue="11" Increment="1" LargeIncrement="1"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0">Conversion delay (ms)</TextBlock>
-                    <local:NumericEntryControl Grid.Row="3" Grid.Column="1" ToolTip="The delay between detecting a change to the saved ark and running the conversion process (in milliseconds)"
+                                               MaxValue="17" MinValue="11" Increment="1" LargeIncrement="1" Margin="0,0,2,0"/>
+            </Border>
+
+            <Border Grid.Row="5" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Conversion delay (ms)</TextBlock>
+            </Border>
+            <Border Grid.Row="5" Grid.Column="1">
+                <local:NumericEntryControl ToolTip="The delay between detecting a change to the saved ark and running the conversion process (in milliseconds)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.ConvertDelay, Mode=TwoWay}" MaxWidth="110" HorizontalAlignment="Right"
-                                               MaxValue="10000" MinValue="200" Increment="100" LargeIncrement="500"/>
-                </Grid>
-            </TabItem>
-        </TabControl>
-        <DockPanel Margin="2,6,2,2" LastChildFill="True">
+                                               MaxValue="10000" MinValue="200" Increment="100" LargeIncrement="500" Margin="0,0,2,0"/>
+            </Border>
+        </Grid>
+        <DockPanel Margin="4,6,6,4" LastChildFill="True">
             <TextBlock Text="Restore all defaults" DockPanel.Dock="Left" VerticalAlignment="Bottom" TextDecorations="Underline" MouseDown="Restore_MouseDown" FontSize="10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Padding="8,2" IsDefault="True" Click="Apply_Click" Content="Apply" Margin="0,0,4,0"/>

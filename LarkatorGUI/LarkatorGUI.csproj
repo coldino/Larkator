@@ -117,9 +117,6 @@
     <Compile Include="DinoViewModel.cs" />
     <Compile Include="DummyMainWindow.cs" />
     <Compile Include="ExternalToolsException.cs" />
-    <Compile Include="DirectoryEntryBox.xaml.cs">
-      <DependentUpon>DirectoryEntryBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FileEntryBox.xaml.cs">
       <DependentUpon>FileEntryBox.xaml</DependentUpon>
     </Compile>
@@ -147,10 +144,6 @@
     <Page Include="CalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DirectoryEntryBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="FileEntryBox.xaml">
       <SubType>Designer</SubType>
