@@ -91,16 +91,16 @@ namespace LarkatorGUI
                 .ToList();
 
             var tameObjects = creatureObjects.Where(o => !o.IsWild()).GroupBy(o => SpeciesName(o.ClassString));
-            TamedSpecies.AddRange(tameObjects.Select(o => o.Key).Distinct());
+            TamedSpecies.AddRange(tameObjects.Select(o => o.Key).Distinct().OrderBy(name => name));
             foreach (var group in tameObjects)
                 TamedDinos.Add(group.Key, group.Select(o => ConvertCreature(o)).ToList());
 
             var wildObjects = creatureObjects.Where(o => o.IsWild()).GroupBy(o => SpeciesName(o.ClassString));
-            WildSpecies.AddRange(wildObjects.Select(o => o.Key).Distinct());
+            WildSpecies.AddRange(wildObjects.Select(o => o.Key).Distinct().OrderBy(name => name));
             foreach (var group in wildObjects)
                 WildDinos.Add(group.Key, group.Select(o => ConvertCreature(o)).ToList());
 
-            AllSpecies.AddRange(creatureObjects.Select(o => SpeciesName(o.ClassString)).Distinct());
+            AllSpecies.AddRange(creatureObjects.Select(o => SpeciesName(o.ClassString)).Distinct().OrderBy(name => name));
         }
 
         private string SpeciesName(string className)
