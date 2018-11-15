@@ -36,7 +36,7 @@
       <Value Profile="(Default)">2000</Value>
     </Setting>
     <Setting Name="ListFontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
+      <Value Profile="(Default)">14</Value>
     </Setting>
     <Setting Name="PinScale" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.9</Value>

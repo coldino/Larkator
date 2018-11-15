@@ -111,47 +111,17 @@
     <StackPanel Margin="16,32">
         <TextBlock><Run FontWeight="Bold" FontSize="20" Text="L"/><Run FontStyle="Italic" FontSize="24" Text="ARK"/><Run FontWeight="Bold" FontSize="20" Text="ator"/><Run FontSize="18" Text=" Dino Hunter"/><LineBreak/><Run Foreground="#FF292424" FontStyle="Italic" Text="Find dinos within your local saved ARK"/></TextBlock>
         <TextBlock MinHeight="32"/>
-        <TextBlock Padding="0,8" FontSize="16">To get started we need to configure a few items...</TextBlock>
-        <Border Height="10"></Border>
+        <TextBlock Padding="0,4" FontSize="16"><Run Text="To get started we need to "/><Run Text="locate your savegame"/><Run Text="..."/></TextBlock>
+        <TextBlock>e.g. SteamLibrary\steamapps\common\ARK\Shooter Game\Saved\SavedArksLocal\TheIsland.ark</TextBlock>
+        <Border Height="20"></Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Padding="8,0" FontSize="16">1)</TextBlock>
-            <StackPanel Grid.Column="1" Grid.Row="0">
-                <TextBlock FontSize="16">ARKTools is used to read from the saved ARK.</TextBlock>
-                <TextBlock FontSize="16">Please locate ark-tools.exe:</TextBlock>
-                <TextBlock>Or download it from here: <Hyperlink Foreground="{DynamicResource HypertextBrush}" NavigateUri="https://survivetheark.com/index.php?/forums/topic/80750-ark-tools-v064-tools-for-reading-and-manipulating-ark-savegame-files/" Click="LaunchHyperlink_Click">https://survivetheark.com/index.php?/forums/topic/80750...</Hyperlink></TextBlock>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Padding="4,2" Style="{DynamicResource TextBoxChromelessStyle}" Text="{Binding ArkToolsPath, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Welcome}}}"/>
-                    <Button Grid.Column="1" Padding="8,2" Margin="2,0" Click="BrowseArkTools_Click">...</Button>
-                </Grid>
-                <Border Height="20"></Border>
-            </StackPanel>
-            <TextBlock Grid.Column="0" Grid.Row="1" Padding="8,0" FontSize="16">2)</TextBlock>
-            <StackPanel Grid.Column="1" Grid.Row="1">
-                <TextBlock FontSize="16">Locate the ARK you wish to search within:</TextBlock>
-                <TextBlock>e.g. SteamLibrary\steamapps\common\ARK\Shooter Game\Saved\SavedArksLocal\TheIsland.ark</TextBlock>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Padding="4,2" Style="{DynamicResource TextBoxChromelessStyle}" Text="{Binding SaveFilePath, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Welcome}}}"/>
-                    <Button Grid.Column="1" Padding="8,2" Margin="2,0" Click="BrowseSaveFile_Click">...</Button>
-                </Grid>
-            </StackPanel>
+            <TextBox Grid.Column="0" Padding="4,2" Style="{DynamicResource TextBoxChromelessStyle}" Text="{Binding SaveFilePath, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Welcome}}}"/>
+            <Button Grid.Column="1" Padding="8,2" Margin="6,0,0,0" Click="BrowseSaveFile_Click">...</Button>
         </Grid>
-        <Button x:Name="LetsGoButton" HorizontalAlignment="Right" Margin="0,26,0,0" FontSize="18" Padding="6,2" IsEnabled="False" Style="{DynamicResource ButtonChromelessStyle}" Click="LetsGoButton_Click">Let's go!</Button>
+        <Button x:Name="LetsGoButton" HorizontalAlignment="Right" Margin="0,32,0,0" FontSize="18" Padding="6,2" IsEnabled="False" Style="{DynamicResource ButtonChromelessStyle}" Click="LetsGoButton_Click">Let's go!</Button>
     </StackPanel>
 </Window>

@@ -34,14 +34,6 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Grid.Column="0">
-                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">ARK Tools (ark-tools.exe)</TextBlock>
-            </Border>
-            <Border Grid.Column="1" Grid.Row="0">
-                <local:FileEntryBox Value="{Binding Source={StaticResource Model}, Path=Settings.ArkTools, Mode=TwoWay}"
-                                        Filter="ARK Tools Executable|ark-tools.exe" DefaultExt="ark-tools.exe" Title="Locate ark-tools.exe"/>
-            </Border>
-
             <Border Grid.Row="1" Grid.Column="0">
                 <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Save file (.ark)</TextBlock>
             </Border>

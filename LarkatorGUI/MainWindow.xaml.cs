@@ -321,12 +321,8 @@ namespace LarkatorGUI
 
                     using (var response = await client.GetAsync(Properties.Resources.ArkDataURL))
                     {
-                        Debug.WriteLine("Response status = ", response.StatusCode);
-
                         // Throw exception on failure
                         response.EnsureSuccessStatusCode();
-
-                        Debug.WriteLine("Response was successful");
 
                         // Don't do anything if the file hasn't changed
                         if (response.StatusCode == HttpStatusCode.NotModified)
@@ -583,19 +579,15 @@ namespace LarkatorGUI
 
         private void Result_MouseEnter(object sender, MouseEventArgs e)
         {
-            var fe = sender as FrameworkElement;
-            if (fe == null) return;
-            var dino = fe.DataContext as DinoViewModel;
-            if (dino == null) return;
+            if (!(sender is FrameworkElement fe)) return;
+            if (!(fe.DataContext is DinoViewModel dino)) return;
             //dino.Highlight = true;
         }
 
         private void Result_MouseLeave(object sender, MouseEventArgs e)
         {
-            var fe = sender as FrameworkElement;
-            if (fe == null) return;
-            var dino = fe.DataContext as DinoViewModel;
-            if (dino == null) return;
+            if (!(sender is FrameworkElement fe)) return;
+            if (!(fe.DataContext is DinoViewModel dino)) return;
             //dino.ClearValue(DinoViewModel.HighlightProperty);
         }
 
