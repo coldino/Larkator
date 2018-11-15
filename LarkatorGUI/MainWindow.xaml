@@ -350,6 +350,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" FontSize="24" TextAlignment="Center" Text="The Chase" Margin="0"/>
@@ -380,7 +381,11 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <TextBlock Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding ShowCounts, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Matching <TextBlock Text="{Binding ResultMatchingCount}"/> of <TextBlock Text="{Binding ResultTotalCount}"/> creatures
+                </TextBlock>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <StackPanel x:Name="devButtons" Visibility="Collapsed" Orientation="Horizontal" Margin="0,0,32,0">
                         <fa:ImageAwesome Icon="Bug" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Add dummy map points" MouseDown="Dev_DummyData_Click"/>
                         <fa:ImageAwesome Icon="Crop" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Calibration" MouseDown="Dev_Calibration_Click"/>

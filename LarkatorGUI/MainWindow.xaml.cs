@@ -106,6 +106,33 @@ namespace LarkatorGUI
             set { SetValue(SearchTextProperty, value); }
         }
 
+        public int ResultMatchingCount
+        {
+            get { return (int)GetValue(ResultMatchingCountProperty); }
+            set { SetValue(ResultMatchingCountProperty, value); }
+        }
+
+        public int ResultTotalCount
+        {
+            get { return (int)GetValue(ResultTotalCountProperty); }
+            set { SetValue(ResultTotalCountProperty, value); }
+        }
+
+        public bool ShowCounts
+        {
+            get { return (bool)GetValue(ShowCountsProperty); }
+            set { SetValue(ShowCountsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCountsProperty =
+            DependencyProperty.Register("ShowCounts", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty ResultTotalCountProperty =
+            DependencyProperty.Register("ResultTotalCount", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+
+        public static readonly DependencyProperty ResultMatchingCountProperty =
+            DependencyProperty.Register("ResultMatchingCount", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+
         public static readonly DependencyProperty SearchTextProperty =
             DependencyProperty.Register("SearchText", typeof(string), typeof(MainWindow), new PropertyMetadata(""));
 
@@ -147,6 +174,8 @@ namespace LarkatorGUI
         string nameSearchArg;
         bool nameSearchRunning;
         private string lastArk;
+        private DebounceDispatcher refreshSearchesTimer = new DebounceDispatcher();
+        private DebounceDispatcher settingsSaveTimer = new DebounceDispatcher();
 
         public MainWindow()
         {
@@ -601,13 +630,16 @@ namespace LarkatorGUI
 
         private void MarkSearchesChanged()
         {
-            SaveSearches();
+            settingsSaveTimer.Debounce(1000, o => SaveSearches());
         }
 
         private void SaveSearches()
         {
-            Properties.Settings.Default.SavedSearches = JsonConvert.SerializeObject(ListSearches);
-            Properties.Settings.Default.Save();
+            if (!ShowTames)
+            {
+                Properties.Settings.Default.SavedSearches = JsonConvert.SerializeObject(ListSearches);
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void LoadSavedSearches()
@@ -653,12 +685,16 @@ namespace LarkatorGUI
                 // Find dinos that match the given searches
                 var found = new List<Dino>();
                 var sourceDinos = ShowTames ? arkReader.TamedDinos : arkReader.WildDinos;
+                var total = 0;
                 foreach (var search in searches)
                 {
                     if (String.IsNullOrWhiteSpace(search.Species))
                     {
                         foreach (var speciesDinos in sourceDinos.Values)
+                        {
                             found.AddRange(speciesDinos);
+                            total += speciesDinos.Count;
+                        }
                     }
                     else
                     {
@@ -666,6 +702,7 @@ namespace LarkatorGUI
                         {
                             var dinoList = sourceDinos[search.Species];
                             found.AddRange(dinoList.Where(d => search.Matches(d)));
+                            total += dinoList.Count;
                         }
                     }
                 }
@@ -673,6 +710,10 @@ namespace LarkatorGUI
                 ListResults.Clear();
                 foreach (var result in found)
                     ListResults.Add(result);
+
+                ShowCounts = true;
+                ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;
+                ResultMatchingCount = ListResults.Count;
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
@@ -707,10 +748,15 @@ namespace LarkatorGUI
 
         private void UpdateCurrentSearch()
         {
-            var search = (SearchCriteria)searchesList.SelectedItem;
-            var searches = new List<SearchCriteria>();
-            if (search != null) searches.Add(search);
-            UpdateSearchResults(searches);
+            void updateSearch(object o)
+            {
+                var search = (SearchCriteria)searchesList.SelectedItem;
+                var searches = new List<SearchCriteria>();
+                if (search != null) searches.Add(search);
+                UpdateSearchResults(searches);
+            }
+
+            refreshSearchesTimer.Debounce(250, updateSearch);
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)

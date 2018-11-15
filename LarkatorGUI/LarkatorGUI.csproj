@@ -114,6 +114,7 @@
     <Compile Include="CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DebounceDispatcher.cs" />
     <Compile Include="DinoViewModel.cs" />
     <Compile Include="DummyMainWindow.cs" />
     <Compile Include="ExternalToolsException.cs" />
