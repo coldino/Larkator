@@ -226,6 +226,7 @@ namespace LarkatorGUI
             if (fileWatcher != null) fileWatcher.EnableRaisingEvents = false;
             fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
             fileWatcher.Renamed += FileWatcher_Changed;
+            fileWatcher.Changed += FileWatcher_Changed;
             fileWatcher.EnableRaisingEvents = true;
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
             reloadTimer.Tick += ReloadTimer_Tick;
