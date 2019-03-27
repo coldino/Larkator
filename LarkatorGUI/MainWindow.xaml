@@ -30,6 +30,10 @@
         <local:GenderToLetterConverter x:Key="GenderToLetterConverter"/>
         <local:AddIntConverter x:Key="AddIntConverter"/>
 
+        <ContextMenu x:Key="CreatureMenu">
+            <MenuItem Header="Copy teleport cmd" Click="CopyTeleport_Click"/>
+        </ContextMenu>
+
         <CollectionViewSource x:Key="GroupedSearchCriteria" Source="{Binding ListSearches}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Group"/>
@@ -67,6 +71,7 @@
                     <TextBlock Text="{Binding Path=Dino, Converter={StaticResource DinoToTooltipConverter}}"/>
                 </Setter.Value>
             </Setter>
+            <Setter Property="ContextMenu" Value="{StaticResource CreatureMenu}"/>
             <Setter Property="IsSelected" Value="{Binding Highlight, Mode=TwoWay}"/>
             <EventSetter Event="MouseEnter" Handler="Result_MouseEnter"/>
             <EventSetter Event="MouseLeave" Handler="Result_MouseLeave"/>

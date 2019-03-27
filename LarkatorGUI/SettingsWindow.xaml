@@ -32,6 +32,11 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <Border Grid.Row="1" Grid.Column="0">
@@ -76,6 +81,33 @@
                 <local:NumericEntryControl ToolTip="The delay between detecting a change to the saved ark and running the conversion process (in milliseconds)"
                                                Value="{Binding Source={StaticResource Model}, Path=Settings.ConvertDelay, Mode=TwoWay}" MaxWidth="110" HorizontalAlignment="Right"
                                                MaxValue="10000" MinValue="200" Increment="100" LargeIncrement="500" Margin="0,0,2,0"/>
+            </Border>
+
+            <Border Grid.Row="6" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Teleport height offset</TextBlock>
+            </Border>
+            <Border Grid.Row="6" Grid.Column="1">
+                <local:NumericEntryControl ToolTip="The distance above the creature when teleporting (in Unreal units)"
+                                               Value="{Binding Source={StaticResource Model}, Path=Settings.TeleportHeightOffset, Mode=TwoWay}" MaxWidth="110" HorizontalAlignment="Right"
+                                               MaxValue="3000" MinValue="0" Increment="100" LargeIncrement="500" Margin="0,0,2,0"/>
+            </Border>
+
+            <Border Grid.Row="7" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Enable fly after teleport</TextBlock>
+            </Border>
+            <Border Grid.Row="7" Grid.Column="1">
+                <CheckBox ToolTip="Include 'cheat fly' in the teleport command"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.TeleportFly, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
+            </Border>
+            
+            <Border Grid.Row="8" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Enable ghost after teleport</TextBlock>
+            </Border>
+            <Border Grid.Row="8" Grid.Column="1">
+                <CheckBox ToolTip="Include 'cheat ghost' in the teleport command (only if fly is also set)"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.TeleportGhost, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
             </Border>
         </Grid>
         <DockPanel Margin="4,6,6,4" LastChildFill="True">

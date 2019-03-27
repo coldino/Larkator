@@ -41,5 +41,14 @@
     <Setting Name="PinScale" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.9</Value>
     </Setting>
+    <Setting Name="TeleportHeightOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1500</Value>
+    </Setting>
+    <Setting Name="TeleportFly" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TeleportGhost" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

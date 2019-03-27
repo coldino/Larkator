@@ -433,6 +433,25 @@ namespace LarkatorGUI
             }
         }
 
+        private void CopyTeleport_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.Parent is ContextMenu cm && cm.PlacementTarget is DataGridRow dgr && dgr.DataContext is DinoViewModel dvm)
+            {
+                var z = dvm.Dino.Location.Z + Properties.Settings.Default.TeleportHeightOffset;
+                var clipboard = "cheat SetPlayerPos ";
+                clipboard += $"{dvm.Dino.Location.X:0.00} {dvm.Dino.Location.Y:0.00} {z:0.00}";
+                if (Properties.Settings.Default.TeleportFly)
+                {
+                    clipboard += " | cheat fly";
+                    if (Properties.Settings.Default.TeleportGhost) clipboard += " | cheat ghost";
+                }
+
+                Clipboard.SetText(clipboard, TextDataFormat.Text);
+
+                StatusText = "Copied: " + clipboard;
+            }
+        }
+
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             // Handler to maintain window aspect ratio
