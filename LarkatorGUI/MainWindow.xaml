@@ -13,7 +13,7 @@
         d:DataContext="{d:DesignInstance Type={x:Type local:DummyMainWindow}, IsDesignTimeCreatable=True}"
         SourceInitialized="Window_SourceInitialized" Loaded="Window_Loaded"
         Title="{Binding WindowTitle}" Background="{DynamicResource WindowBackgroundBrush}"
-        MaxHeight="1016" MinHeight="500"
+        MinHeight="500"
         Left="{Binding Source={StaticResource Settings}, Path=Default.MainWindowLeft, Mode=TwoWay}"
         Top="{Binding Source={StaticResource Settings}, Path=Default.MainWindowTop, Mode=TwoWay}"
         Width="{Binding Source={StaticResource Settings}, Path=Default.MainWindowWidth, Mode=TwoWay}"
@@ -334,9 +334,9 @@
                 </StackPanel>
             </Grid>
 
-            <Viewbox Grid.Column="1" MinWidth="240" MaxWidth="1000" MaxHeight="1000">
+            <Viewbox Grid.Column="1" MinWidth="240" MinHeight="240">
                 <Grid>
-                    <Image x:Name="image" Source="{Binding MapImage, FallbackValue=imgs/map_TheIsland.jpg}" Width="1000" Height="1000" />
+                    <Image x:Name="image" Source="{Binding MapImage, FallbackValue=imgs/map_TheIsland.jpg}" />
                     <Canvas>
                         <ItemsControl x:Name="map" ItemTemplate="{DynamicResource MapPinTemplate}" ItemsSource="{Binding Source={StaticResource OrderedResults}}"/>
                     </Canvas>
