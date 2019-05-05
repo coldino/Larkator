@@ -529,7 +529,14 @@ namespace LarkatorGUI
             SearchCriteria tempSearch;
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
             NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
-            if (NewSearchList.Count == 0) return; // No matches
+            if (NewSearchList.Count == 0) // No matches
+            { //Trigger default values so the user knows we tried to match
+                NewSearch = null;
+                tempSearch = null;
+                NewSearchActive = false;
+                CreateSearchAvailable = true;
+                return; 
+            }
 
             try
             {
