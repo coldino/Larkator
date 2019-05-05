@@ -525,7 +525,11 @@ namespace LarkatorGUI
 
         private void SaveSearch_Click(object sender, RoutedEventArgs e)
         {
+            List<String> NewSearchList;
+            SearchCriteria tempSearch;
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
+            NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
+            if (NewSearchList.Count == 0) return; // No matches
 
             try
             {
@@ -534,8 +538,15 @@ namespace LarkatorGUI
             catch (InvalidOperationException) // no entries for .Max - ignore
             { }
 
-            ListSearches.Add(NewSearch);
+            foreach (String newDino in NewSearchList)
+            {
+                tempSearch = new SearchCriteria(NewSearch);
+                tempSearch.Species = newDino;
+                ListSearches.Add(tempSearch);
+            }
+
             NewSearch = null;
+            tempSearch = null;
             NewSearchActive = false;
             CreateSearchAvailable = true;
 
