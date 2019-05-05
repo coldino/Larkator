@@ -110,6 +110,70 @@
                                                Margin="7,4"/>
             </Border>
         </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Hp</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="2">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">St</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="3">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">We</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="4">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Me</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="5">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Sp</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="6">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Fd</TextBlock>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="7">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Ox</TextBlock>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Display Stats:</TextBlock>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="1">
+                <CheckBox ToolTip="Display Health" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showHealth, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="2">
+                <CheckBox ToolTip="Display Stamina" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showStam, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="3">
+                <CheckBox ToolTip="Display Weight" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showWeight, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="4">
+                <CheckBox ToolTip="Display Melee" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showMelee, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="5">
+                <CheckBox ToolTip="Display Speed" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showSpeed, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="6">
+                <CheckBox ToolTip="Display Food" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showFood, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="7">
+                <CheckBox ToolTip="Display Oxygen"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.showOxygen, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
+            </Border>
+        </Grid>
         <DockPanel Margin="4,6,6,4" LastChildFill="True">
             <TextBlock Text="Restore all defaults" DockPanel.Dock="Left" VerticalAlignment="Bottom" TextDecorations="Underline" MouseDown="Restore_MouseDown" FontSize="10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

@@ -176,7 +176,7 @@ namespace LarkatorGUI
         private string lastArk;
         private DebounceDispatcher refreshSearchesTimer = new DebounceDispatcher();
         private DebounceDispatcher settingsSaveTimer = new DebounceDispatcher();
-
+        
         public MainWindow()
         {
             ValidateWindowPositionAndSize();
@@ -574,6 +574,11 @@ namespace LarkatorGUI
             settings.ShowDialog();
 
             OnSettingsChanged();
+        }
+
+        private async void Refresh_Click(object sender, MouseButtonEventArgs e)
+        {
+            await ReReadArk();
         }
 
         private void AdjustableInteger_MouseWheel(object sender, MouseWheelEventArgs e)
