@@ -9,6 +9,8 @@ namespace Larkator.Common
         public int Weight { get; set; }
         public int Melee { get; set; }
         public int Speed { get; set; }
+        public int Food { get; set; }
+        public int Oxygen { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -22,7 +24,9 @@ namespace Larkator.Common
                    Stamina == other.Stamina &&
                    Weight == other.Weight &&
                    Melee == other.Melee &&
-                   Speed == other.Speed;
+                   Speed == other.Speed &&
+                   Food == other.Food &&
+                   Oxygen == other.Oxygen;
         }
 
         public override int GetHashCode()
@@ -33,18 +37,20 @@ namespace Larkator.Common
             hashCode = hashCode * -1521134295 + Weight.GetHashCode();
             hashCode = hashCode * -1521134295 + Melee.GetHashCode();
             hashCode = hashCode * -1521134295 + Speed.GetHashCode();
+            hashCode = hashCode * -1521134295 + Food.GetHashCode();
+            hashCode = hashCode * -1521134295 + Oxygen.GetHashCode();
             return hashCode;
         }
 
         public override string ToString()
         {
-            return $"{Health}/{Stamina}/{Weight}/{Melee}/{Speed}";
+            return $"{Health}/{Stamina}/{Weight}/{Melee}/{Speed}/{Food}/{Oxygen}";
         }
 
         public string ToString(bool fixedWidth = false)
         {
             if (fixedWidth)
-                return $"{Health,2}/{Stamina,2}/{Weight,2}/{Melee,2}/{Speed,2}";
+                return $"{Health,2}/{Stamina,2}/{Weight,2}/{Melee,2}/{Speed,2}/{Food,2}/{Oxygen,2}";
             else
                 return ToString();
         }
