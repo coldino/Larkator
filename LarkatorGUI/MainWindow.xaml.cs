@@ -758,18 +758,24 @@ namespace LarkatorGUI
                 ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;
                 ResultMatchingCount = ListResults.Count;
 
-                this.resultsList.Columns["health"].Visibility="{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
-                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
-                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
-                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
-                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
-                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                adjustSearchColumns();
 
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
 
             TriggerNameSearch(true);
+        }
+
+        private void adjustSearchColumns()
+        {
+            resultsList.Columns[3].Visibility = Properties.Settings.Default.showHealth ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[4].Visibility = Properties.Settings.Default.showStam ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[5].Visibility = Properties.Settings.Default.showWeight ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[6].Visibility = Properties.Settings.Default.showMelee ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[7].Visibility = Properties.Settings.Default.showSpeed ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[8].Visibility = Properties.Settings.Default.showFood ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[9].Visibility = Properties.Settings.Default.showOxygen ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async Task PerformConversion()
