@@ -130,8 +130,8 @@ namespace LarkatorGUI
                 var defaultValue = new ArkByteValue(0);
                 dino.WildLevels.Health = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 0, defaultValue).ByteValue;
                 dino.WildLevels.Stamina = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 1, defaultValue).ByteValue;
-                dino.WildLevels.Oxygen = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 2, defaultValue).ByteValue;
-                dino.WildLevels.Food = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 3, defaultValue).ByteValue;
+                dino.WildLevels.Oxygen = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 3, defaultValue).ByteValue;
+                dino.WildLevels.Food = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 4, defaultValue).ByteValue;
                 dino.WildLevels.Weight = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 7, defaultValue).ByteValue;
                 dino.WildLevels.Melee = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 8, defaultValue).ByteValue;
                 dino.WildLevels.Speed = status.GetPropertyValue("NumberOfLevelUpPointsApplied", 9, defaultValue).ByteValue;

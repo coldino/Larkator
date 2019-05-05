@@ -132,7 +132,8 @@ namespace LarkatorGUI
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var v = (Dino)value;
-            return $"{(String.IsNullOrWhiteSpace(v.Name) ? "" : "\"" + v.Name + "\" ")}{v.Type} {(v.Female ? 'F' : 'M')}{v.BaseLevel} @ {v.Location.ToString(PositionFormat.LatLong)} ({v.Location.ToString(PositionFormat.XYZ)})";
+            StatPoints temp = v.WildLevels;
+            return $"{(String.IsNullOrWhiteSpace(v.Name) ? "" : "\"" + v.Name + "\" ")}{v.Type} {(v.Female ? 'F' : 'M')}{v.BaseLevel} @ {v.Location.ToString(PositionFormat.LatLong)} ({v.Location.ToString(PositionFormat.XYZ)}) ({temp})";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
