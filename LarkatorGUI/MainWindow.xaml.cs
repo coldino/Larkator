@@ -757,6 +757,14 @@ namespace LarkatorGUI
                 ShowCounts = true;
                 ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;
                 ResultMatchingCount = ListResults.Count;
+
+                this.resultsList.Columns["health"].Visibility="{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+                this.resultsList.Columns["health"].Visibility = "{ Binding Source = { StaticResource Model }, Path = Settings.showHealth, Mode = TwoWay}";
+
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
