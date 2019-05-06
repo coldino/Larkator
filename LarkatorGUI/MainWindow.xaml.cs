@@ -200,6 +200,7 @@ namespace LarkatorGUI
             }, DispatcherPriority.Loaded);
 
             LoadSavedSearches();
+            adjustSearchColumns();
             SetupFileWatcher();
 
             var cmdThrowExceptionAndExit = new RoutedCommand();
@@ -901,7 +902,7 @@ namespace LarkatorGUI
             UpdateCurrentSearch();
 
             ForceFontSizeUpdate();
-
+            adjustSearchColumns();
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }
 
