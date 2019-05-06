@@ -317,7 +317,7 @@
                     <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
                         <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
                             <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True" SelectedIndex="0"/>
-                            <ComboBox x:Name="speciesCombo" Text="{Binding Species}"/>
+                            <ComboBox x:Name="speciesCombo" Text="{Binding Species}" IsEditable="True" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                                 <TextBlock Text="Min"/>
                                 <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
