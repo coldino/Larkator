@@ -545,17 +545,17 @@ namespace LarkatorGUI
 
             try
             {
-                NewSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+                foreach (String newDino in NewSearchList)
+                {
+                    tempSearch = new SearchCriteria(NewSearch);
+                    tempSearch.Species = newDino;
+                    tempSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+                    ListSearches.Add(tempSearch);
+                }
             }
             catch (InvalidOperationException) // no entries for .Max - ignore
             { }
 
-            foreach (String newDino in NewSearchList)
-            {
-                tempSearch = new SearchCriteria(NewSearch);
-                tempSearch.Species = newDino;
-                ListSearches.Add(tempSearch);
-            }
 
             NewSearch = null;
             tempSearch = null;
@@ -757,7 +757,7 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    if (!Properties.Settings.Default.hideUntameable || (Properties.Settings.Default.hideUntameable && result.IsTameable == true))
+                    if (!Properties.Settings.Default.hideUntameable || (Properties.Settings.Default.hideUntameable && result.IsTameable))
                         ListResults.Add(result);
 
                 ShowCounts = true;
