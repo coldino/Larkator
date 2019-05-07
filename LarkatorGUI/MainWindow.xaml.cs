@@ -477,6 +477,8 @@ namespace LarkatorGUI
 
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
+            int temp = Properties.Settings.Default.lastGroup;
+            groupsCombo.SelectedIndex = Properties.Settings.Default.lastGroup;
         }
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
@@ -529,6 +531,8 @@ namespace LarkatorGUI
             List<String> NewSearchList;
             SearchCriteria tempSearch;
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
+            Properties.Settings.Default.lastGroup = groupsCombo.SelectedIndex;
+            Properties.Settings.Default.Save();
             NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
             if (NewSearchList.Count == 0) // No matches
             { //Trigger default values so the user knows we tried to match
