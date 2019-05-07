@@ -757,7 +757,8 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    ListResults.Add(result);
+                    if (!Properties.Settings.Default.hideUntameable || (Properties.Settings.Default.hideUntameable && result.IsTameable == true))
+                        ListResults.Add(result);
 
                 ShowCounts = true;
                 ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;

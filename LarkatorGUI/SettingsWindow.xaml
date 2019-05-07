@@ -37,6 +37,7 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <Border Grid.Row="1" Grid.Column="0">
@@ -107,6 +108,14 @@
             <Border Grid.Row="8" Grid.Column="1">
                 <CheckBox ToolTip="Include 'cheat ghost' in the teleport command (only if fly is also set)"
                                                IsChecked="{Binding Source={StaticResource Model}, Path=Settings.TeleportGhost, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
+            </Border>
+            <Border Grid.Row="9" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Hide untameable dinosaurs</TextBlock>
+            </Border>
+            <Border Grid.Row="9" Grid.Column="1">
+                <CheckBox ToolTip="Hide dinosaurs that cannot be tamed"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.hideUntameable, Mode=TwoWay}" HorizontalAlignment="Right"
                                                Margin="7,4"/>
             </Border>
         </Grid>

@@ -332,5 +332,17 @@ namespace LarkatorGUI.Properties {
                 this["lastGroup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hideUntameable {
+            get {
+                return ((bool)(this["hideUntameable"]));
+            }
+            set {
+                this["hideUntameable"] = value;
+            }
+        }
     }
 }
