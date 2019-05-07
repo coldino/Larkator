@@ -120,9 +120,16 @@ namespace LarkatorGUI
                 Id = (ulong)obj.GetDinoId(),
                 BaseLevel = obj.GetBaseLevel(),
                 Name = obj.GetPropertyValue("TamedName", defaultValue: ""),
+                IsTameable = obj.GetPropertyValue("bForceDisabledTaming",defaultValue: true),
                 Location = ConvertCoordsToLatLong(obj.Location),
                 WildLevels = new StatPoints(),
             };
+
+            if (dino.Type.Contains("Polar"))
+            {
+                //stuff
+                int x = 1;
+            }
 
             var status = obj.CharacterStatusComponent();
             if (status != null)

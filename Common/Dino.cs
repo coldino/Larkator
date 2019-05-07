@@ -10,6 +10,7 @@ namespace Larkator.Common
         public string Name { get; set; }
         public int BaseLevel { get; set; }
         public bool Female { get; set; }
+        public bool IsTameable { get; set; }
         public Position Location { get; set; }
         public StatPoints WildLevels { get; set; }
 
@@ -26,6 +27,7 @@ namespace Larkator.Common
                    Name == other.Name &&
                    BaseLevel == other.BaseLevel &&
                    Female == other.Female &&
+                   IsTameable == other.IsTameable &&
                    EqualityComparer<Position>.Default.Equals(Location, other.Location) &&
                    EqualityComparer<StatPoints>.Default.Equals(WildLevels, other.WildLevels);
         }
@@ -38,6 +40,7 @@ namespace Larkator.Common
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + BaseLevel.GetHashCode();
             hashCode = hashCode * -1521134295 + Female.GetHashCode();
+            hashCode = hashCode * -1521134295 + IsTameable.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<Position>.Default.GetHashCode(Location);
             hashCode = hashCode * -1521134295 + EqualityComparer<StatPoints>.Default.GetHashCode(WildLevels);
             return hashCode;
