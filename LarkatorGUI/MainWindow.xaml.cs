@@ -545,11 +545,12 @@ namespace LarkatorGUI
 
             try
             {
+                ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String) groupsCombo.SelectedValue));
                 foreach (String newDino in NewSearchList)
                 {
                     tempSearch = new SearchCriteria(NewSearch);
                     tempSearch.Species = newDino;
-                    tempSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+                    tempSearch.Order = ListSearches.Where(sc => sc.Group == tempSearch.Group).Max(sc => sc.Order) + 100;
                     ListSearches.Add(tempSearch);
                 }
             }
@@ -757,7 +758,7 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    if (!Properties.Settings.Default.hideUntameable || (Properties.Settings.Default.hideUntameable && result.IsTameable))
+                    if (!Properties.Settings.Default.hideUntameable || (result.IsTameable))
                         ListResults.Add(result);
 
                 ShowCounts = true;
