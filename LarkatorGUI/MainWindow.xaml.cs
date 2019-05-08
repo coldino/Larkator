@@ -477,7 +477,6 @@ namespace LarkatorGUI
 
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
-            int temp = Properties.Settings.Default.lastGroup;
             groupsCombo.SelectedIndex = Properties.Settings.Default.lastGroup;
         }
 
@@ -528,12 +527,16 @@ namespace LarkatorGUI
 
         private void SaveSearch_Click(object sender, RoutedEventArgs e)
         {
-            List<String> NewSearchList;
-            SearchCriteria tempSearch;
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
+
+            List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
+            SearchCriteria tempSearch;
+            int order = 100;
+
             Properties.Settings.Default.lastGroup = groupsCombo.SelectedIndex;
             Properties.Settings.Default.Save();
-            NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
+            
+
             if (NewSearchList.Count == 0) // No matches
             { //Trigger default values so the user knows we tried to match
                 NewSearch = null;
@@ -545,12 +548,20 @@ namespace LarkatorGUI
 
             try
             {
+                ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String) groupsCombo.SelectedValue));
+                if (tempListSearch.Count > 0)
+                {
+                    order = (int) ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+                }
                 foreach (String newDino in NewSearchList)
                 {
-                    tempSearch = new SearchCriteria(NewSearch);
-                    tempSearch.Species = newDino;
-                    tempSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
-                    ListSearches.Add(tempSearch);
+                    if (tempListSearch.Count == 0 || tempListSearch.Where(dino =>dino.Species == newDino).Count() == 0) {
+                        tempSearch = new SearchCriteria(NewSearch);
+                        tempSearch.Species = newDino;
+                        tempSearch.Order = order;
+                        ListSearches.Add(tempSearch);
+                        order += 100;
+                    }
                 }
             }
             catch (InvalidOperationException) // no entries for .Max - ignore
@@ -757,7 +768,7 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    if (!Properties.Settings.Default.hideUntameable || (Properties.Settings.Default.hideUntameable && result.IsTameable))
+                    if (!Properties.Settings.Default.hideUntameable || (result.IsTameable))
                         ListResults.Add(result);
 
                 ShowCounts = true;
