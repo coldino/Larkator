@@ -784,7 +784,7 @@ namespace LarkatorGUI
             TriggerNameSearch(true);
         }
 
-        private void adjustSearchColumns()
+        private void AdjustSearchColumns()
         {
             resultsList.Columns[3].Visibility = Properties.Settings.Default.ShowHealth ? Visibility.Visible : Visibility.Collapsed;
             resultsList.Columns[4].Visibility = Properties.Settings.Default.ShowStam ? Visibility.Visible : Visibility.Collapsed;
