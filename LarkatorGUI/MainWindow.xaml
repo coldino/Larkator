@@ -381,11 +381,11 @@
                         <DataGridTextColumn Header="Pos" Width="2.2*" Binding="{Binding Path=Dino.Location, Converter={StaticResource PositionToStringConverter}}"/>
                         <DataGridTextColumn x:Name="health" Header="Hp" Width="1*" Binding="{Binding Path=Dino.WildLevels.Health}"/>
                         <DataGridTextColumn x:Name="stamina" Header="St" Width="1*" Binding="{Binding Path=Dino.WildLevels.Stamina}"/>
-                        <DataGridTextColumn x:Name="weight" Header="We" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
-                        <DataGridTextColumn x:Name="melee" Header="Me" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
-                        <DataGridTextColumn x:Name="speed" Header="Sp" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
-                        <DataGridTextColumn x:Name="food" Header="Fd" Width="1*" Binding="{Binding Path=Dino.WildLevels.Food}"/>
-                        <DataGridTextColumn x:Name="oxygen" Header="Ox" Width="1*" Binding="{Binding Path=Dino.WildLevels.Oxygen}"/>
+                        <DataGridTextColumn x:Name="weight" Header="Fd" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
+                        <DataGridTextColumn x:Name="melee" Header="Ox" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
+                        <DataGridTextColumn x:Name="speed" Header="We" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
+                        <DataGridTextColumn x:Name="food" Header="Me" Width="1*" Binding="{Binding Path=Dino.WildLevels.Food}"/>
+                        <DataGridTextColumn x:Name="oxygen" Header="Sp" Width="1*" Binding="{Binding Path=Dino.WildLevels.Oxygen}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 

@@ -44,13 +44,13 @@ namespace Larkator.Common
 
         public override string ToString()
         {
-            return $"{Health}/{Stamina}/{Weight}/{Melee}/{Speed}/{Food}/{Oxygen}";
+            return $"{Health}/{Stamina}/{Oxygen}/{Food}/{Weight}/{Melee}/{Speed}";
         }
 
         public string ToString(bool fixedWidth = false)
         {
             if (fixedWidth)
-                return $"{Health,2}/{Stamina,2}/{Weight,2}/{Melee,2}/{Speed,2}/{Food,2}/{Oxygen,2}";
+                return $"{Health,2}/{Stamina,2}/{Oxygen,2}/{Food,2}//{Weight,2}{Melee,2}/{Speed,2}";
             else
                 return ToString();
         }

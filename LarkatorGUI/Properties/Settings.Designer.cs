@@ -240,108 +240,108 @@ namespace LarkatorGUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showHealth {
+        public bool ShowHealth {
             get {
-                return ((bool)(this["showHealth"]));
+                return ((bool)(this["ShowHealth"]));
             }
             set {
-                this["showHealth"] = value;
+                this["ShowHealth"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showStam {
+        public bool ShowStam {
             get {
-                return ((bool)(this["showStam"]));
+                return ((bool)(this["ShowStam"]));
             }
             set {
-                this["showStam"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showWeight {
-            get {
-                return ((bool)(this["showWeight"]));
-            }
-            set {
-                this["showWeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showMelee {
-            get {
-                return ((bool)(this["showMelee"]));
-            }
-            set {
-                this["showMelee"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showSpeed {
-            get {
-                return ((bool)(this["showSpeed"]));
-            }
-            set {
-                this["showSpeed"] = value;
+                this["ShowStam"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool showFood {
+        public bool ShowOxygen {
             get {
-                return ((bool)(this["showFood"]));
+                return ((bool)(this["ShowOxygen"]));
             }
             set {
-                this["showFood"] = value;
+                this["ShowOxygen"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool showOxygen {
+        public bool ShowFood {
             get {
-                return ((bool)(this["showOxygen"]));
+                return ((bool)(this["ShowFood"]));
             }
             set {
-                this["showOxygen"] = value;
+                this["ShowFood"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowWeight {
+            get {
+                return ((bool)(this["ShowWeight"]));
+            }
+            set {
+                this["ShowWeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMelee {
+            get {
+                return ((bool)(this["ShowMelee"]));
+            }
+            set {
+                this["ShowMelee"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowSpeed {
+            get {
+                return ((bool)(this["ShowSpeed"]));
+            }
+            set {
+                this["ShowSpeed"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int lastGroup {
+        public int LastGroup {
             get {
-                return ((int)(this["lastGroup"]));
+                return ((int)(this["LastGroup"]));
             }
             set {
-                this["lastGroup"] = value;
+                this["LastGroup"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool hideUntameable {
+        public bool HideUntameable {
             get {
-                return ((bool)(this["hideUntameable"]));
+                return ((bool)(this["HideUntameable"]));
             }
             set {
-                this["hideUntameable"] = value;
+                this["HideUntameable"] = value;
             }
         }
     }

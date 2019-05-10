@@ -477,7 +477,7 @@ namespace LarkatorGUI
 
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
-            groupsCombo.SelectedIndex = Properties.Settings.Default.lastGroup;
+            groupsCombo.SelectedIndex = Properties.Settings.Default.LastGroup;
         }
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
@@ -533,7 +533,7 @@ namespace LarkatorGUI
             SearchCriteria tempSearch;
             int order = 100;
 
-            Properties.Settings.Default.lastGroup = groupsCombo.SelectedIndex;
+            Properties.Settings.Default.LastGroup = groupsCombo.SelectedIndex;
             Properties.Settings.Default.Save();
             
 
@@ -768,7 +768,7 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    if (!Properties.Settings.Default.hideUntameable || (result.IsTameable))
+                    if (!Properties.Settings.Default.HideUntameable || (result.IsTameable))
                         ListResults.Add(result);
 
                 ShowCounts = true;
@@ -786,13 +786,15 @@ namespace LarkatorGUI
 
         private void adjustSearchColumns()
         {
-            resultsList.Columns[3].Visibility = Properties.Settings.Default.showHealth ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[4].Visibility = Properties.Settings.Default.showStam ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[5].Visibility = Properties.Settings.Default.showWeight ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[6].Visibility = Properties.Settings.Default.showMelee ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[7].Visibility = Properties.Settings.Default.showSpeed ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[8].Visibility = Properties.Settings.Default.showFood ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[9].Visibility = Properties.Settings.Default.showOxygen ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[3].Visibility = Properties.Settings.Default.ShowHealth ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[4].Visibility = Properties.Settings.Default.ShowStam ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[5].Visibility = Properties.Settings.Default.ShowOxygen ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[6].Visibility = Properties.Settings.Default.ShowFood ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[7].Visibility = Properties.Settings.Default.ShowWeight ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[8].Visibility = Properties.Settings.Default.ShowMelee ? Visibility.Visible : Visibility.Collapsed;
+            resultsList.Columns[9].Visibility = Properties.Settings.Default.ShowSpeed ? Visibility.Visible : Visibility.Collapsed;
+            
+            
         }
 
         private async Task PerformConversion()
