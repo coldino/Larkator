@@ -401,7 +401,7 @@
                         <fa:ImageAwesome Icon="Remove" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Remove user settings &amp; exit" MouseDown="Dev_RemoveSettings_Click"/>
                     </StackPanel>
                     <fa:ImageAwesome Icon="cogs" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Settings" MouseDown="Settings_Click"/>
-                    <fa:ImageAwesome Icon="refresh" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Refresh" MouseDown="Refresh_Click"/>
+                    <fa:ImageAwesome Icon="refresh" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Refresh" Visibility="Hidden" MouseDown="Refresh_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>
