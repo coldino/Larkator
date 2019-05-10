@@ -158,7 +158,7 @@
             </Border>
 
             <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Display Stats:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Display stats</TextBlock>
             </Border>
             <Border Grid.Row="1" Grid.Column="2">
                 <CheckBox ToolTip="Display Health" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowHealth, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
