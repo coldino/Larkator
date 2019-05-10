@@ -200,7 +200,6 @@ namespace LarkatorGUI
             }, DispatcherPriority.Loaded);
 
             LoadSavedSearches();
-            adjustSearchColumns();
             SetupFileWatcher();
 
             var cmdThrowExceptionAndExit = new RoutedCommand();
@@ -775,26 +774,11 @@ namespace LarkatorGUI
                 ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;
                 ResultMatchingCount = ListResults.Count;
 
-                adjustSearchColumns();
-
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
 
             TriggerNameSearch(true);
-        }
-
-        private void AdjustSearchColumns()
-        {
-            resultsList.Columns[3].Visibility = Properties.Settings.Default.ShowHealth ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[4].Visibility = Properties.Settings.Default.ShowStam ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[5].Visibility = Properties.Settings.Default.ShowOxygen ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[6].Visibility = Properties.Settings.Default.ShowFood ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[7].Visibility = Properties.Settings.Default.ShowWeight ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[8].Visibility = Properties.Settings.Default.ShowMelee ? Visibility.Visible : Visibility.Collapsed;
-            resultsList.Columns[9].Visibility = Properties.Settings.Default.ShowSpeed ? Visibility.Visible : Visibility.Collapsed;
-            
-            
         }
 
         private async Task PerformConversion()
@@ -920,7 +904,6 @@ namespace LarkatorGUI
             UpdateCurrentSearch();
 
             ForceFontSizeUpdate();
-            adjustSearchColumns();
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }
 
