@@ -541,38 +541,52 @@ namespace LarkatorGUI
             {
                 Properties.Settings.Default.LastGroup = "Shopping List";
             }
+            //Set and save property
+            Properties.Settings.Default.GroupSearch = (bool) groupCheck.IsChecked;
             Properties.Settings.Default.Save();
             
 
             if (NewSearchList.Count == 0) // No matches
-            { //Trigger default values so the user knows we tried to match
+            { //Trigger default values so the user knows we did search to match
                 NewSearch = null;
                 tempSearch = null;
                 NewSearchActive = false;
                 CreateSearchAvailable = true;
                 return; 
             }
-
-            try
+            ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String)groupsCombo.SelectedValue));
+            if (tempListSearch.Count > 0)
             {
-                ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String) groupsCombo.SelectedValue));
-                if (tempListSearch.Count > 0)
+                order = (int)ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+            }
+            //check for group based search
+            if (Properties.Settings.Default.GroupSearch)
+            {
+                tempSearch = new SearchCriteria(NewSearch);
+                tempSearch.Species = NewSearch.Species;
+                tempSearch.Order = order; //Sort order
+                tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                ListSearches.Add(tempSearch);
+            }
+            else {
+                try
                 {
-                    order = (int) ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
-                }
-                foreach (String newDino in NewSearchList)
-                {
-                    if (tempListSearch.Count == 0 || tempListSearch.Where(dino =>dino.Species == newDino).Count() == 0) {
-                        tempSearch = new SearchCriteria(NewSearch);
-                        tempSearch.Species = newDino;
-                        tempSearch.Order = order;
-                        ListSearches.Add(tempSearch);
-                        order += 100;
+                    foreach (String newDino in NewSearchList)
+                    {
+                        if (tempListSearch.Count == 0 || tempListSearch.Where(dino => dino.Species == newDino).Count() == 0)
+                        {
+                            tempSearch = new SearchCriteria(NewSearch);
+                            tempSearch.Species = newDino;
+                            tempSearch.Order = order;
+                            tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                            ListSearches.Add(tempSearch);
+                            order += 100;
+                        }
                     }
                 }
+                catch (InvalidOperationException) // no entries for .Max - ignore
+                { }
             }
-            catch (InvalidOperationException) // no entries for .Max - ignore
-            { }
 
 
             NewSearch = null;
@@ -761,6 +775,21 @@ namespace LarkatorGUI
                             found.AddRange(speciesDinos);
                             total += speciesDinos.Count;
                         }
+                    }
+                    else if (search.GroupSearch)
+                    {
+                        List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(search.Species)));
+                        foreach (String newDino in NewSearchList)
+                        {
+                            if (sourceDinos.ContainsKey(newDino))
+                            {
+                                var dinoList = sourceDinos[newDino];
+                                //found.AddRange(dinoList.Where(d => search.Matches(d)));
+                                found.AddRange(dinoList);
+                                total += dinoList.Count;
+                            }
+                        }
+
                     }
                     else
                     {

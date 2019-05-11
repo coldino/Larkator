@@ -314,17 +314,23 @@
                     </StackPanel>
                     <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click"
                             Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
+                        <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
                         <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
                             <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True" />
                             <ComboBox x:Name="speciesCombo" Text="{Binding Species}" IsEditable="True" StaysOpenOnEdit="True"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Min"/>
+                                <TextBlock Text="Min "/>
                                 <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Max"/>
+                                <TextBlock Text="Max "/>
                                 <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                                <TextBlock Text="Grouped search "/>
+                                <CheckBox x:Name="groupCheck" ToolTip="Keyword search for a group of dinosaurs"
+                                               IsChecked="{Binding Source={StaticResource Settings}, Path=Settings.GroupSearch, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" />
