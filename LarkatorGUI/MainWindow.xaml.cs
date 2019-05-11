@@ -476,7 +476,7 @@ namespace LarkatorGUI
 
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
-            groupsCombo.SelectedIndex = Properties.Settings.Default.LastGroup;
+            groupsCombo.SelectedItem = Properties.Settings.Default.LastGroup;
         }
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
@@ -532,7 +532,15 @@ namespace LarkatorGUI
             SearchCriteria tempSearch;
             int order = 100;
 
-            Properties.Settings.Default.LastGroup = groupsCombo.SelectedIndex;
+            //If we lose our selection default back to Shopping List
+            try
+            {
+                Properties.Settings.Default.LastGroup = groupsCombo.Text;
+            }
+            catch 
+            {
+                Properties.Settings.Default.LastGroup = "Shopping List";
+            }
             Properties.Settings.Default.Save();
             
 
