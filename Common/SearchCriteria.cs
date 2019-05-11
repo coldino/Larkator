@@ -26,6 +26,7 @@ namespace Larkator.Common
             MinLevel = copy.MinLevel;
             MaxLevel = copy.MaxLevel;
             Female = copy.Female;
+            GroupSearch = copy.GroupSearch;
         }
 
         public string Group { get; set; }
@@ -34,6 +35,7 @@ namespace Larkator.Common
         public int? MinLevel { get; set; }
         public int? MaxLevel { get; set; }
         public bool? Female { get; set; }
+        public bool GroupSearch { get; set; }
 
         /// <summary>
         /// Compares equality based only on an internal random ID assigned on creation.
