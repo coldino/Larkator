@@ -189,6 +189,7 @@ namespace LarkatorGUI
             DiscoverCalibration();
 
             DataContext = this;
+            this.MouseDown += new MouseButtonEventHandler(window_MouseDown);
 
             InitializeComponent();
 
@@ -1004,6 +1005,17 @@ namespace LarkatorGUI
                 foreach (var dvm in ListResults)
                     dvm.Highlight = (dvm.Dino.Name != null) && dvm.Dino.Name.Contains(searchText);
             }
+        }
+
+        private void ComboOpen(object sender, EventArgs e)
+        {
+            //Open the box when we first click into the text
+            speciesCombo.IsDropDownOpen = true;
+        }
+
+        private void window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
         }
     }
 }
