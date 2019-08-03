@@ -240,6 +240,7 @@
     <Resource Include="imgs\map_ScorchedEarth.jpg" />
     <Resource Include="imgs\map_TheCenter.jpg" />
     <Resource Include="imgs\map_TheIsland.jpg" />
+    <Resource Include="imgs\map_Valguero_P.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="imgs\map_Extinction.jpg" />
