@@ -176,7 +176,7 @@ namespace LarkatorGUI
         private string lastArk;
         private DebounceDispatcher refreshSearchesTimer = new DebounceDispatcher();
         private DebounceDispatcher settingsSaveTimer = new DebounceDispatcher();
-
+        
         public MainWindow()
         {
             ValidateWindowPositionAndSize();
@@ -189,6 +189,7 @@ namespace LarkatorGUI
             DiscoverCalibration();
 
             DataContext = this;
+            this.MouseDown += new MouseButtonEventHandler(window_MouseDown);
 
             InitializeComponent();
 
@@ -476,6 +477,7 @@ namespace LarkatorGUI
 
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
+            groupsCombo.SelectedItem = Properties.Settings.Default.LastGroup;
         }
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
@@ -527,15 +529,69 @@ namespace LarkatorGUI
         {
             if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
 
+            List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
+            SearchCriteria tempSearch;
+            int order = 100;
+
+            //If we lose our selection default back to Shopping List
             try
             {
-                NewSearch.Order = ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+                Properties.Settings.Default.LastGroup = groupsCombo.Text;
             }
-            catch (InvalidOperationException) // no entries for .Max - ignore
-            { }
+            catch 
+            {
+                Properties.Settings.Default.LastGroup = "Shopping List";
+            }
+            //Set and save property
+            Properties.Settings.Default.GroupSearch = (bool) groupCheck.IsChecked;
+            Properties.Settings.Default.Save();
+            
 
-            ListSearches.Add(NewSearch);
+            if (NewSearchList.Count == 0) // No matches
+            { //Trigger default values so the user knows we did search to match
+                NewSearch = null;
+                tempSearch = null;
+                NewSearchActive = false;
+                CreateSearchAvailable = true;
+                return; 
+            }
+            ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String)groupsCombo.SelectedValue));
+            if (tempListSearch.Count > 0)
+            {
+                order = (int)ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
+            }
+            //check for group based search
+            if (Properties.Settings.Default.GroupSearch)
+            {
+                tempSearch = new SearchCriteria(NewSearch);
+                tempSearch.Species = NewSearch.Species;
+                tempSearch.Order = order; //Sort order
+                tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                ListSearches.Add(tempSearch);
+            }
+            else {
+                try
+                {
+                    foreach (String newDino in NewSearchList)
+                    {
+                        if (tempListSearch.Count == 0 || tempListSearch.Where(dino => dino.Species == newDino).Count() == 0)
+                        {
+                            tempSearch = new SearchCriteria(NewSearch);
+                            tempSearch.Species = newDino;
+                            tempSearch.Order = order;
+                            tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                            ListSearches.Add(tempSearch);
+                            order += 100;
+                        }
+                    }
+                }
+                catch (InvalidOperationException) // no entries for .Max - ignore
+                { }
+            }
+
+
             NewSearch = null;
+            tempSearch = null;
             NewSearchActive = false;
             CreateSearchAvailable = true;
 
@@ -574,6 +630,11 @@ namespace LarkatorGUI
             settings.ShowDialog();
 
             OnSettingsChanged();
+        }
+
+        private async void Refresh_Click(object sender, MouseButtonEventArgs e)
+        {
+            await ReReadArk();
         }
 
         private void AdjustableInteger_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -716,6 +777,21 @@ namespace LarkatorGUI
                             total += speciesDinos.Count;
                         }
                     }
+                    else if (search.GroupSearch)
+                    {
+                        List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(search.Species)));
+                        foreach (String newDino in NewSearchList)
+                        {
+                            if (sourceDinos.ContainsKey(newDino))
+                            {
+                                var dinoList = sourceDinos[newDino];
+                                //found.AddRange(dinoList.Where(d => search.Matches(d)));
+                                found.AddRange(dinoList);
+                                total += dinoList.Count;
+                            }
+                        }
+
+                    }
                     else
                     {
                         if (sourceDinos.ContainsKey(search.Species))
@@ -729,11 +805,13 @@ namespace LarkatorGUI
 
                 ListResults.Clear();
                 foreach (var result in found)
-                    ListResults.Add(result);
+                    if (!Properties.Settings.Default.HideUntameable || (result.IsTameable))
+                        ListResults.Add(result);
 
                 ShowCounts = true;
                 ResultTotalCount = ShowTames ? sourceDinos.Sum(species => species.Value.Count()) : total;
                 ResultMatchingCount = ListResults.Count;
+
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
@@ -864,7 +942,6 @@ namespace LarkatorGUI
             UpdateCurrentSearch();
 
             ForceFontSizeUpdate();
-
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
         }
 
@@ -928,6 +1005,17 @@ namespace LarkatorGUI
                 foreach (var dvm in ListResults)
                     dvm.Highlight = (dvm.Dino.Name != null) && dvm.Dino.Name.Contains(searchText);
             }
+        }
+
+        private void ComboOpen(object sender, EventArgs e)
+        {
+            //Open the box when we first click into the text
+            speciesCombo.IsDropDownOpen = true;
+        }
+
+        private void window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
         }
     }
 }

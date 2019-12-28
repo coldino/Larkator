@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LarkatorGUI"
+        xmlns:properties="clr-namespace:LarkatorGUI.Properties"
         xmlns:common="clr-namespace:Larkator.Common;assembly=Larkator.Common"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
@@ -313,17 +314,23 @@
                     </StackPanel>
                     <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click"
                             Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
+                        <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
                         <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
-                            <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True"/>
-                            <ComboBox x:Name="speciesCombo" Text="{Binding Species}"/>
+                            <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True" />
+                            <ComboBox x:Name="speciesCombo" Text="{Binding Species}" IsEditable="True" StaysOpenOnEdit="True" GotFocus="ComboOpen" AllowDrop="True"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Min"/>
+                                <TextBlock Text="Min "/>
                                 <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Max"/>
+                                <TextBlock Text="Max "/>
                                 <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                                <TextBlock Text="Grouped search "/>
+                                <CheckBox x:Name="groupCheck" ToolTip="Keyword search for a group of dinosaurs"
+                                               IsChecked="{Binding Source={StaticResource Settings}, Path=Settings.GroupSearch, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" />
@@ -378,11 +385,13 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Lvl" Width="1.2*" Binding="{Binding Dino.BaseLevel}"/>
                         <DataGridTextColumn Header="Pos" Width="2.2*" Binding="{Binding Path=Dino.Location, Converter={StaticResource PositionToStringConverter}}"/>
-                        <DataGridTextColumn Header="Hp" Width="1*" Binding="{Binding Path=Dino.WildLevels.Health}"/>
-                        <DataGridTextColumn Header="St" Width="1*" Binding="{Binding Path=Dino.WildLevels.Stamina}"/>
-                        <DataGridTextColumn Header="We" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
-                        <DataGridTextColumn Header="Me" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
-                        <DataGridTextColumn Header="Sp" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
+                        <DataGridTextColumn x:Name="health" Header="Hp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowHealth, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Health}"/>
+                        <DataGridTextColumn x:Name="stamina" Header="St" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowStam, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Stamina}"/>
+                        <DataGridTextColumn x:Name="oxygen" Header="Ox" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowOxygen, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
+                        <DataGridTextColumn x:Name="food" Header="Fd" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowFood, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
+                        <DataGridTextColumn x:Name="weight" Header="We" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowWeight, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
+                        <DataGridTextColumn x:Name="melee" Header="Me" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowMelee, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Food}"/>
+                        <DataGridTextColumn x:Name="speed" Header="Sp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowSpeed, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Oxygen}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -398,6 +407,7 @@
                         <fa:ImageAwesome Icon="Remove" Height="30" Width="30" Margin="8" Foreground="#88FFFF00" ToolTip="Remove user settings &amp; exit" MouseDown="Dev_RemoveSettings_Click"/>
                     </StackPanel>
                     <fa:ImageAwesome Icon="cogs" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Settings" MouseDown="Settings_Click"/>
+                    <fa:ImageAwesome Icon="refresh" Width="30" Height="30" Margin="8" Foreground="#44ffffff" ToolTip="Refresh" Visibility="Hidden" MouseDown="Refresh_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>
