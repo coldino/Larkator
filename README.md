@@ -1,3 +1,9 @@
+I'm not a coder but I'm just trying to compile myself because the author is missing in action...
+Use at your own risk...
+
+
+
+
 # Larkator : ARK Dino Finder
 > Reads your ARK. Finds your dinos.
 
