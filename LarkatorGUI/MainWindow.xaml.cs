@@ -440,7 +440,7 @@ namespace LarkatorGUI
             {
                 var z = dvm.Dino.Location.Z + Properties.Settings.Default.TeleportHeightOffset;
                 var clipboard = "cheat SetPlayerPos ";
-                clipboard += $"{dvm.Dino.Location.X:0.00} {dvm.Dino.Location.Y:0.00} {z:0.00}";
+                clipboard += System.FormattableString.Invariant($"{dvm.Dino.Location.X:0.00} {dvm.Dino.Location.Y:0.00} {z:0.00}");
                 if (Properties.Settings.Default.TeleportFly)
                 {
                     clipboard += " | cheat fly";
