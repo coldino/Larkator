@@ -1,68 +1,79 @@
 [
-    {
-        "Filename": "TheIsland",
-        "LatOffset": 50,
-        "LatDivisor": 8000,
-        "LonOffset": 50,
-        "LonDivisor": 8000,
-        "PixelOffsetX": 18.375,
-        "PixelOffsetY": 23.75,
-        "PixelScaleX": 9.55,
-        "PixelScaleY": 9.625
-    },
-    {
-        "Filename": "TheCenter",
-        "LatOffset": 30.30309,
-        "LatDivisor": 9584.15646605143,
-        "LonOffset": 55,
-        "LonDivisor": 9600.55903111401,
-        "PixelOffsetX": 18.875,
-        "PixelOffsetY": 50.75,
-        "PixelScaleX": 9.1,
-        "PixelScaleY": 9.1
-    },
-    {
-        "Filename": "Aberration",
-        "LatOffset": 50,
-        "LatDivisor": 8000,
-        "LonOffset": 50,
-        "LonDivisor": 8000,
-        "PixelOffsetX": 15.125,
-        "PixelOffsetY": 19.0,
-        "PixelScaleX": 9.8875,
-        "PixelScaleY": 9.7
-    },
-    {
-        "Filename": "Ragnarok",
-        "LatOffset": 50,
-        "LatDivisor": 13100,
-        "LonOffset": 50,
-        "LonDivisor": 13100,
-        "PixelOffsetX": 15.25,
-        "PixelOffsetY": 19,
-        "PixelScaleX": 9.7,
-        "PixelScaleY": 9.7
-    },
-    {
-        "Filename": "ScorchedEarth",
-        "LatOffset": 50,
-        "LatDivisor": 8000,
-        "LonOffset": 50,
-        "LonDivisor": 8000,
-        "PixelOffsetX": 13.875,
-        "PixelOffsetY": 21.125,
-        "PixelScaleX": 9.9125,
-        "PixelScaleY": 9.6875
-    },
-    {
-        "Filename": "Extinction",
-        "LatOffset": 50,
-        "LatDivisor": 8000,
-        "LonOffset": 50,
-        "LonDivisor": 8000,
-        "PixelOffsetX": 92.375,
-        "PixelOffsetY": 86.125,
-        "PixelScaleX": 8.4625,
-        "PixelScaleY": 8.2875
-    }
+  {
+    "Filename": "TheIsland",
+    "LatOffset": 50,
+    "LatDivisor": 8000,
+    "LonOffset": 50,
+    "LonDivisor": 8000,
+    "PixelOffsetX": 18.375,
+    "PixelOffsetY": 23.75,
+    "PixelScaleX": 9.55,
+    "PixelScaleY": 9.625
+  },
+  {
+    "Filename": "TheCenter",
+    "LatOffset": 30.30309,
+    "LatDivisor": 9584.15646605143,
+    "LonOffset": 55,
+    "LonDivisor": 9600.55903111401,
+    "PixelOffsetX": 18.875,
+    "PixelOffsetY": 50.75,
+    "PixelScaleX": 9.1,
+    "PixelScaleY": 9.1
+  },
+  {
+    "Filename": "Aberration",
+    "LatOffset": 50,
+    "LatDivisor": 8000,
+    "LonOffset": 50,
+    "LonDivisor": 8000,
+    "PixelOffsetX": 15.125,
+    "PixelOffsetY": 19.0,
+    "PixelScaleX": 9.8875,
+    "PixelScaleY": 9.7
+  },
+  {
+    "Filename": "Ragnarok",
+    "LatOffset": 50,
+    "LatDivisor": 13100,
+    "LonOffset": 50,
+    "LonDivisor": 13100,
+    "PixelOffsetX": 15.25,
+    "PixelOffsetY": 19,
+    "PixelScaleX": 9.7,
+    "PixelScaleY": 9.7
+  },
+  {
+    "Filename": "ScorchedEarth",
+    "LatOffset": 50,
+    "LatDivisor": 8000,
+    "LonOffset": 50,
+    "LonDivisor": 8000,
+    "PixelOffsetX": 13.875,
+    "PixelOffsetY": 21.125,
+    "PixelScaleX": 9.9125,
+    "PixelScaleY": 9.6875
+  },
+  {
+    "Filename": "Extinction",
+    "LatOffset": 50,
+    "LatDivisor": 8000,
+    "LonOffset": 50,
+    "LonDivisor": 8000,
+    "PixelOffsetX": 92.375,
+    "PixelOffsetY": 86.125,
+    "PixelScaleX": 8.4625,
+    "PixelScaleY": 8.2875
+  },
+  {
+    "Filename": "Valguero_P",
+    "LatOffset": 50,
+    "LatDivisor": 8161,
+    "LonOffset": 50,
+    "LonDivisor": 8161,
+    "PixelOffsetX": 17,
+    "PixelOffsetY": 14,
+    "PixelScaleX": 13.5,
+    "PixelScaleY": 13.5
+  }
 ]
