@@ -241,9 +241,8 @@
     <Resource Include="imgs\map_TheCenter.jpg" />
     <Resource Include="imgs\map_TheIsland.jpg" />
     <Resource Include="imgs\map_Valguero_P.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="imgs\map_Extinction.jpg" />
+    <Resource Include="imgs\map_CrystalIsles.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
