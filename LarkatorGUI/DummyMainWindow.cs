@@ -50,7 +50,16 @@ namespace LarkatorGUI
             foreach (var dvm in results)
             {
                 dvm.Dino.Id = (ulong)rnd.Next();
-                dvm.Dino.WildLevels = new StatPoints() { Health = rnd.Next(50), Stamina = rnd.Next(50), Melee = rnd.Next(50), Speed = rnd.Next(50), Weight = rnd.Next(50) };
+                dvm.Dino.WildLevels = new StatPoints()
+                {
+                    Health = 10 + rnd.Next(9),
+                    Stamina = 20 + rnd.Next(9),
+                    Oxygen = 30 + rnd.Next(9),
+                    Food = 40 + rnd.Next(9),
+                    Weight = 50 + rnd.Next(9),
+                    Melee = 60 + rnd.Next(9),
+                    Speed = 70 + rnd.Next(9)
+                };
             }
         }
     }
