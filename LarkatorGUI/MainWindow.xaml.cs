@@ -1,4 +1,4 @@
-﻿using FastMember;
+using FastMember;
 using GongSolutions.Wpf.DragDrop;
 using Larkator.Common;
 using Newtonsoft.Json;
@@ -447,7 +447,16 @@ namespace LarkatorGUI
                     if (Properties.Settings.Default.TeleportGhost) clipboard += " | cheat ghost";
                 }
 
-                Clipboard.SetText(clipboard, TextDataFormat.Text);
+                try
+                {
+                    Clipboard.SetText(clipboard, TextDataFormat.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Failed to set clipboard - is Larkator sandboxed or run as a different user?", "Error setting clipboard", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    StatusText = "Failed to set clipboard!";
+                    return;
+                }
 
                 StatusText = "Copied: " + clipboard;
             }
