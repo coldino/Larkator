@@ -884,6 +884,10 @@ namespace LarkatorGUI
                 .OrderBy(sc => sc.Order)
                 .ToArray();
 
+            // Make no changes if it was dropped on itself
+            if (options.Length == 0)
+                return;
+
             var above = options.Where(sc => sc.Order < targetItem.Order).OrderByDescending(sc => sc.Order).FirstOrDefault();
             var below = options.Where(sc => sc.Order > targetItem.Order).OrderBy(sc => sc.Order).FirstOrDefault();
 
