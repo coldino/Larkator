@@ -1,4 +1,4 @@
-<Window x:Class="LarkatorGUI.MainWindow"
+﻿<Window x:Class="LarkatorGUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -210,7 +210,7 @@
 
         <FrameworkElement x:Name="dummyElement"/>
 
-        <Border x:Name="statusPanel" Grid.Row="1" Background="#33000000" Padding="8,6,8,3">
+        <Border x:Name="statusPanel" Grid.Row="1" Background="#20402080" Padding="8,6,8,3">
             <Grid Height="16" TextBlock.Foreground="AntiqueWhite">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -385,18 +385,18 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Lvl" Width="1.2*" Binding="{Binding Dino.BaseLevel}"/>
                         <DataGridTextColumn Header="Pos" Width="2.2*" Binding="{Binding Path=Dino.Location, Converter={StaticResource PositionToStringConverter}}"/>
-                        <DataGridTextColumn x:Name="health" Header="Hp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowHealth, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Health}"/>
-                        <DataGridTextColumn x:Name="stamina" Header="St" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowStam, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Stamina}"/>
-                        <DataGridTextColumn x:Name="oxygen" Header="Ox" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowOxygen, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
-                        <DataGridTextColumn x:Name="food" Header="Fd" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowFood, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
-                        <DataGridTextColumn x:Name="weight" Header="We" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowWeight, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
-                        <DataGridTextColumn x:Name="melee" Header="Me" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowMelee, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Food}"/>
-                        <DataGridTextColumn x:Name="speed" Header="Sp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowSpeed, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Oxygen}"/>
+                        <DataGridTextColumn Header="Hp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowHealth, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Health}"/>
+                        <DataGridTextColumn Header="St" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowStam, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Stamina}"/>
+                        <DataGridTextColumn Header="Ox" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowOxygen, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Oxygen}"/>
+                        <DataGridTextColumn Header="Fd" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowFood, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Food}"/>
+                        <DataGridTextColumn Header="We" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowWeight, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Weight}"/>
+                        <DataGridTextColumn Header="Me" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowMelee, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Melee}"/>
+                        <DataGridTextColumn Header="Sp" Visibility="{Binding Source={StaticResource Settings}, Path=Default.ShowSpeed, Converter={StaticResource BoolToVisibilityConverter}}" Width="1*" Binding="{Binding Path=Dino.WildLevels.Speed}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
                 <TextBlock Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding ShowCounts, Converter={StaticResource BoolToVisibilityConverter}}">
-                    Matching <TextBlock Text="{Binding ResultMatchingCount}"/> of <TextBlock Text="{Binding ResultTotalCount}"/> creatures
+                    Matching <TextBlock Text="{Binding ResultMatchingCount, FallbackValue=?}"/> of <TextBlock Text="{Binding ResultTotalCount, FallbackValue=?}"/> creatures
                 </TextBlock>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
