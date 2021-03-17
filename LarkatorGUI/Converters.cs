@@ -1,5 +1,6 @@
 ﻿using Larkator.Common;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -132,62 +133,33 @@ namespace LarkatorGUI
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var v = (Dino)value;
-            String displayStats = "";
-            //Build the string to display only shown stats
-            //Health, Stamina, Oxygen, Food, Weight, Melee, Speed
-            if (Properties.Settings.Default.ShowHealth)
+            string displayStats = "";
+
+            if (v.WildLevels != null)
             {
-                displayStats += v.WildLevels.Health;
+                var stats = new List<int>();
+
+                // Build the string to display only shown stats
+                if (Properties.Settings.Default.ShowHealth)
+                    stats.Add(v.WildLevels.Health);
+                if (Properties.Settings.Default.ShowStam)
+                    stats.Add(v.WildLevels.Stamina);
+                if (Properties.Settings.Default.ShowOxygen)
+                    stats.Add(v.WildLevels.Oxygen);
+                if (Properties.Settings.Default.ShowFood)
+                    stats.Add(v.WildLevels.Food);
+                if (Properties.Settings.Default.ShowWeight)
+                    stats.Add(v.WildLevels.Weight);
+                if (Properties.Settings.Default.ShowMelee)
+                    stats.Add(v.WildLevels.Melee);
+                if (Properties.Settings.Default.ShowSpeed)
+                    stats.Add(v.WildLevels.Speed);
+
+                displayStats = $" ({String.Join("/", stats)})";
             }
-            if (Properties.Settings.Default.ShowStam)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Stamina;
-            }
-            if (Properties.Settings.Default.ShowOxygen)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Oxygen;
-            }
-            if (Properties.Settings.Default.ShowFood)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Food;
-            }
-            if (Properties.Settings.Default.ShowWeight)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Weight;
-            }
-            if (Properties.Settings.Default.ShowMelee)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Melee;
-            }
-            if (Properties.Settings.Default.ShowSpeed)
-            {
-                if (!displayStats.Equals(""))
-                {
-                    displayStats += "/";
-                }
-                displayStats += v.WildLevels.Speed;
-            }
-            return $"{(String.IsNullOrWhiteSpace(v.Name) ? "" : "\"" + v.Name + "\" ")}{v.Type} {(v.Female ? 'F' : 'M')}{v.BaseLevel} @ {v.Location.ToString(PositionFormat.LatLong)} ({v.Location.ToString(PositionFormat.XYZ)}) ({displayStats})";
+
+            return $"{(String.IsNullOrWhiteSpace(v.Name) ? "" : "\"" + v.Name + "\" ")}{v.Type} {(v.Female ? 'F' : 'M')}{v.BaseLevel} "
+                + $"@ {v.Location.ToString(PositionFormat.LatLong)} ({v.Location.ToString(PositionFormat.XYZ)}){displayStats}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
