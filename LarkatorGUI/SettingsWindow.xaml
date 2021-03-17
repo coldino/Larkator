@@ -115,7 +115,7 @@
             </Border>
             <Border Grid.Row="9" Grid.Column="1">
                 <CheckBox ToolTip="Hide dinosaurs that cannot be tamed"
-                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.hideUntameable, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.HideUntameable, Mode=TwoWay}" HorizontalAlignment="Right"
                                                Margin="7,4"/>
             </Border>
         </Grid>
@@ -136,50 +136,50 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="2">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Hp</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Hp</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="3">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">St</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">St</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="4">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Ox</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Ox</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="5">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Fd</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Fd</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="6">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">We</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">We</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="7">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Me</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Me</TextBlock>
             </Border>
             <Border Grid.Row="0" Grid.Column="8">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="7,4">Sp</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Sp</TextBlock>
             </Border>
 
             <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Display stats</TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="4,0,4,0">Display stats</TextBlock>
             </Border>
             <Border Grid.Row="1" Grid.Column="2">
-                <CheckBox ToolTip="Display Health" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowHealth, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Health" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowHealth, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="3">
-                <CheckBox ToolTip="Display Stamina" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowStam, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Stamina" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowStam, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="4">
-                <CheckBox ToolTip="Display Oxygen" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowOxygen, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Oxygen" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowOxygen, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="5">
-                <CheckBox ToolTip="Display Food" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowFood, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Food" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowFood, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="6">
-                <CheckBox ToolTip="Display Weight" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowWeight, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Weight" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowWeight, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="7">
-                <CheckBox ToolTip="Display Melee" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowMelee, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Melee" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowMelee, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
             <Border Grid.Row="1" Grid.Column="8">
-                <CheckBox ToolTip="Display Speed" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowSpeed, Mode=TwoWay}" HorizontalAlignment="Right" Margin="7,4"/>
+                <CheckBox ToolTip="Display Speed" IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowSpeed, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,4"/>
             </Border>
         </Grid>
 
