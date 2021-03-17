@@ -17,10 +17,8 @@ Larkator uses your ARK save file to help you locate both wild and tamed creature
  - Supports all six of the standard ARK maps
 
 ### Requirements
-Larkator **no longer** requires ark-tools.
-
-### Limitations
- - Due to screen space only health, stamina, weight, damage and speed stats are shown
+Larkator needs access to read your .ark save file to do its work. This works best for local saves but also works if you can fetch
+the save file via FTP or other service (which you'd do manually).
 
 ### Installation
 For full step-by-step installation instructions refer to the [wiki](https://github.com/coldino/Larkator/wiki/Installation).
