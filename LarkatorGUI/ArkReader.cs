@@ -31,7 +31,7 @@ namespace LarkatorGUI
             classMap = arkData.Creatures.ToDictionary(c => c.Class, c => c.Name);
         }
 
-        private static readonly string[] RAFT_CLASSES = { "Raft_BP_C", "MotorRaft_BP_C", "Barge_BP_C" };
+        private static readonly string[] RAFT_CLASSES = { "Raft_BP_C", "MotorRaft_BP_C", "Barge_BP_C", "TekHoverSkiff_Character_BP_C" };
         private ArkData arkData;
         private Dictionary<string, string> classMap;
 
