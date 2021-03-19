@@ -277,15 +277,6 @@ namespace LarkatorGUI
             }
         }
 
-        private void NotifyArkChanged()
-        {
-            // Cause a fresh conversion of the new ark
-            Dispatcher.Invoke(() => ReReadArk(), DispatcherPriority.Background);
-
-            // Ensure the file watcher is watching the right directory
-            fileWatcher.Path = Path.GetDirectoryName(Properties.Settings.Default.SaveFile);
-        }
-
         private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             if (!String.Equals(e.FullPath, Properties.Settings.Default.SaveFile)) return;
@@ -678,6 +669,32 @@ namespace LarkatorGUI
         {
             var im = (Image)sender;
             var diff = Math.Sign(e.Delta);
+
+            CycleAdjustableGender(im, diff);
+
+            e.Handled = true;
+        }
+
+        private void AdjustableGender_Click(object sender, MouseButtonEventArgs e)
+        {
+            var im = (Image)sender;
+
+            var diff = e.ChangedButton switch
+            {
+                MouseButton.Left => 1,
+                MouseButton.Right => -1,
+                _ => 0,
+            };
+
+            if (diff != 0)
+            {
+                CycleAdjustableGender(im, diff);
+                e.Handled = true;
+            }
+        }
+
+        private void CycleAdjustableGender(Image im, int diff)
+        {
             var nOptions = nullableBoolValues.Count;
             var bexpr = im.GetBindingExpression(Image.SourceProperty);
             var accessor = TypeAccessor.Create(typeof(SearchCriteria));
@@ -692,8 +709,6 @@ namespace LarkatorGUI
                 UpdateCurrentSearch();
 
             MarkSearchesChanged();
-
-            e.Handled = true;
         }
 
         private void Result_MouseEnter(object sender, MouseEventArgs e)
@@ -712,6 +727,13 @@ namespace LarkatorGUI
 
         private void ResultList_Sorting(object sender, DataGridSortingEventArgs e)
         {
+            // No sorting for position
+            if (e.Column.DisplayIndex == 2)
+            {
+                e.Handled = true;
+                return;
+            }
+
             if (e.Column.SortDirection == null)
                 e.Column.SortDirection = ListSortDirection.Ascending;
 
