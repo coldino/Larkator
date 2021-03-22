@@ -49,7 +49,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
                     <TextBlock Text="ARK filename" Margin="8,2"/>
-                    <TextBox Text="{Binding Filename, Mode=TwoWay}" Width="100" TextChanged="Filename_TextChanged"/>
+                    <TextBox Text="{Binding Filename, Mode=TwoWay, NotifyOnSourceUpdated=True}" Width="100" TextChanged="Filename_TextChanged"/>
                     <TextBlock Text="Image" Margin="8,2"/>
                     <TextBox Text="{Binding Image}" Width="150" IsReadOnly="True"/>
                 </StackPanel>

@@ -482,7 +482,7 @@ namespace LarkatorGUI
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
         {
-            var win = new CalibrationWindow(new Calibration { Bounds = new Bounds() });
+            var win = new CalibrationWindow(new Calibration { Bounds = new Bounds(), Filename = MapCalibration.Filename });
             win.ShowDialog();
         }
 

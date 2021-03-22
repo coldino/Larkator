@@ -243,6 +243,7 @@
     <Resource Include="imgs\map_Valguero_P.jpg" />
     <Resource Include="imgs\map_Extinction.jpg" />
     <Resource Include="imgs\map_CrystalIsles.jpg" />
+    <Resource Include="imgs\map_Genesis.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
