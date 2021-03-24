@@ -124,6 +124,15 @@ namespace LarkatorGUI
             set { SetValue(ShowCountsProperty, value); }
         }
 
+        public bool IsDevMode
+        {
+            get { return (bool)GetValue(IsDevModeProperty); }
+            set { SetValue(IsDevModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsDevModeProperty =
+            DependencyProperty.Register("IsDevMode", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
         public static readonly DependencyProperty ShowCountsProperty =
             DependencyProperty.Register("ShowCounts", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
 
@@ -184,6 +193,7 @@ namespace LarkatorGUI
             arkReader = new ArkReader();
 
             appVersion = CalculateApplicationVersion();
+            IsDevMode = (appVersion == DEV_STRING);
 
             LoadCalibrations();
             DiscoverCalibration();
@@ -193,7 +203,6 @@ namespace LarkatorGUI
 
             InitializeComponent();
 
-            devButtons.Visibility = (ApplicationVersion == DEV_STRING) ? Visibility.Visible : Visibility.Collapsed;
             Dispatcher.Invoke(async () =>
             {
                 await Task.Yield();

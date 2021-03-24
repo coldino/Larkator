@@ -118,8 +118,16 @@
                                                IsChecked="{Binding Source={StaticResource Model}, Path=Settings.HideUntameable, Mode=TwoWay}" HorizontalAlignment="Right"
                                                Margin="7,4"/>
             </Border>
+            <Border Grid.Row="10" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Show "Force Reload" button</TextBlock>
+            </Border>
+            <Border Grid.Row="10" Grid.Column="1">
+                <CheckBox ToolTip="Show &quot;Force Reload&quot; button that will immediately reload the savegame (should never be needed)"
+                                               IsChecked="{Binding Source={StaticResource Model}, Path=Settings.ShowForceReload, Mode=TwoWay}" HorizontalAlignment="Right"
+                                               Margin="7,4"/>
+            </Border>
         </Grid>
-        <Grid>
+        <Grid Margin="0,8,0,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2.5*"/>
                 <ColumnDefinition Width="1*"/>
