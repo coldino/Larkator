@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -101,6 +102,43 @@ namespace LarkatorGUI
                 WildDinos.Add(group.Key, group.Select(o => ConvertCreature(o)).ToList());
 
             AllSpecies.AddRange(creatureObjects.Select(o => SpeciesName(o.ClassString)).Distinct().OrderBy(name => name));
+        }
+
+        public async Task<IList<(Position pos, string name)>> PerformCalibrationRead(string saveFile)
+        {
+            // Read objects directly from the savegame
+            (GameObjectContainer gameObjectContainer, float gameTime) = await ReadSavegameFile(saveFile);
+
+            var containers = gameObjectContainer.Select(o => IdentifyCalibrationBox(o)).Where(v => v != null).Cast<(Position,string)>().ToList();
+
+            return containers;
+        }
+
+        public (Position pos, string name)? IdentifyCalibrationBox(GameObject obj)
+        {
+            var boxName = obj.GetPropertyValue<string>("BoxName", defaultValue: null);
+            if (String.IsNullOrWhiteSpace(boxName))
+                return null;
+
+            var calibrationRe = new Regex(@"(?:Cal(?:ibration)?:)?\s*(?<x>[-+]?\d+\.\d+)(?:(?:\s*,\s*)|(?:\s+))(?<y>[-+]?\d+\.\d+)",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            var match = calibrationRe.Match(boxName);
+            if (!match.Success || match.Groups.Count < 2)
+            {
+                Console.WriteLine($"Skipping box: {boxName}");
+                return null;
+            }
+
+            if (!double.TryParse(match.Groups["x"].Value, out double x) || !double.TryParse(match.Groups["y"].Value, out double y))
+                return null;
+
+            string name = match.Groups["name"].Success ? match.Groups["name"].Value : $"{x:F1}, {y:F1}";
+
+            var ll = ConvertCoordsToLatLong(obj.Location);
+            var pos = new Position { Lon = ll.Lon, Lat = ll.Lat, X = obj.Location.X, Y = obj.Location.Y, Z = obj.Location.Z };
+
+            return (pos, name);
         }
 
         private string SpeciesName(string className)

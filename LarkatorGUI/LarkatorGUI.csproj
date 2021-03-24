@@ -122,6 +122,7 @@
       <DependentUpon>FileEntryBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="FontSizeHelper.cs" />
+    <Compile Include="LinearRegression.cs" />
     <Compile Include="ListViewHackyCell.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

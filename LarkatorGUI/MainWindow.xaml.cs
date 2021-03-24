@@ -1,4 +1,4 @@
-using FastMember;
+﻿using FastMember;
 using GongSolutions.Wpf.DragDrop;
 using Larkator.Common;
 using Newtonsoft.Json;
@@ -513,8 +513,6 @@ namespace LarkatorGUI
 
         private void Dev_DummyData_Click(object sender, MouseButtonEventArgs e)
         {
-            ListResults.Clear();
-
             var dummyData = new Dino[] {
                 new Dino { Location=new Position{ Lat=10,Lon=10 }, Type="Testificate", Name="10,10" },
                 new Dino { Location=new Position{ Lat=90,Lon=10 }, Type="Testificate", Name="90,10" },
@@ -532,6 +530,96 @@ namespace LarkatorGUI
             }
 
             ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
+        }
+
+        private void Dev_CalibrationData_Click(object sender, MouseButtonEventArgs e)
+        {
+            Dispatcher.Invoke(GenerateCalibrationPoints);
+        }
+
+        private async Task GenerateCalibrationPoints()
+        {
+            IsLoading = true;
+            try
+            {
+                StatusDetailText = "...converting";
+                StatusText = "Processing saved ARK (for calibration)";
+
+                var boxes = await arkReader.PerformCalibrationRead(Properties.Settings.Default.SaveFile);
+
+                if (boxes.Count == 0)
+                {
+                    MessageBox.Show(@"Map calibration requires storage boxes named 'Calibration: XX.X, YY.Y', " +
+                        "where XX.X and YY.Y are read from the GPS when standing on top of the box. " +
+                        "At least 4 are required for a calculation but 16+ are recommended!",
+                        "Calibration Boxes", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    return;
+                }
+
+                var rnd = new Random();
+                foreach (var (pos, name) in boxes)
+                {
+                    var dino = new Dino { Location = pos, Type = "Calibration", Name = name, Id = (ulong)rnd.Next() };
+                    var vm = new DinoViewModel(dino) { Color = Colors.Blue };
+                    ListResults.Add(vm);
+                }
+
+                ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
+
+                StatusText = "ARK processing completed";
+                StatusDetailText = $"{boxes.Count} valid calaibration boxes located";
+
+                if (boxes.Count >= 4)
+                {
+                    var ((xO, xD), (yO, yD)) = CalculateCalibration(boxes.Select(p => p.pos).ToArray());
+
+                    var win = new CalibrationWindow(new Calibration
+                    {
+                        Bounds = new Bounds(),
+                        Filename = MapCalibration.Filename,
+                        LatOffset = xO,
+                        LatDivisor = xD,
+                        LonOffset = yO,
+                        LonDivisor = yD,
+                    });
+                    Dispatcher.Invoke(() => win.ShowDialog());
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusText = "ARK processing failed";
+                StatusDetailText = "";
+                MessageBox.Show(ex.Message, "Savegame Read Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        public static ((double xOffset, double xDiv), (double yOffset, double yDiv)) CalculateCalibration(Position[] inputs)
+        {
+            // Perform linear regression on the values for best fit, separately for X and Y
+            double[] xValues = inputs.Select(i => i.X).ToArray();
+            double[] yValues = inputs.Select(i => i.Y).ToArray();
+            double[] lonValues = inputs.Select(i => i.Lon).ToArray();
+            double[] latValues = inputs.Select(i => i.Lat).ToArray();
+            var (xOffset, xMult) = LinearRegression.Fit(xValues, lonValues);
+            var (yOffset, yMult) = LinearRegression.Fit(yValues, latValues);
+            var xCorr = LinearRegression.RSquared(xValues.Select(x => xOffset + xMult * x).ToArray(), lonValues);
+            var yCorr = LinearRegression.RSquared(yValues.Select(y => yOffset + yMult * y).ToArray(), latValues);
+
+            var warning = (xCorr < 0.99 || yCorr < 0.99) ? "\nWARNING: Correlation is poor - add more boxes!\n" : "";
+
+            MessageBox.Show("UE->LatLon conversion...\n" +
+                "\n" +
+                $"X correlation: {xCorr:F5}\n" +
+                $"Y correlation: {yCorr:F5}\n" +
+                warning +
+                "\nOpening Calibration window with these presets.");
+
+            return ((xOffset, 1 / xMult), (yOffset, 1 / yMult));
         }
 
         private void SaveSearch_Click(object sender, RoutedEventArgs e)

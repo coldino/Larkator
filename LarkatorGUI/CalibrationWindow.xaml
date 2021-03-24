@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LarkatorGUI"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:Calibration, IsDesignTimeCreatable=True}"
-        Title="CalibrationWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        Title="CalibrationWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -21,6 +21,7 @@
         <Image x:Name="img" Grid.Row="0" Source="{Binding Image}" Height="1000" Width="1000" Stretch="Uniform" MouseDown="Image_MouseDown" MouseUp="Image_MouseUp" MouseMove="Image_MouseMove"/>
         <Grid Grid.Column="1" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -65,6 +66,15 @@
                 </StackPanel>
             </StackPanel>
             <TextBox Grid.Row="1" Text="{Binding Output}" Margin="8" MinWidth="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True"/>
+            <TextBlock Grid.Row="2" Margin="8,32" Width="370" TextWrapping="WrapWithOverflow">
+                This calibration stage lines up and scales pre-converted positions to pixel positions, based on the 10-90 grid in X and Y.
+                <LineBreak/><LineBreak/>
+                Use the mouse to match the pink lines to the 10 and 90 grid lines (drag near a corner).
+                <LineBreak/><LineBreak/>
+                This window is best launched from the map pin debug option which calculates UE -> LatLon conversion automatically, bvut requires storage boxes placed in-world.
+                <LineBreak/><LineBreak/>
+                See <Hyperlink NavigateUri="https://github.com/coldino/Larkator/wiki/Calibrating-New-Maps">https://github.com/coldino/Larkator/wiki/Calibrating-New-Maps</Hyperlink>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>

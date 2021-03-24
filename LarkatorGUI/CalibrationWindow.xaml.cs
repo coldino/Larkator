@@ -268,16 +268,15 @@ namespace LarkatorGUI
         }
 
         public static readonly DependencyProperty Y2Property =
-            DependencyProperty.Register("Y2", typeof(double), typeof(Bounds), new PropertyMetadata(0.0));
+            DependencyProperty.Register("Y2", typeof(double), typeof(Bounds), new PropertyMetadata(900.0));
 
         public static readonly DependencyProperty Y1Property =
-            DependencyProperty.Register("Y1", typeof(double), typeof(Bounds), new PropertyMetadata(0.0));
+            DependencyProperty.Register("Y1", typeof(double), typeof(Bounds), new PropertyMetadata(100.0));
 
         public static readonly DependencyProperty X2Property =
-            DependencyProperty.Register("X2", typeof(double), typeof(Bounds), new PropertyMetadata(0.0));
+            DependencyProperty.Register("X2", typeof(double), typeof(Bounds), new PropertyMetadata(900.0));
 
         public static readonly DependencyProperty X1Property =
-            DependencyProperty.Register("X1", typeof(double), typeof(Bounds), new PropertyMetadata(0.0));
+            DependencyProperty.Register("X1", typeof(double), typeof(Bounds), new PropertyMetadata(100.0));
     }
-
 }
