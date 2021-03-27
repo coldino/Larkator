@@ -1,7 +1,10 @@
-﻿using System;
+﻿using LarkatorGUI.Properties;
+
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Configuration;
 
 namespace LarkatorGUI
 {
@@ -12,6 +15,31 @@ namespace LarkatorGUI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            try
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                Console.WriteLine(config.FilePath);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                MessageBox.Show("Larkator's settings file is corrupted and cannot be loaded.\n" +
+                    "\nAttempting to reset settings to defaults... :(\n" +
+                    "\nApp will now exit - please restart it manually!",
+                    "Settings Corruption", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                if (ex.Filename != null)
+                {
+                    System.IO.File.Delete(ex.Filename);
+                }
+                else
+                {
+                    Settings.Default.Reset();
+                    Settings.Default.Save();
+                }
+
+                Environment.Exit(101);
+            }
+
             base.OnStartup(e);
 
 #if !DEBUG
