@@ -12,14 +12,14 @@
     },
     {
         "Filename": "TheCenter",
-        "LatOffset": 30.30309,
-        "LatDivisor": 9584.15646605143,
-        "LonOffset": 55,
-        "LonDivisor": 9600.55903111401,
-        "PixelOffsetX": 18.875,
-        "PixelOffsetY": 50.75,
-        "PixelScaleX": 9.1,
-        "PixelScaleY": 9.1
+        "LatOffset": 30.2910546612884,
+        "LatDivisor": 9583.35709796441,
+        "LonOffset": 55.0558146954239,
+        "LonDivisor": 9598.33718484527,
+        "PixelOffsetX": 5,
+        "PixelOffsetY": 33.75,
+        "PixelScaleX": 9.95,
+        "PixelScaleY": 9.3
     },
     {
         "Filename": "Aberration",
