@@ -38,10 +38,10 @@
         "LatDivisor": 13100,
         "LonOffset": 50,
         "LonDivisor": 13100,
-        "PixelOffsetX": 15.25,
-        "PixelOffsetY": 19,
-        "PixelScaleX": 9.7,
-        "PixelScaleY": 9.7
+        "PixelOffsetX": 10.75,
+        "PixelOffsetY": 8,
+        "PixelScaleX": 10.125,
+        "PixelScaleY": 10.22
     },
     {
         "Filename": "ScorchedEarth",
