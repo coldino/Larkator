@@ -120,7 +120,7 @@ namespace LarkatorGUI
             if (String.IsNullOrWhiteSpace(boxName))
                 return null;
 
-            var calibrationRe = new Regex(@"(?:Cal(?:ibration)?:)?\s*(?<x>[-+]?\d+\.\d+)(?:(?:\s*,\s*)|(?:\s+))(?<y>[-+]?\d+\.\d+)",
+            var calibrationRe = new Regex(@"(?:Cal(?:ibration)?:)?\s*(?<lat>[-+]?\d+\.\d+)(?:(?:\s*,\s*)|(?:\s+))(?<lon>[-+]?\d+\.\d+)",
                 RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
             var match = calibrationRe.Match(boxName);
@@ -130,13 +130,11 @@ namespace LarkatorGUI
                 return null;
             }
 
-            if (!double.TryParse(match.Groups["x"].Value, out double x) || !double.TryParse(match.Groups["y"].Value, out double y))
+            if (!double.TryParse(match.Groups["lat"].Value, out double lat) || !double.TryParse(match.Groups["lon"].Value, out double lon))
                 return null;
 
-            string name = match.Groups["name"].Success ? match.Groups["name"].Value : $"{x:F1}, {y:F1}";
-
-            var ll = ConvertCoordsToLatLong(obj.Location);
-            var pos = new Position { Lon = ll.Lon, Lat = ll.Lat, X = obj.Location.X, Y = obj.Location.Y, Z = obj.Location.Z };
+            string name = match.Groups["name"].Success ? match.Groups["name"].Value : $"{lat:F1}, {lon:F1}";
+            var pos = new Position { Lon = lon, Lat = lat, X = obj.Location.X, Y = obj.Location.Y, Z = obj.Location.Z };
 
             return (pos, name);
         }

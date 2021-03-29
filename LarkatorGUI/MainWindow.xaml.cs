@@ -578,10 +578,10 @@ namespace LarkatorGUI
                     {
                         Bounds = new Bounds(),
                         Filename = MapCalibration.Filename,
-                        LatOffset = xO,
-                        LatDivisor = xD,
-                        LonOffset = yO,
-                        LonDivisor = yD,
+                        LonOffset = xO,
+                        LonDivisor = xD,
+                        LatOffset = yO,
+                        LatDivisor = yD,
                     });
                     Dispatcher.Invoke(() => win.ShowDialog());
                 }
@@ -614,8 +614,8 @@ namespace LarkatorGUI
 
             MessageBox.Show("UE->LatLon conversion...\n" +
                 "\n" +
-                $"X correlation: {xCorr:F5}\n" +
-                $"Y correlation: {yCorr:F5}\n" +
+                $"X: {xOffset:F2} + x / {1 / xMult:F3}  (correlation {xCorr:F5})\n" +
+                $"Y: {yOffset:F2} + y / {1 / yMult:F3}  (correlation {yCorr:F5})\n" +
                 warning +
                 "\nOpening Calibration window with these presets.");
 
