@@ -78,14 +78,14 @@
     },
     {
         "Filename": "CrystalIsles",
-        "LatOffset": 48.75,
-        "LatDivisor": 16997.77,
+        "LatOffset": 50,
+        "LatDivisor": 16000,
         "LonOffset": 50,
-        "LonDivisor": 16001.8,
-        "PixelOffsetX": 5.25,
-        "PixelOffsetY": -53.875,
-        "PixelScaleX": 9.875,
-        "PixelScaleY": 10.5875
+        "LonDivisor": 17000,
+        "PixelOffsetX": 0,
+        "PixelOffsetY": 19,
+        "PixelScaleX": 10.4,
+        "PixelScaleY": 9.8
     },
     {
         "Filename": "Genesis",
