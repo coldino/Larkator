@@ -49,10 +49,10 @@
         "LatDivisor": 8000,
         "LonOffset": 50,
         "LonDivisor": 8000,
-        "PixelOffsetX": 13.875,
-        "PixelOffsetY": 21.125,
-        "PixelScaleX": 9.9125,
-        "PixelScaleY": 9.6875
+        "PixelOffsetX": 0,
+        "PixelOffsetY": -30,
+        "PixelScaleX": 10.3,
+        "PixelScaleY": 10.9
     },
     {
         "Filename": "Extinction",
