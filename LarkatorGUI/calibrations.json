@@ -61,9 +61,9 @@
         "LonOffset": 50,
         "LonDivisor": 8000,
         "PixelOffsetX": 92.375,
-        "PixelOffsetY": 86.125,
-        "PixelScaleX": 8.4625,
-        "PixelScaleY": 8.2875
+        "PixelOffsetY": 80,
+        "PixelScaleX": 8.875,
+        "PixelScaleY": 8.5
     },
     {
         "Filename": "Valguero_P",
