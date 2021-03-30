@@ -38,8 +38,7 @@ namespace LarkatorGUI
 
         private static Task<(GameObjectContainer gameObjects, float gameTime)> ReadSavegameFile(string fileName)
         {
-            return Task.Run(() =>
-            {
+            return Task.Run(() => {
                 if (new FileInfo(fileName).Length > int.MaxValue)
                     throw new Exception("Input file is too large.");
 
@@ -109,7 +108,7 @@ namespace LarkatorGUI
             // Read objects directly from the savegame
             (GameObjectContainer gameObjectContainer, float gameTime) = await ReadSavegameFile(saveFile);
 
-            var containers = gameObjectContainer.Select(o => IdentifyCalibrationBox(o)).Where(v => v != null).Cast<(Position,string)>().ToList();
+            var containers = gameObjectContainer.Select(o => IdentifyCalibrationBox(o)).Where(v => v != null).Cast<(Position, string)>().ToList();
 
             return containers;
         }
@@ -160,7 +159,7 @@ namespace LarkatorGUI
                 Location = ConvertCoordsToLatLong(obj.Location),
                 WildLevels = new StatPoints(),
             };
-        
+
             var status = obj.CharacterStatusComponent();
             if (status != null)
             {

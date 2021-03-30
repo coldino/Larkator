@@ -1,9 +1,6 @@
 ﻿using Larkator.Common;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -31,7 +28,7 @@ namespace LarkatorGUI
         {
             obj.SetValue(PositionProperty, value);
         }
-        
+
         public static readonly DependencyProperty PositionProperty =
             DependencyProperty.RegisterAttached("Position", typeof(Position), typeof(MapPositionConverter), new PropertyMetadata(null, OnChanged));
 
@@ -45,7 +42,8 @@ namespace LarkatorGUI
             {
                 var cal = GetCalibration(d);
                 var pos = GetPosition(d);
-                if (cal == null || pos == null) return;
+                if (cal == null || pos == null)
+                    return;
 
                 tx.X = pos.Lon * cal.PixelScaleX + cal.PixelOffsetX;
                 tx.Y = pos.Lat * cal.PixelScaleY + cal.PixelOffsetY;
@@ -60,7 +58,7 @@ namespace LarkatorGUI
     public class MapCalibration
     {
         public string Filename { get; set; }
-        
+
         public double PixelOffsetX { get; set; }
         public double PixelOffsetY { get; set; }
 

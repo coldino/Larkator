@@ -53,8 +53,7 @@ namespace LarkatorGUI
             // timer is recreated for each event and effectively
             // resets the timeout. Action only fires after timeout has fully
             // elapsed without other events firing in between
-            timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), priority, (s, e) =>
-            {
+            timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), priority, (s, e) => {
                 if (timer == null)
                     return;
 
@@ -97,8 +96,7 @@ namespace LarkatorGUI
             if (curTime.Subtract(timerStarted).TotalMilliseconds < interval)
                 interval -= (int)curTime.Subtract(timerStarted).TotalMilliseconds;
 
-            timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), priority, (s, e) =>
-            {
+            timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), priority, (s, e) => {
                 if (timer == null)
                     return;
 

@@ -1,8 +1,13 @@
 ﻿using FastMember;
+
 using GongSolutions.Wpf.DragDrop;
+
 using Larkator.Common;
+
 using Newtonsoft.Json;
+
 using SavegameToolkitAdditions;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -203,8 +208,7 @@ namespace LarkatorGUI
 
             InitializeComponent();
 
-            Dispatcher.Invoke(async () =>
-            {
+            Dispatcher.Invoke(async () => {
                 await Task.Yield();
                 Properties.Settings.Default.MainWindowWidth = CalculateWidthFromHeight((int)Math.Round(Properties.Settings.Default.MainWindowHeight));
             }, DispatcherPriority.Loaded);
@@ -233,7 +237,8 @@ namespace LarkatorGUI
 
         private void SetupFileWatcher()
         {
-            if (fileWatcher != null) fileWatcher.EnableRaisingEvents = false;
+            if (fileWatcher != null)
+                fileWatcher.EnableRaisingEvents = false;
             fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
             fileWatcher.Renamed += FileWatcher_Changed;
             fileWatcher.Changed += FileWatcher_Changed;
@@ -264,7 +269,8 @@ namespace LarkatorGUI
 
             var imgFilename = $"pack://application:,,,/imgs/map_{MapCalibration.Filename}.jpg";
             MapImage = (new ImageSourceConverter()).ConvertFromString(imgFilename) as ImageSource;
-            if (image != null) image.Source = MapImage;
+            if (image != null)
+                image.Source = MapImage;
 
             arkReader.MapCalibration = MapCalibration;
         }
@@ -288,16 +294,17 @@ namespace LarkatorGUI
 
         private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (!String.Equals(e.FullPath, Properties.Settings.Default.SaveFile)) return;
+            if (!String.Equals(e.FullPath, Properties.Settings.Default.SaveFile))
+                return;
 
-            Dispatcher.Invoke(() =>
-            {
+            Dispatcher.Invoke(() => {
                 StatusText = "Detected change to saved ARK...";
                 StatusDetailText = "...waiting";
             });
 
             // Cancel any existing timer to ensure we're not called multiple times
-            if (reloadTimer.IsEnabled) reloadTimer.Stop();
+            if (reloadTimer.IsEnabled)
+                reloadTimer.Stop();
 
             reloadTimer.Start();
         }
@@ -328,7 +335,8 @@ namespace LarkatorGUI
                 var fetchOkay = await FetchArkData(targetFile);
                 var loadOkay = await LoadArkData(targetFile);
 
-                if (!loadOkay) throw new ApplicationException("No species data available");
+                if (!loadOkay)
+                    throw new ApplicationException("No species data available");
                 if (fetchOkay)
                     StatusText = "Species data loaded";
                 else
@@ -377,8 +385,7 @@ namespace LarkatorGUI
 
         private async Task<bool> LoadArkData(string targetFile)
         {
-            return await Task.Run<bool>(() =>
-            {
+            return await Task.Run<bool>(() => {
                 try
                 {
                     arkReader.SetArkData(ArkDataReader.ReadFromFile(targetFile));
@@ -398,10 +405,12 @@ namespace LarkatorGUI
 
         private void RemoveSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (ShowTames) return;
+            if (ShowTames)
+                return;
 
             var button = sender as Button;
-            if (button?.DataContext is SearchCriteria search) ListSearches.Remove(search);
+            if (button?.DataContext is SearchCriteria search)
+                ListSearches.Remove(search);
             UpdateCurrentSearch();
 
             MarkSearchesChanged();
@@ -430,7 +439,8 @@ namespace LarkatorGUI
             if (sender is FrameworkElement e && e.DataContext is DinoViewModel dvm)
             {
                 dvm.Highlight = !dvm.Highlight;
-                if (dvm.Highlight) resultsList.ScrollIntoView(dvm);
+                if (dvm.Highlight)
+                    resultsList.ScrollIntoView(dvm);
             }
         }
 
@@ -444,7 +454,8 @@ namespace LarkatorGUI
                 if (Properties.Settings.Default.TeleportFly)
                 {
                     clipboard += " | cheat fly";
-                    if (Properties.Settings.Default.TeleportGhost) clipboard += " | cheat ghost";
+                    if (Properties.Settings.Default.TeleportGhost)
+                        clipboard += " | cheat ghost";
                 }
 
                 try
@@ -626,7 +637,8 @@ namespace LarkatorGUI
 
         private void SaveSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(NewSearch.Species)) return;
+            if (String.IsNullOrWhiteSpace(NewSearch.Species))
+                return;
 
             List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(NewSearch.Species)));
             SearchCriteria tempSearch;
@@ -642,7 +654,7 @@ namespace LarkatorGUI
                 Properties.Settings.Default.LastGroup = "Shopping List";
             }
             //Set and save property
-            Properties.Settings.Default.GroupSearch = (bool) groupCheck.IsChecked;
+            Properties.Settings.Default.GroupSearch = (bool)groupCheck.IsChecked;
             Properties.Settings.Default.Save();
 
 
@@ -668,7 +680,8 @@ namespace LarkatorGUI
                 tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
                 ListSearches.Add(tempSearch);
             }
-            else {
+            else
+            {
                 try
                 {
                     foreach (String newDino in NewSearchList)
@@ -746,7 +759,8 @@ namespace LarkatorGUI
             if (value.HasValue)
             {
                 value = value + diff;
-                if (value < 0 || value > Properties.Settings.Default.MaxLevel) value = null;
+                if (value < 0 || value > Properties.Settings.Default.MaxLevel)
+                    value = null;
             }
             else
             {
@@ -812,15 +826,19 @@ namespace LarkatorGUI
 
         private void Result_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (!(sender is FrameworkElement fe)) return;
-            if (!(fe.DataContext is DinoViewModel dino)) return;
+            if (!(sender is FrameworkElement fe))
+                return;
+            if (!(fe.DataContext is DinoViewModel dino))
+                return;
             //dino.Highlight = true;
         }
 
         private void Result_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (!(sender is FrameworkElement fe)) return;
-            if (!(fe.DataContext is DinoViewModel dino)) return;
+            if (!(sender is FrameworkElement fe))
+                return;
+            if (!(fe.DataContext is DinoViewModel dino))
+                return;
             //dino.ClearValue(DinoViewModel.HighlightProperty);
         }
 
@@ -876,7 +894,8 @@ namespace LarkatorGUI
 
         private async Task ReReadArk()
         {
-            if (IsLoading) return;
+            if (IsLoading)
+                return;
 
             lastArk = Properties.Settings.Default.SaveFile;
             await PerformConversion();
@@ -980,7 +999,8 @@ namespace LarkatorGUI
             {
                 var search = (SearchCriteria)searchesList.SelectedItem;
                 var searches = new List<SearchCriteria>();
-                if (search != null) searches.Add(search);
+                if (search != null)
+                    searches.Add(search);
                 UpdateSearchResults(searches);
             }
 

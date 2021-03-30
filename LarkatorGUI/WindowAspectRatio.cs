@@ -12,13 +12,13 @@ namespace LarkatorGUI
     {
         private Func<int, int> calculateWidthFromHeightFn;
 
-        private WindowAspectRatio(Window window, Func<int,int> calculateWidthFromHeight)
+        private WindowAspectRatio(Window window, Func<int, int> calculateWidthFromHeight)
         {
             this.calculateWidthFromHeightFn = calculateWidthFromHeight;
             ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
         }
 
-        public static void Register(Window window, Func<int,int> calculateWidthFromHeight)
+        public static void Register(Window window, Func<int, int> calculateWidthFromHeight)
         {
             new WindowAspectRatio(window, calculateWidthFromHeight);
         }
@@ -54,7 +54,8 @@ namespace LarkatorGUI
                 WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
 
                 if ((position.flags & (int)SWP.NoMove) != 0 ||
-                    HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
+                    HwndSource.FromHwnd(hwnd).RootVisual == null)
+                    return IntPtr.Zero;
 
                 position.cx = calculateWidthFromHeightFn(position.cy);
 

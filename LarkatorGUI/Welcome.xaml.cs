@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -30,7 +31,8 @@ namespace LarkatorGUI
 
             // Skip the Welcome window if we're already configured
             UpdateValidation();
-            if (LetsGoButton.IsEnabled) SwitchToMainWindow();
+            if (LetsGoButton.IsEnabled)
+                SwitchToMainWindow();
         }
 
         private void UpdateValidation()

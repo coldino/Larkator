@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +44,8 @@ namespace LarkatorGUI
 
         private void Image_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (!dragging) return;
+            if (!dragging)
+                return;
             var img = (Image)sender;
             img.ReleaseMouseCapture();
             dragging = false;
@@ -53,7 +53,8 @@ namespace LarkatorGUI
 
         private void Image_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!dragging) return;
+            if (!dragging)
+                return;
 
             var img = (Image)sender;
             var pos = Mouse.GetPosition(img);
@@ -73,7 +74,7 @@ namespace LarkatorGUI
 
         private void Filename_TextChanged(object sender, TextChangedEventArgs e)
         {
-           calibration.Image = $"imgs\\map_{((TextBox)sender).Text}.jpg";
+            calibration.Image = $"imgs\\map_{((TextBox)sender).Text}.jpg";
         }
 
         private void UpdateOutput_TextChanged(object sender, TextChangedEventArgs e)
@@ -199,7 +200,7 @@ namespace LarkatorGUI
 
         public static readonly DependencyProperty ImageProperty =
             DependencyProperty.Register("Image", typeof(string), typeof(Calibration), new PropertyMetadata(""));
-        
+
         public static readonly DependencyProperty FilenameProperty =
             DependencyProperty.Register("Filename", typeof(string), typeof(Calibration), new PropertyMetadata(""));
 
@@ -208,7 +209,8 @@ namespace LarkatorGUI
 
         public void Recalculate()
         {
-            if (Bounds == null) return;
+            if (Bounds == null)
+                return;
 
             var minX = Math.Min(Bounds.X1, Bounds.X2);
             var minY = Math.Min(Bounds.Y1, Bounds.Y2);

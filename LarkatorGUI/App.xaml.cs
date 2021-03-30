@@ -46,7 +46,7 @@ namespace LarkatorGUI
             RegisterExceptionHandlers();
 #endif
         }
-        
+
         private void RegisterExceptionHandlers()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

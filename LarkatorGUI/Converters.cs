@@ -1,4 +1,5 @@
 ﻿using Larkator.Common;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,8 +12,10 @@ namespace LarkatorGUI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool asBool) return asBool ? Visibility.Visible : Visibility.Collapsed;
-            if (value is int asInt) return asInt != 0 ? Visibility.Visible : Visibility.Collapsed;
+            if (value is bool asBool)
+                return asBool ? Visibility.Visible : Visibility.Collapsed;
+            if (value is int asInt)
+                return asInt != 0 ? Visibility.Visible : Visibility.Collapsed;
             return Visibility.Collapsed;
         }
 
@@ -83,7 +86,8 @@ namespace LarkatorGUI
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool? gender = (bool?)value;
-            if (!gender.HasValue) return "imgs/nogender.png";
+            if (!gender.HasValue)
+                return "imgs/nogender.png";
             if (gender.Value)
                 return "imgs/female.png";
             else
@@ -101,7 +105,8 @@ namespace LarkatorGUI
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool? gender = (bool?)value;
-            if (!gender.HasValue) return "";
+            if (!gender.HasValue)
+                return "";
             if (gender.Value)
                 return "F";
             else

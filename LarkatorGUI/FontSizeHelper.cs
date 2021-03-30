@@ -11,21 +11,24 @@ namespace LarkatorGUI
 
         public static double GetRelativeFontSize(DependencyObject d)
         {
-            if (d == null) throw new ArgumentNullException(nameof(d), "in GetRelativeFontSize");
+            if (d == null)
+                throw new ArgumentNullException(nameof(d), "in GetRelativeFontSize");
 
             return (double)d.GetValue(RelativeFontSizeProperty);
         }
 
         public static void SetRelativeFontSize(DependencyObject d, double value)
         {
-            if (d == null) throw new ArgumentNullException(nameof(d), "in SetRelativeFontSize");
+            if (d == null)
+                throw new ArgumentNullException(nameof(d), "in SetRelativeFontSize");
 
             d.SetValue(RelativeFontSizeProperty, value);
         }
 
         private static void RelativeFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d == null) throw new ArgumentNullException(nameof(d), "in RelativeFontSizeChanged");
+            if (d == null)
+                throw new ArgumentNullException(nameof(d), "in RelativeFontSizeChanged");
 
             d.ClearValue(TextBlock.FontSizeProperty);
             var old = (double)d.GetValue(TextBlock.FontSizeProperty);
