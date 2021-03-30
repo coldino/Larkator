@@ -185,7 +185,7 @@ namespace LarkatorGUI
         private string lastArk;
         private DebounceDispatcher refreshSearchesTimer = new DebounceDispatcher();
         private DebounceDispatcher settingsSaveTimer = new DebounceDispatcher();
-        
+
         public MainWindow()
         {
             ValidateWindowPositionAndSize();
@@ -568,22 +568,33 @@ namespace LarkatorGUI
                 ((CollectionViewSource)Resources["OrderedResults"]).View.Refresh();
 
                 StatusText = "ARK processing completed";
-                StatusDetailText = $"{boxes.Count} valid calaibration boxes located";
+                StatusDetailText = $"{boxes.Count} valid calibration boxes located";
 
                 if (boxes.Count >= 4)
                 {
-                    var ((xO, xD), (yO, yD)) = CalculateCalibration(boxes.Select(p => p.pos).ToArray());
+                    var ((xO, xD, xC), (yO, yD, yC)) = CalculateCalibration(boxes.Select(p => p.pos).ToArray());
 
-                    var win = new CalibrationWindow(new Calibration
+                    var warning = (xC < 0.99 || yC < 0.99) ? "\nWARNING: Correlation is poor - add more boxes!\n" : "";
+                    var result = MessageBox.Show("UE->LatLon conversion...\n" +
+                                            "\n" +
+                                            $"X: {xO:F2} + x / {xD:F3}  (correlation {xC:F5})\n" +
+                                            $"Y: {yO:F2} + y / {yD:F3}  (correlation {yC:F5})\n" +
+                                            warning +
+                                            "\nOpen Calibration window with these presets?", "Calibration Box Results", MessageBoxButton.YesNo);
+
+                    if (MessageBoxResult.Yes == result)
                     {
-                        Bounds = new Bounds(),
-                        Filename = MapCalibration.Filename,
-                        LonOffset = xO,
-                        LonDivisor = xD,
-                        LatOffset = yO,
-                        LatDivisor = yD,
-                    });
-                    Dispatcher.Invoke(() => win.ShowDialog());
+                        var win = new CalibrationWindow(new Calibration
+                        {
+                            Bounds = new Bounds(),
+                            Filename = MapCalibration.Filename,
+                            LonOffset = xO,
+                            LonDivisor = xD,
+                            LatOffset = yO,
+                            LatDivisor = yD,
+                        });
+                        Dispatcher.Invoke(() => win.ShowDialog());
+                    }
                 }
             }
             catch (Exception ex)
@@ -598,7 +609,7 @@ namespace LarkatorGUI
             }
         }
 
-        public static ((double xOffset, double xDiv), (double yOffset, double yDiv)) CalculateCalibration(Position[] inputs)
+        public static ((double xOffset, double xDiv, double xCorr), (double yOffset, double yDiv, double yCorr)) CalculateCalibration(Position[] inputs)
         {
             // Perform linear regression on the values for best fit, separately for X and Y
             double[] xValues = inputs.Select(i => i.X).ToArray();
@@ -610,16 +621,7 @@ namespace LarkatorGUI
             var xCorr = LinearRegression.RSquared(xValues.Select(x => xOffset + xMult * x).ToArray(), lonValues);
             var yCorr = LinearRegression.RSquared(yValues.Select(y => yOffset + yMult * y).ToArray(), latValues);
 
-            var warning = (xCorr < 0.99 || yCorr < 0.99) ? "\nWARNING: Correlation is poor - add more boxes!\n" : "";
-
-            MessageBox.Show("UE->LatLon conversion...\n" +
-                "\n" +
-                $"X: {xOffset:F2} + x / {1 / xMult:F3}  (correlation {xCorr:F5})\n" +
-                $"Y: {yOffset:F2} + y / {1 / yMult:F3}  (correlation {yCorr:F5})\n" +
-                warning +
-                "\nOpening Calibration window with these presets.");
-
-            return ((xOffset, 1 / xMult), (yOffset, 1 / yMult));
+            return ((xOffset, 1 / xMult, xCorr), (yOffset, 1 / yMult, yCorr));
         }
 
         private void SaveSearch_Click(object sender, RoutedEventArgs e)
@@ -635,14 +637,14 @@ namespace LarkatorGUI
             {
                 Properties.Settings.Default.LastGroup = groupsCombo.Text;
             }
-            catch 
+            catch
             {
                 Properties.Settings.Default.LastGroup = "Shopping List";
             }
             //Set and save property
             Properties.Settings.Default.GroupSearch = (bool) groupCheck.IsChecked;
             Properties.Settings.Default.Save();
-            
+
 
             if (NewSearchList.Count == 0) // No matches
             { //Trigger default values so the user knows we did search to match
@@ -650,7 +652,7 @@ namespace LarkatorGUI
                 tempSearch = null;
                 NewSearchActive = false;
                 CreateSearchAvailable = true;
-                return; 
+                return;
             }
             ObservableCollection<SearchCriteria> tempListSearch = new ObservableCollection<SearchCriteria>(ListSearches.Where(sc => sc.Group == (String)groupsCombo.SelectedValue));
             if (tempListSearch.Count > 0)
