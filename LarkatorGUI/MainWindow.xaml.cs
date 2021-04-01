@@ -1,4 +1,4 @@
-﻿using FastMember;
+using FastMember;
 
 using GongSolutions.Wpf.DragDrop;
 
@@ -240,8 +240,10 @@ namespace LarkatorGUI
             if (fileWatcher != null)
                 fileWatcher.EnableRaisingEvents = false;
             fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
+            fileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size | NotifyFilters.CreationTime;
             fileWatcher.Renamed += FileWatcher_Changed;
             fileWatcher.Changed += FileWatcher_Changed;
+            fileWatcher.Created += FileWatcher_Changed;
             fileWatcher.EnableRaisingEvents = true;
             reloadTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.ConvertDelay);
             reloadTimer.Tick += ReloadTimer_Tick;
@@ -294,7 +296,7 @@ namespace LarkatorGUI
 
         private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (!String.Equals(e.FullPath, Properties.Settings.Default.SaveFile))
+            if (e.FullPath?.ToLowerInvariant() != Properties.Settings.Default.SaveFile?.ToLowerInvariant())
                 return;
 
             Dispatcher.Invoke(() => {
