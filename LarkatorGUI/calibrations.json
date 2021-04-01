@@ -93,9 +93,9 @@
         "LatDivisor": 10475,
         "LonOffset": 50,
         "LonDivisor": 10495,
-        "PixelOffsetX": 14.125,
-        "PixelOffsetY": 16.875,
-        "PixelScaleX": 9.8875,
-        "PixelScaleY": 9.7125
+        "PixelOffsetX": 6,
+        "PixelOffsetY": -8,
+        "PixelScaleX": 10.2,
+        "PixelScaleY": 10.1
     }
 ]
