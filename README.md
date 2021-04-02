@@ -35,7 +35,7 @@ For full step-by-step installation instructions refer to the [wiki](https://gith
 ### Support Continued Development
 Larkator was made just for fun, but if you'd like to say thank you or support continued development then it is much appreciated.
 
-[![Github Sponsorship](assets/sponsor_sm.svg)](https://github.com/sponsors/coldino)
+[![Github Sponsorship](Assets/sponsor_sm.svg)](https://github.com/sponsors/coldino)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z23YS84)
 
 ### Known Issues
