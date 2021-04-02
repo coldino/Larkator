@@ -71,10 +71,10 @@
         "LatDivisor": 8161,
         "LonOffset": 50,
         "LonDivisor": 8161,
-        "PixelOffsetX": 17,
-        "PixelOffsetY": 14,
-        "PixelScaleX": 13.5,
-        "PixelScaleY": 13.5
+        "PixelOffsetX": 42,
+        "PixelOffsetY": 23.75,
+        "PixelScaleX": 9.325,
+        "PixelScaleY": 9.65
     },
     {
         "Filename": "CrystalIsles",
