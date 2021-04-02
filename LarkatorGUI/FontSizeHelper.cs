@@ -9,30 +9,30 @@ namespace LarkatorGUI
         public static readonly DependencyProperty RelativeFontSizeProperty = DependencyProperty.RegisterAttached(
             "RelativeFontSize", typeof(double), typeof(FontSizeHelper), new PropertyMetadata(0.0, RelativeFontSizeChanged));
 
-        public static double GetRelativeFontSize(DependencyObject d)
+        public static double GetRelativeFontSize(DependencyObject do_grfs)
         {
-            if (d == null)
-                throw new ArgumentNullException(nameof(d), "in GetRelativeFontSize");
+            if (do_grfs == null)
+                throw new ArgumentNullException(nameof(do_grfs), "in GetRelativeFontSize");
 
-            return (double)d.GetValue(RelativeFontSizeProperty);
+            return (double)do_grfs.GetValue(RelativeFontSizeProperty);
         }
 
-        public static void SetRelativeFontSize(DependencyObject d, double value)
+        public static void SetRelativeFontSize(DependencyObject do_srfs, double value)
         {
-            if (d == null)
-                throw new ArgumentNullException(nameof(d), "in SetRelativeFontSize");
+            if (do_srfs == null)
+                throw new ArgumentNullException(nameof(do_srfs), "in SetRelativeFontSize");
 
-            d.SetValue(RelativeFontSizeProperty, value);
+            do_srfs.SetValue(RelativeFontSizeProperty, value);
         }
 
-        private static void RelativeFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void RelativeFontSizeChanged(DependencyObject do_rsfc, DependencyPropertyChangedEventArgs e)
         {
-            if (d == null)
-                throw new ArgumentNullException(nameof(d), "in RelativeFontSizeChanged");
+            if (do_rsfc == null)
+                throw new ArgumentNullException(nameof(do_rsfc), "in RelativeFontSizeChanged");
 
-            d.ClearValue(TextBlock.FontSizeProperty);
-            var old = (double)d.GetValue(TextBlock.FontSizeProperty);
-            d.SetValue(TextBlock.FontSizeProperty, Math.Max(old + (double)e.NewValue, 0));
+            do_rsfc.ClearValue(TextBlock.FontSizeProperty);
+            var old = (double)do_rsfc.GetValue(TextBlock.FontSizeProperty);
+            do_rsfc.SetValue(TextBlock.FontSizeProperty, Math.Max(old + (double)e.NewValue, 0));
         }
     }
 }

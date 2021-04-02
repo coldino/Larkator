@@ -118,6 +118,7 @@
     <Compile Include="DebounceDispatcher.cs" />
     <Compile Include="DinoViewModel.cs" />
     <Compile Include="DummyMainWindow.cs" />
+    <Compile Include="DummyNewSearch.cs" />
     <Compile Include="ExternalToolsException.cs" />
     <Compile Include="FileEntryBox.xaml.cs">
       <DependentUpon>FileEntryBox.xaml</DependentUpon>

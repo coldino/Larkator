@@ -232,7 +232,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="leftPanel" Grid.Column="0" Width="240" MinHeight="200" Background="{DynamicResource WindowBackgroundBrush}">
+            <Grid x:Name="leftPanel" Grid.Column="0" Width="270" MinHeight="200" Background="{DynamicResource WindowBackgroundBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -319,26 +319,37 @@
                     <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="16" Content="+" Click="CreateSearch_Click"
                             Visibility="{Binding CreateSearchAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <Grid Margin="16,0,16,16" Visibility="{Binding NewSearchActive, Converter={StaticResource BoolToVisibilityConverter}}" Background="#44ffffff">
-                        <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}">
+                        <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Stretch" DataContext="{Binding NewSearch}" d:DataContext="{d:DesignInstance Type={x:Type local:DummyNewSearch}, IsDesignTimeCreatable=True}">
                             <ComboBox x:Name="groupsCombo" Text="{Binding Group}" IsEditable="True" />
                             <ComboBox x:Name="speciesCombo" Text="{Binding Species}" IsEditable="True" StaysOpenOnEdit="True" GotFocus="ComboOpen" AllowDrop="True"/>
+                            <Grid Margin="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row="0" Text="Min" HorizontalAlignment="Right" Margin="8,2"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1" Text="Max" HorizontalAlignment="Right" Margin="8,2"/>
+                                <TextBlock Grid.Column="0" Grid.Row="2" Text="Partial match" HorizontalAlignment="Right" Margin="8,2"
+                                           ToolTip="Match species that contain the given string" />
+                                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}"
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding MaxLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}"
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" TextAlignment="Center" MouseWheel="AdjustableInteger_MouseWheel"/>
+                                <CheckBox Grid.Column="1" Grid.Row="2" ToolTip="Match species that contain the given string" HorizontalAlignment="Left" Margin="6,4,0,0"
+                                          IsChecked="{Binding GroupSearch, FallbackValue=False}"/>
+                            </Grid>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Min "/>
-                                <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Max "/>
-                                <TextBlock Text="{Binding MinLevel, ConverterParameter=-, Converter={StaticResource OptionalIntConverter}}" MinWidth="64" MouseWheel="AdjustableInteger_MouseWheel"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="Grouped search "/>
-                                <CheckBox x:Name="groupCheck" ToolTip="Keyword search for a group of dinosaurs"
-                                               IsChecked="{Binding Source={StaticResource Settings}, Path=Default.GroupSearch, Mode=TwoWay}" HorizontalAlignment="Right"
-                                               Margin="7,4"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" />
-                                <TextBlock VerticalAlignment="Center" MouseDown="CloseNewSearch_Click"><Underline><Run Text="X"/></Underline></TextBlock>
+                                <Button Width="32" FontFamily="Arial Black" FontSize="28" FontWeight="Bold" Padding="-4" Margin="4,0" Content="+" Click="SaveSearch_Click" ToolTip="Save this search" />
+                                <Button Click="CloseNewSearch_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}" ToolTip="Cancel">
+                                    <fa:ImageAwesome Icon="Close" Width="10" Foreground="AntiqueWhite" Opacity="0.8"/>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

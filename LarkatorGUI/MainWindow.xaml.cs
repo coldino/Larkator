@@ -1,4 +1,4 @@
-using FastMember;
+﻿using FastMember;
 
 using GongSolutions.Wpf.DragDrop;
 
@@ -238,7 +238,11 @@ namespace LarkatorGUI
         private void SetupFileWatcher()
         {
             if (fileWatcher != null)
+            {
                 fileWatcher.EnableRaisingEvents = false;
+                fileWatcher.Dispose();
+            }
+
             fileWatcher = new FileSystemWatcher(Path.GetDirectoryName(Properties.Settings.Default.SaveFile));
             fileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size | NotifyFilters.CreationTime;
             fileWatcher.Renamed += FileWatcher_Changed;
@@ -500,6 +504,7 @@ namespace LarkatorGUI
             speciesCombo.ItemsSource = arkReader.AllSpecies;
             groupsCombo.ItemsSource = ListSearches.Select(sc => sc.Group).Distinct().OrderBy(g => g).ToArray();
             groupsCombo.SelectedItem = Properties.Settings.Default.LastGroup;
+            NewSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
         }
 
         private void Dev_Calibration_Click(object sender, MouseButtonEventArgs e)
@@ -656,11 +661,10 @@ namespace LarkatorGUI
                 Properties.Settings.Default.LastGroup = "Shopping List";
             }
             //Set and save property
-            Properties.Settings.Default.GroupSearch = (bool)groupCheck.IsChecked;
+            Properties.Settings.Default.GroupSearch = NewSearch.GroupSearch;
             Properties.Settings.Default.Save();
 
-
-            if (NewSearchList.Count == 0) // No matches
+            if (NewSearchList.Count == 0 && !NewSearch.GroupSearch) // No matches
             { //Trigger default values so the user knows we did search to match
                 NewSearch = null;
                 tempSearch = null;
@@ -673,13 +677,13 @@ namespace LarkatorGUI
             {
                 order = (int)ListSearches.Where(sc => sc.Group == NewSearch.Group).Max(sc => sc.Order) + 100;
             }
-            //check for group based search
-            if (Properties.Settings.Default.GroupSearch)
+            //Check for group based search
+            if (NewSearch.GroupSearch)
             {
                 tempSearch = new SearchCriteria(NewSearch);
                 tempSearch.Species = NewSearch.Species;
                 tempSearch.Order = order; //Sort order
-                tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                tempSearch.GroupSearch = NewSearch.GroupSearch;
                 ListSearches.Add(tempSearch);
             }
             else
@@ -693,7 +697,7 @@ namespace LarkatorGUI
                             tempSearch = new SearchCriteria(NewSearch);
                             tempSearch.Species = newDino;
                             tempSearch.Order = order;
-                            tempSearch.GroupSearch = Properties.Settings.Default.GroupSearch;
+                            tempSearch.GroupSearch = NewSearch.GroupSearch;
                             ListSearches.Add(tempSearch);
                             order += 100;
                         }
@@ -712,7 +716,7 @@ namespace LarkatorGUI
             MarkSearchesChanged();
         }
 
-        private void CloseNewSearch_Click(object sender, MouseButtonEventArgs e)
+        private void CloseNewSearch_Click(object sender, RoutedEventArgs e)
         {
             NewSearchActive = false;
             CreateSearchAvailable = true;

@@ -36,12 +36,12 @@ namespace LarkatorGUI
             DependencyProperty.RegisterAttached("Calibration", typeof(MapCalibration), typeof(MapPositionConverter), new PropertyMetadata(null, OnChanged));
 
 
-        public static void OnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static void OnChanged(DependencyObject do_mpoc, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TranslateTransform tx)
+            if (do_mpoc is TranslateTransform tx)
             {
-                var cal = GetCalibration(d);
-                var pos = GetPosition(d);
+                var cal = GetCalibration(do_mpoc);
+                var pos = GetPosition(do_mpoc);
                 if (cal == null || pos == null)
                     return;
 
