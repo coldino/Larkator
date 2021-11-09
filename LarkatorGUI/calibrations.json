@@ -97,5 +97,16 @@
         "PixelOffsetY": -8,
         "PixelScaleX": 10.2,
         "PixelScaleY": 10.1
+    },
+    {
+        "Filename": "Gen2",
+        "LatOffset": 49.6,
+        "LatDivisor": 14500,
+        "LonOffset": 49.6,
+        "LonDivisor": 14500,
+        "PixelOffsetX": 21.625,
+        "PixelOffsetY": 6.875,
+        "PixelScaleX": 9.7375,
+        "PixelScaleY": 10.0125
     }
 ]
