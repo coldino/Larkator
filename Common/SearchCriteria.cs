@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Larkator.Common
 {
@@ -64,14 +66,47 @@ namespace Larkator.Common
             return guid.GetHashCode();
         }
 
-        public bool Matches(Dino dino)
+        public List<Dino> Matches(Dictionary<string, List<Dino>> dinos, out int num_dinos_matching_species_criteria)
         {
-            if (MinLevel.HasValue && dino.BaseLevel < MinLevel) return false;
-            if (MaxLevel.HasValue && dino.BaseLevel > MaxLevel) return false;
-            if (Female.HasValue && dino.Female != Female) return false;
-            if (!String.IsNullOrWhiteSpace(Species) && !String.Equals(Species, dino.Type)) return false;
+            string species_criteria = this.Species;
+            bool species_criteria_is_partial = this.GroupSearch;
+            int min_level_criteria = this.MinLevel ?? int.MinValue;
+            int max_level_criteria = this.MaxLevel ?? int.MaxValue;
+            bool? female_criteria = this.Female;
 
-            return true;
+            List<Dino> result_list_of_dinos = new List<Dino>();
+            num_dinos_matching_species_criteria = 0;
+            
+            foreach (var kvp in dinos)
+            {
+                string current_species = kvp.Key;
+                List<Dino> dinos_for_species = kvp.Value;
+                if (matches_species(current_species))
+                {
+                    num_dinos_matching_species_criteria += dinos_for_species.Count;
+
+                    result_list_of_dinos.AddRange(
+                        dinos_for_species.Where(matches_level_and_sex)
+                        );
+                }
+            }
+
+            return result_list_of_dinos;
+
+            bool matches_level_and_sex(Dino dino)
+                => min_level_criteria <= dino.BaseLevel
+                && max_level_criteria >= dino.BaseLevel
+                && (female_criteria == null || female_criteria.Value == dino.Female);
+
+            bool matches_species(string species)
+            {
+                if (string.IsNullOrWhiteSpace(species_criteria))
+                    return true;
+                else if (species_criteria_is_partial)
+                    return species.Contains(species_criteria);
+                else
+                    return species.Equals(species_criteria);
+            }
         }
     }
 }

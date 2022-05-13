@@ -924,38 +924,9 @@ namespace LarkatorGUI
                 var total = 0;
                 foreach (var search in searches)
                 {
-                    if (String.IsNullOrWhiteSpace(search.Species))
-                    {
-                        foreach (var speciesDinos in sourceDinos.Values)
-                        {
-                            found.AddRange(speciesDinos);
-                            total += speciesDinos.Count;
-                        }
-                    }
-                    else if (search.GroupSearch)
-                    {
-                        List<String> NewSearchList = new List<String>(AllSpecies.Where(species => species.Contains(search.Species)));
-                        foreach (String newDino in NewSearchList)
-                        {
-                            if (sourceDinos.ContainsKey(newDino))
-                            {
-                                var dinoList = sourceDinos[newDino];
-                                //found.AddRange(dinoList.Where(d => search.Matches(d)));
-                                found.AddRange(dinoList);
-                                total += dinoList.Count;
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        if (sourceDinos.ContainsKey(search.Species))
-                        {
-                            var dinoList = sourceDinos[search.Species];
-                            found.AddRange(dinoList.Where(d => search.Matches(d)));
-                            total += dinoList.Count;
-                        }
-                    }
+                    found.AddRange(search.Matches(sourceDinos, out int num_matched_on_species_only));
+                    total += num_matched_on_species_only;
+                    continue;
                 }
 
                 ListResults.Clear();
