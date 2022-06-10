@@ -76,7 +76,7 @@ namespace Larkator.Common
 
             List<Dino> result_list_of_dinos = new List<Dino>();
             num_dinos_matching_species_criteria = 0;
-            
+
             foreach (var kvp in dinos)
             {
                 string current_species = kvp.Key;
@@ -84,10 +84,7 @@ namespace Larkator.Common
                 if (matches_species(current_species))
                 {
                     num_dinos_matching_species_criteria += dinos_for_species.Count;
-
-                    result_list_of_dinos.AddRange(
-                        dinos_for_species.Where(matches_level_and_sex)
-                        );
+                    result_list_of_dinos.AddRange(dinos_for_species.Where(matches_level_and_sex));
                 }
             }
 
