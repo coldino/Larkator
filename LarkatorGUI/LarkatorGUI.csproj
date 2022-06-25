@@ -32,7 +32,7 @@
     <PublisherName>coldino</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.15.0.0</ApplicationVersion>
+    <ApplicationVersion>1.16.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -251,6 +251,9 @@
     <Resource Include="imgs\map_Genesis.jpg" />
     <Resource Include="imgs\map_Gen2.jpg" />
     <Resource Include="imgs\map_LostIsland.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imgs\map_Fjordur.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
