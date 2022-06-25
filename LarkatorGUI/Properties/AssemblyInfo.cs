@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LarkatorGUI")]
-[assembly: AssemblyCopyright("Copyright © 2017-2021")]
+[assembly: AssemblyCopyright("Copyright © 2017-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
